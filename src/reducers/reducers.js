@@ -10,14 +10,16 @@ import {
   RECEIVE_RESOURCE,
   EDIT_SINGLE_RESOURCE,
   EDIT_COMPLEX_RESOURCE_PAIR,
+  REMOVE_ITEMS,
+  DESELECT_ITEM,
+  SELECT_ITEM,
   NAVIGATE,
   GO_BACK
-} from "../actions/actions.js";
+} from "../actions/actions";
 import base64 from "base-64";
 import { Routes } from "../components/screens/Navigator";
 import { NavigationActions } from "react-navigation";
 import update from "update-immutable";
-import {SELECT_ITEM, UNSELECT_ALL_ITEMS, UNSELECT_ITEM} from "../actions/actions";
 
 const { getActionForPathAndParams, getStateForAction } = Routes.router;
 
@@ -132,15 +134,14 @@ function liveResource(state = {}, action) {
   }
 }
 
-function selectedItems(state = [], action) {
+function selectedItems(state = {}, action) {
   switch (action.type) {
     case SELECT_ITEM:
-      return update(state, { $push: [action.key] });
-    case UNSELECT_ITEM:
-      const index = state.indexOf(action.key);
-      return update(state, { $splice: [[index, 1]] });
-    case UNSELECT_ALL_ITEMS:
-      return [];
+      return update(state, { [action.key]: {$set: true} });
+    case DESELECT_ITEM:
+      return update(state, { [action.key]: {$set: false} });
+    case REMOVE_ITEMS:
+      return {};
     default:
       return state;
   }

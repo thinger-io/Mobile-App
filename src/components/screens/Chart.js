@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import AreaChart from "../charts/MultipleLine";
+import MultipleLine from "../charts/MultipleLine";
 import {
   getResourceFromApi,
   selectItem,
-  unselectAllItems
+  deselectItem,
+  removeItems
 } from "../../actions/actions";
 import { View } from "react-native";
 
@@ -18,7 +19,10 @@ class ChartScreen extends React.Component {
     const { device, resource, onInit, onRefresh } = this.props;
     const delay = 1000;
     onInit(device, resource);
-    this.refreshInterval = setInterval(() => onRefresh(device, resource), delay);
+    this.refreshInterval = setInterval(
+      () => onRefresh(device, resource),
+      delay
+    );
   }
 
   componentWillUnmount() {
@@ -26,13 +30,23 @@ class ChartScreen extends React.Component {
   }
 
   render() {
-    const { data, resource } = this.props;
+    const {
+      enabledItems,
+      data,
+      resource,
+      onSelectItem,
+      onDeselectItem
+    } = this.props;
     if (Object.keys(data).length === 0 && data.constructor === Object)
       return null;
     return (
-      <View style={{ padding: 10 }}>
-        <AreaChart resource={resource} data={data} />
-      </View>
+      <MultipleLine
+        resource={resource}
+        enabledItems={enabledItems}
+        data={data}
+        onSelectItem={onSelectItem}
+        onDeselectItem={onDeselectItem}
+      />
     );
   }
 }
@@ -40,18 +54,14 @@ class ChartScreen extends React.Component {
 const mapStateToProps = state => {
   const jti = state.selectedDevice;
   const resource = state.selectedResource;
-  const keys = state.selectedItems;
-
-  let data = {};
-  for (key of keys) {
-    if (state.liveResource[key] !== undefined)
-      data = Object.assign(data, { [key]: state.liveResource[key] });
-  }
+  const enabledItems = state.selectedItems;
+  const data = state.liveResource;
 
   return {
     device: state.devices[jti],
     resource,
-    data
+    data,
+    enabledItems
   };
 };
 
@@ -65,9 +75,15 @@ const mapDispatchToProps = dispatch => {
         Object.keys(value["out"]).forEach(key => dispatch(selectItem(key)));
       });
     },
-    onFinish: (refreshInterval) => {
-      dispatch(unselectAllItems());
+    onFinish: refreshInterval => {
+      dispatch(removeItems());
       clearInterval(refreshInterval);
+    },
+    onSelectItem: key => {
+      dispatch(selectItem(key));
+    },
+    onDeselectItem: key => {
+      dispatch(deselectItem(key));
     }
   };
 };

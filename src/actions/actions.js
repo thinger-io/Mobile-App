@@ -5,8 +5,8 @@ export const REMOVE_DEVICE = "REMOVE_DEVICE";
 export const SELECT_DEVICE = "SELECT_DEVICE";
 export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ITEM = "SELECT_ITEM";
-export const UNSELECT_ITEM = "UNSELECT_ITEM";
-export const UNSELECT_ALL_ITEMS = "UNSELECT_ALL_ITEMS";
+export const DESELECT_ITEM = "DESELECT_ITEM";
+export const REMOVE_ITEMS = "REMOVE_ITEMS";
 export const RECEIVE_RESOURCE = "RECEIVE_RESOURCE";
 export const EDIT_SINGLE_RESOURCE = "EDIT_SINGLE_RESOURCE";
 export const EDIT_COMPLEX_RESOURCE_PAIR = "EDIT_COMPLEX_RESOURCE_PAIR";
@@ -52,16 +52,16 @@ export function selectItem(key) {
   };
 }
 
-export function unselectItem(key) {
+export function deselectItem(key) {
   return {
-    type: UNSELECT_ITEM,
+    type: DESELECT_ITEM,
     key
   };
 }
 
-export function unselectAllItems() {
+export function removeItems() {
   return {
-    type: UNSELECT_ALL_ITEMS,
+    type: REMOVE_ITEMS,
   };
 }
 

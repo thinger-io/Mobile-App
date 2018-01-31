@@ -20,18 +20,6 @@ import { SimpleInputResource } from "../resources/SimpleInput";
 import { ComplexOutputResource } from "../resources/ComplexOutput";
 
 class ResourcesScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      tabBarOnPress: ({ scene, jumpToIndex }) => {
-        console.log(scene, jumpToIndex);
-        if (!scene.focused) {
-          jumpToIndex(1);
-          //navigation.state.params.onFocus()
-        }
-      }
-    };
-  };
-
   constructor(props) {
     super(props);
     this.onRefresh = this.onRefresh.bind(this);

@@ -14,7 +14,7 @@ export const REMOVE_RESOURCES = "REMOVE_RESOURCES";
 export const RESTART_LIVE_RESOURCE = "RESTART_LIVE_RESOURCE";
 export const ENABLE_REFRESH = "ENABLE_REFRESH";
 export const DISABLE_REFRESH = "DISABLE_REFRESH";
-export const NAVIGATE = "NAVIGATE";
+export const NAVIGATE = "Navigation/NAVIGATE";
 export const GO_BACK = "Navigation/BACK";
 
 export function addDevice(jwt) {
@@ -117,7 +117,7 @@ export function disableRefresh() {
 export function navigate(screen) {
   return {
     type: NAVIGATE,
-    toScreen: screen
+    routeName: screen
   };
 }
 

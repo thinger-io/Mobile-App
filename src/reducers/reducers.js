@@ -149,12 +149,13 @@ function selectedItems(state = {}, action) {
 
 const initScreen = getStateForAction(getActionForPathAndParams("Main"));
 function nav(state = initScreen, action) {
+  console.log(action);
   switch (action.type) {
     case GO_BACK:
       return getStateForAction(NavigationActions.back(), state);
     case NAVIGATE:
       return getStateForAction(
-        NavigationActions.navigate({ routeName: action.toScreen }),
+        NavigationActions.navigate({ routeName: action.routeName }),
         state
       );
     default:

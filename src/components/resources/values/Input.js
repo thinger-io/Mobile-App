@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles";
+import styles from "../../../utils/styles";
 import { Switch, TextInput } from "react-native";
 
 export class Input extends React.Component {

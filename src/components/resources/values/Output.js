@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles";
+import styles from "../../../utils/styles";
 import { Text } from "react-native";
 
 export class Output extends React.Component {

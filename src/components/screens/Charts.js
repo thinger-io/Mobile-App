@@ -7,12 +7,22 @@ import {
   deselectItem,
   removeItems
 } from "../../actions/actions";
-import { View } from "react-native";
+import styles from "../../utils/styles";
+import { getColorByIndex } from "../../utils/colors";
+import {
+  FlatList,
+  ScrollView,
+  Text,
+  View
+} from "react-native";
+import Card from "../cards/Card";
+import Label from "../Label";
 
-class ChartScreen extends React.Component {
+class ChartsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.refreshInterval = null;
+    this.handleOnLabelClick = this.handleOnLabelClick.bind(this);
   }
 
   componentDidMount() {
@@ -29,24 +39,44 @@ class ChartScreen extends React.Component {
     this.props.onFinish(this.refreshInterval);
   }
 
+  handleOnLabelClick(key) {
+    const { enabledItems, onDeselectItem, onSelectItem } = this.props;
+    enabledItems[key] ? onDeselectItem(key) : onSelectItem(key);
+  }
+
   render() {
     const {
       enabledItems,
       data,
       resource,
-      onSelectItem,
-      onDeselectItem
     } = this.props;
     if (Object.keys(data).length === 0 && data.constructor === Object)
       return null;
+
     return (
-      <MultipleLine
-        resource={resource}
-        enabledItems={enabledItems}
-        data={data}
-        onSelectItem={onSelectItem}
-        onDeselectItem={onDeselectItem}
-      />
+      <ScrollView style={{ flex: 1 }}>
+        <Card hasPadding>
+          <View style={styles.header}>
+            <Text style={styles.title}>{resource}</Text>
+          </View>
+          <MultipleLine enabledItems={enabledItems} data={data} />
+        </Card>
+
+        <FlatList
+          data={Object.keys(enabledItems)}
+          renderItem={({ item, index }) => {
+            return (
+              <Label
+                id={item}
+                value={data[item].slice(-1)[0]}
+                color={getColorByIndex(index * 2)}
+                enabled={enabledItems[item]}
+                onClick={this.handleOnLabelClick}
+              />
+            );
+          }}
+        />
+      </ScrollView>
     );
   }
 }
@@ -88,4 +118,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChartScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ChartsScreen);

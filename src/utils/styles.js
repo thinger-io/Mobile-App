@@ -1,13 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  resource: {
-    marginTop: 10,
-    marginBottom: 10,
-    backgroundColor: "white",
-    borderRadius: 15,
-    overflow: "hidden"
-  },
   header: {
     padding: 20,
     flexDirection: "row"

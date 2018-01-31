@@ -10,7 +10,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import DevicesScreen from "./Devices";
 import QRScannerScreen from "./QRScanner";
 import ResourcesScreen from "./Resources";
-import ChartScreen from "./Chart";
+import ChartScreen from "./Charts";
 
 const tabNavigator = TabNavigator(
   {

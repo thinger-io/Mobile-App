@@ -3,23 +3,19 @@ import React from "react";
 
 export default class Card extends React.Component {
   render() {
-    const { header, body, footer } = this.props;
-
     return (
-      <View style={styles.card}>
-        <View>{header}</View>
-        <View style={{ marginVertical: 15 }}>{body}</View>
-        <View>{footer}</View>
+      <View
+        style={{
+          backgroundColor: "white",
+          borderRadius: 10,
+          padding: this.props.hasPadding ? 15 : 0,
+          margin: 10,
+          marginBottom: 5,
+          overflow: "hidden"
+        }}
+      >
+        {this.props.children}
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 15,
-    overflow: "hidden"
-  }
-});

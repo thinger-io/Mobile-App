@@ -149,7 +149,6 @@ function selectedItems(state = {}, action) {
 
 const initScreen = getStateForAction(getActionForPathAndParams("Main"));
 function nav(state = initScreen, action) {
-  console.log(action);
   switch (action.type) {
     case GO_BACK:
       return getStateForAction(NavigationActions.back(), state);

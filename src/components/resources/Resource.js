@@ -4,9 +4,9 @@ import Card from "../cards/Card";
 import { FlatList, Text, View } from "react-native";
 import { Output } from "./values/Output";
 import { Input } from "./values/Input";
-import ChartButton from "./buttons/Chart";
-import UpdateButton from "./buttons/Update";
-import PostButton from "./buttons/Post";
+import ChartButton from "../buttons/Chart";
+import UpdateButton from "../buttons/Update";
+import PostButton from "../buttons/Post";
 
 class Resource extends React.Component {
   constructor(props) {

@@ -1,4 +1,4 @@
-import styles from "../../../utils/styles";
+import styles from "../../utils/styles";
 import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 

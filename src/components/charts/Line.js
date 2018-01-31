@@ -1,10 +1,7 @@
 import React from "react";
 import { LineChart, YAxis } from "react-native-svg-charts";
 import * as shape from "d3-shape";
-import {
-  View,
-  StyleSheet,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 
 export default class extends React.PureComponent {
@@ -16,21 +13,20 @@ export default class extends React.PureComponent {
     const { enabledItems, data } = this.props;
 
     const contentInset = { top: 20, bottom: 20 };
+    const dataPoints = [].concat.apply([],
+      Object.entries(enabledItems).map(
+        ([key, value]) => (value ? data[key] : [])
+      )
+    );
 
-    let dataToShow = {};
-    Object.entries(enabledItems).map(([key, value]) => {
-      if (value === true)
-        dataToShow = Object.assign(dataToShow, { [key]: data[key] });
-    });
-    const allDataPoints = [].concat.apply([], Object.values(dataToShow));
-    const min = Math.min(...allDataPoints);
-    const max = Math.max(...allDataPoints);
+    const min = Math.min(...dataPoints);
+    const max = Math.max(...dataPoints);
 
     return (
-      <View style={{ height: 200, flexDirection: "row" }}>
+      <View style={{ height: 200, flexDirection: "row", margin: 15 }}>
         <YAxis
           style={{ top: 0, bottom: 0 }}
-          dataPoints={allDataPoints}
+          dataPoints={dataPoints}
           contentInset={contentInset}
         />
         <View style={{ flex: 1 }}>

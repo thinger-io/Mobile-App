@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import MultipleLine from "../charts/MultipleLine";
+import Line from "../charts/Line";
 import {
   getResourceFromApi,
   selectItem,
@@ -9,19 +9,18 @@ import {
 } from "../../actions/actions";
 import styles from "../../utils/styles";
 import { getColorByIndex } from "../../utils/colors";
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  View
-} from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import Card from "../cards/Card";
 import Label from "../Label";
+import Pie from "../charts/Pie";
+import LinesChartButton from "../buttons/LinesChart";
+import PieChartButton from "../buttons/PieChart";
 
 class ChartsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.refreshInterval = null;
+    this.state = {type: "Lines"};
     this.handleOnLabelClick = this.handleOnLabelClick.bind(this);
   }
 
@@ -45,21 +44,33 @@ class ChartsScreen extends React.Component {
   }
 
   render() {
-    const {
-      enabledItems,
-      data,
-      resource,
-    } = this.props;
+    const { enabledItems, data, resource, onDeselectItem } = this.props;
+    const { type } = this.state;
     if (Object.keys(data).length === 0 && data.constructor === Object)
       return null;
 
+    console.log(type);
+
     return (
       <ScrollView style={{ flex: 1 }}>
-        <Card hasPadding>
+        <Card>
           <View style={styles.header}>
             <Text style={styles.title}>{resource}</Text>
           </View>
-          <MultipleLine enabledItems={enabledItems} data={data} />
+          {type === "Lines" && (
+            <Line enabledItems={enabledItems} data={data} />
+          )}
+          {type === "Pie" && (
+            <Pie
+              enabledItems={enabledItems}
+              data={data}
+              deselectItem={onDeselectItem}
+            />
+          )}
+          <View style={styles.footer}>
+            <LinesChartButton onClick={() => {this.setState({type: 'Lines'})}} />
+            <PieChartButton onClick={() => {this.setState({type: 'Pie'})}} />
+          </View>
         </Card>
 
         <FlatList

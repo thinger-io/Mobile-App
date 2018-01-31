@@ -1,7 +1,7 @@
 import React from "react";
 import { LineChart, YAxis } from "react-native-svg-charts";
 import * as shape from "d3-shape";
-import {View, StyleSheet, Text, TouchableOpacity, FlatList} from "react-native";
+import {View, StyleSheet, Text, TouchableOpacity, FlatList, ScrollView} from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 import Card from "../cards/Card";
 import Header from "../cards/headers/Header";
@@ -33,7 +33,7 @@ export default class extends React.PureComponent {
     const max = Math.max(...allDataPoints);
 
     return (
-      <View style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={{ margin: 10, marginBottom: 0 }}>
           <Card
             header={<Header title={resource} />}
@@ -100,7 +100,7 @@ export default class extends React.PureComponent {
             )
           }}
         />
-      </View>
+      </ScrollView>
     );
   }
 }

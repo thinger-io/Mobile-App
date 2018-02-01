@@ -15,12 +15,14 @@ import Label from "../Label";
 import Pie from "../charts/Pie";
 import LinesChartButton from "../buttons/LinesChart";
 import PieChartButton from "../buttons/PieChart";
+import BarsChartButton from "../buttons/BarsChart";
+import Bars from "../charts/Bars";
 
 class ChartsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.refreshInterval = null;
-    this.state = {type: "Lines"};
+    this.state = { type: "Lines" };
     this.handleOnLabelClick = this.handleOnLabelClick.bind(this);
   }
 
@@ -49,17 +51,14 @@ class ChartsScreen extends React.Component {
     if (Object.keys(data).length === 0 && data.constructor === Object)
       return null;
 
-    console.log(type);
-
     return (
       <ScrollView style={{ flex: 1 }}>
         <Card>
           <View style={styles.header}>
             <Text style={styles.title}>{resource}</Text>
           </View>
-          {type === "Lines" && (
-            <Line enabledItems={enabledItems} data={data} />
-          )}
+          {type === "Lines" && <Line enabledItems={enabledItems} data={data} />}
+          {type === "Bars" && <Bars enabledItems={enabledItems} data={data} />}
           {type === "Pie" && (
             <Pie
               enabledItems={enabledItems}
@@ -68,8 +67,21 @@ class ChartsScreen extends React.Component {
             />
           )}
           <View style={styles.footer}>
-            <LinesChartButton onClick={() => {this.setState({type: 'Lines'})}} />
-            <PieChartButton onClick={() => {this.setState({type: 'Pie'})}} />
+            <LinesChartButton
+              onClick={() => {
+                this.setState({ type: "Lines" });
+              }}
+            />
+            <BarsChartButton
+              onClick={() => {
+                this.setState({ type: "Bars" });
+              }}
+            />
+            <PieChartButton
+              onClick={() => {
+                this.setState({ type: "Pie" });
+              }}
+            />
           </View>
         </Card>
 

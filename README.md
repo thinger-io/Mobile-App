@@ -1,3 +1,7 @@
+<p align="center">
+   <img alt="Thinger.io" src="https://www.thinger.io/wp-content/uploads/2015/03/platform_logo.png" width="400"/>
+</p>
+
 # Thinger.io Mobile App Client
 
 Mobile App source code for the [Thinger.io](https://thinger.io) Internet of Things Platform. 
@@ -7,10 +11,35 @@ Mobile App source code for the [Thinger.io](https://thinger.io) Internet of Thin
 The current version of the APP does not require any kind of login to interact with your IoT devices. Simply scan your device token as a QR code and your phone will be able to interact with your device for reading sensor values, changing led or relays states, and so on.
 It is available for Android and iOS devices.
 
+## Usage
+
+Download de repo
+```shell
+git clone https://github.com/carloscpda/thingerioapp.git
+cd thingerioapp
+```
+Install the dependencies
+```shell
+npm install
+```
+or
+```shell
+yarn
+```
+Get the command line expo tool
+```shell
+npm install exp --global
+```
+Execute de app with the expo tool
+```shell
+exp start
+```
+
 ## Features under development
 
-Some of the planned featues for the Thinger.io Android App are the following:
+Some of the planned features for the Thinger.io App are the following:
 
+* Implement booleans attributes.
 * Improve for Android devices.
 * Improve device discovery screen.
 * Android Wear and Apple Watch support.

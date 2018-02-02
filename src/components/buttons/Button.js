@@ -1,4 +1,4 @@
-import styles from "../../utils/styles";
+import styles from "../../styles/common";
 import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 
@@ -8,7 +8,12 @@ export default class Button extends React.Component {
 
     return (
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: color }]}
+        style={{
+          backgroundColor: color,
+          flex: 1,
+          padding: 10,
+          alignItems: "center"
+        }}
         onPress={onClick}
       >
         <Text

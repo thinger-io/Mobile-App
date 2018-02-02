@@ -1,6 +1,5 @@
 import React from "react";
-import styles from "../../../utils/styles";
-import { Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 export class Output extends React.Component {
   render() {
@@ -17,3 +16,12 @@ export class Output extends React.Component {
     }
   }
 }
+
+const styles = StyleSheet.create({
+  value: {
+    fontSize: 18,
+    marginRight: 10,
+    textAlign: "right",
+    flex: 1
+  }
+});

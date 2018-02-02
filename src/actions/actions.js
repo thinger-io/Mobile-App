@@ -61,14 +61,14 @@ export function deselectItem(key) {
 
 export function removeItems() {
   return {
-    type: REMOVE_ITEMS,
+    type: REMOVE_ITEMS
   };
 }
 
-export function receiveResource(key, value) {
+export function receiveResource(id, value) {
   return {
     type: RECEIVE_RESOURCE,
-    key,
+    id,
     value
   };
 }
@@ -174,29 +174,29 @@ export function getResourcesFromApi(device) {
       .then(response => response.json())
       .then(json => {
         const keys = Object.keys(json);
+        let promises = [];
         for (const key of keys) {
-          dispatch(getResourceFromApi(device, key));
+          promises.push(dispatch(getResourceFromApi(device, key)));
         }
+        return Promise.all(promises);
       })
       .catch(error => {
         console.error(error);
       });
 }
 
-export function postResource(device, key, value) {
+export function postResource(device, id, value) {
   return dispatch =>
     fetch(
       `https://api.thinger.io/v2/users/${device.usr}/devices/${
         device.dev
-      }/${key}`,
+      }/${id}`,
       generatePOSTHeader(device.jwt, { in: value })
     )
       .then(response => {
         response.json();
       })
-      .then(() => {
-        dispatch(getResourcesFromApi(device));
-      })
+      .then(() => dispatch(getResourcesFromApi(device)))
       .catch(error => {
         console.error(error);
       });

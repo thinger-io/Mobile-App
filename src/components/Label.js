@@ -39,5 +39,5 @@ Label.propTypes = {
   value: PropTypes.any.isRequired,
   color: PropTypes.string.isRequired,
   enabled: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired
 };

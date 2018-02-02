@@ -1,12 +1,11 @@
 import React from "react";
-import styles from "../../utils/styles";
-import Card from "../cards/Card";
+import styles, { PADDING } from "../../styles/common";
+import Card from "../Card";
 import { FlatList, Text, View } from "react-native";
-import { Output } from "./values/Output";
-import { Input } from "./values/Input";
 import ChartButton from "../buttons/Chart";
 import UpdateButton from "../buttons/Update";
 import PostButton from "../buttons/Post";
+import Attribute from "./Attribute";
 
 class Resource extends React.Component {
   constructor(props) {
@@ -14,108 +13,101 @@ class Resource extends React.Component {
     this.state = { input: {} };
     this.handleOnUpdateClick = this.handleOnUpdateClick.bind(this);
     this.handleOnPostClick = this.handleOnPostClick.bind(this);
+    this.handleOnChangeAttribute = this.handleOnChangeAttribute.bind(this);
   }
 
   handleOnUpdateClick() {
-    const { name, onUpdateClick } = this.props;
-    onUpdateClick(name);
+    const { id, onUpdateClick } = this.props;
+    onUpdateClick(id);
   }
 
   handleOnPostClick() {
-    const { name, onPostClick } = this.props;
-    onPostClick(name);
+    const { id, data, simple, onPostClick } = this.props;
+    const castedData = castInputData(this.state.input, data, simple);
+    onPostClick(id, castedData).then(() => this.clearInputs());
+  }
+
+  handleOnChangeAttribute(id, value) {
+    const input = Object.assign({}, this.state.input);
+    input[id] = value;
+    this.setState({ input });
+  }
+
+  clearInputs() {
     this.setState({ input: {} });
   }
 
-  handleOnChangeResource(text, type) {
-    this.setState({ input: text });
-    const { name, onItemChange } = this.props;
-    const value = Resource.castStringInput(text, type);
-    onItemChange(name, value);
-  }
-
-  handleOnChangeItem(item, text, type) {
-    const input = Object.assign({}, this.state.input);
-    input[item] = text;
-    this.setState({ input });
-    const { name, onItemChange } = this.props;
-    for (const key of Object.keys(input)) {
-      const value = Resource.castStringInput(input[key], type);
-      onItemChange(name, key, value);
-    }
-  }
-
-  static castStringInput(value, type) {
-    switch (type) {
-      case "number":
-        return Number(value.replace(",", "."));
-      default:
-        return value;
-    }
-  }
-
   render() {
-    const { name, data, onChartClick, simple, output } = this.props;
-    return (
-      <Card>
-        {simple ? (
-          <View style={styles.header}>
-            <Text style={styles.title}>{name}</Text>
-            {output ? (
-              <Output value={data} />
-            ) : (
-              <Input
-                value={this.state.input}
-                placeholder={data}
-                onChangeText={text =>
-                  this.handleOnChangeResource(text, typeof data)
-                }
-              />
-            )}
-          </View>
-        ) : (
-          <View>
-            <View style={styles.header}>
-              <Text style={styles.title}>{name}</Text>
-            </View>
-            <FlatList
-              style={styles.body}
-              data={Object.keys(data)}
-              renderItem={({ item }) => (
-                <View style={styles.row}>
-                  <Text style={styles.key}>{item}</Text>
-                  {output ? (
-                    <Output value={data[item]} />
-                  ) : (
-                    <Input
-                      value={this.state.input[item]}
-                      placeholder={data[item]}
-                      onChangeText={text =>
-                        this.handleOnChangeItem(item, text, typeof data[item])
-                      }
-                    />
-                  )}
-                </View>
-              )}
-            />
-          </View>
-        )}
+    const { id, data, onChartClick, simple, output } = this.props;
 
-        {output ? (
-          <View style={styles.footer}>
-            <ChartButton onClick={onChartClick} />
-            <UpdateButton onClick={this.handleOnUpdateClick} />
-          </View>
-        ) : (
-          <View style={styles.footer}>
-            <UpdateButton onClick={this.handleOnUpdateClick} />
-            <PostButton onClick={this.handleOnPostClick} />
-          </View>
-        )}
-      </Card>
+    return (
+      <Card
+        body={
+          simple ? (
+            <Attribute
+              id={id}
+              value={data}
+              inputValue={this.state.input}
+              isOutput={output}
+              isSimple
+              onChange={(id, value) => this.setState({ input: value })}
+            />
+          ) : (
+            <View>
+              <Text style={styles.h1}>{id}</Text>
+              <FlatList
+                data={Object.keys(data)}
+                keyExtractor={item => item}
+                renderItem={({ item }) => (
+                  <Attribute
+                    id={item}
+                    value={data[item]}
+                    inputValue={this.state.input[item]}
+                    isOutput={output}
+                    onChange={this.handleOnChangeAttribute}
+                  />
+                )}
+              />
+            </View>
+          )
+        }
+        footer={
+          output ? (
+            [
+              <ChartButton onClick={onChartClick} />,
+              <UpdateButton onClick={this.handleOnUpdateClick} />
+            ]
+          ) : (
+            [
+              <UpdateButton onClick={this.handleOnUpdateClick} />,
+              <PostButton onClick={this.handleOnPostClick} />
+            ]
+          )
+        }
+      />
     );
   }
 }
 
+function castInputData(editedData, data, isSimple) {
+  if (isSimple) return castAttributeValue(editedData, typeof data);
+  else {
+    return Object.assign.apply(
+      {},
+      Object.keys(editedData).map(key => ({
+        [key]: castAttributeValue(editedData[key], typeof data[key])
+      }))
+    );
+  }
+}
+
+function castAttributeValue(value, type) {
+  switch (type) {
+    case "number":
+      return Number(value.replace(",", "."));
+    default:
+      return value;
+  }
+}
 
 export default Resource;

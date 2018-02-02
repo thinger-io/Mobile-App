@@ -13,7 +13,8 @@ export default class extends React.PureComponent {
     const { enabledItems, data } = this.props;
 
     const contentInset = { top: 20, bottom: 20 };
-    const dataPoints = [].concat.apply([],
+    const dataPoints = [].concat.apply(
+      [],
       Object.entries(enabledItems).map(
         ([key, value]) => (value ? data[key] : [])
       )

@@ -7,7 +7,7 @@ import {
   disableRefresh,
   enableRefresh
 } from "../../actions/actions";
-import { FlatList, Button } from "react-native";
+import {FlatList, Button, Text} from "react-native";
 import Device from "../devices/Device";
 import React from "react";
 
@@ -26,13 +26,14 @@ class DevicesScreen extends React.Component {
 
   render() {
     const { devices, onDeviceClick } = this.props;
+    console.log(devices);
     return (
       <FlatList
         data={Object.values(devices)}
-        renderItem={({ item, index }) => (
-          <Device device={item} onClick={onDeviceClick} index={index} />
-        )}
         keyExtractor={item => item.jti}
+        renderItem={ ({item}) => (
+          <Device name={item.dev} user={item.usr} onClick={() => onDeviceClick(item)} />
+        )}
       />
     );
   }

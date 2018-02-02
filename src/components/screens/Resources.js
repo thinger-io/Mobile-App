@@ -2,8 +2,6 @@ import { connect } from "react-redux";
 import {
   getResourcesFromApi,
   postResource,
-  editSimpleResource,
-  editComplexResourcePair,
   enableRefresh,
   disableRefresh,
   getResourceFromApi,
@@ -11,7 +9,7 @@ import {
   selectResource,
   restartLiveResource
 } from "../../actions/actions";
-import { FlatList, KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { FlatList, KeyboardAvoidingView, View } from "react-native";
 import React from "react";
 import Resource from "../resources/Resource";
 
@@ -33,9 +31,7 @@ class ResourcesScreen extends React.Component {
       type,
       onUpdateClick,
       onPostClick,
-      onChartClick,
-      onEditSimpleResource,
-      onEditComplexResourcePair
+      onChartClick
     } = this.props;
 
     const simple = typeof resources[item] !== "object";
@@ -45,12 +41,11 @@ class ResourcesScreen extends React.Component {
       <Resource
         simple={simple}
         output={output}
-        name={item}
+        id={item}
         data={resources[item]}
         onUpdateClick={onUpdateClick}
         onPostClick={onPostClick}
         onChartClick={() => onChartClick(item)}
-        onItemChange={simple ? onEditSimpleResource : onEditComplexResourcePair}
       />
     );
   };
@@ -94,18 +89,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onEditSimpleResource: (resource, value) => {
-      dispatch(editSimpleResource(resource, value));
-    },
-    onEditComplexResourcePair: (resource, key, value) => {
-      dispatch(editComplexResourcePair(resource, key, value));
-    },
     onUpdateClick: (device, resource) => {
       dispatch(getResourceFromApi(device, resource));
     },
-    onPostClick: (device, key, value) => {
-      dispatch(postResource(device, key, value));
-    },
+    onPostClick: (device, id, value) =>
+      dispatch(postResource(device, id, value)),
     onChartClick: resource => {
       dispatch(restartLiveResource());
       dispatch(selectResource(resource));
@@ -126,10 +114,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
       const { device } = stateProps;
       dispatchProps.onUpdateClick(device, resource);
     },
-    onPostClick: resource => {
-      const { device, resources } = stateProps;
-      const value = resources[resource];
-      dispatchProps.onPostClick(device, resource, value);
+    onPostClick: (id, value) => {
+      const { device } = stateProps;
+      return dispatchProps.onPostClick(device, id, value);
     }
   });
 };

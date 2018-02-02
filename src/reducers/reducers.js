@@ -8,13 +8,11 @@ import {
   SELECT_DEVICE,
   SELECT_RESOURCE,
   RECEIVE_RESOURCE,
-  EDIT_SINGLE_RESOURCE,
-  EDIT_COMPLEX_RESOURCE_PAIR,
   REMOVE_ITEMS,
   DESELECT_ITEM,
   SELECT_ITEM,
   NAVIGATE,
-  GO_BACK
+  GO_BACK,
 } from "../actions/actions";
 import base64 from "base-64";
 import { Routes } from "../components/screens/Navigator";
@@ -84,30 +82,9 @@ function refreshing(state = false, action) {
 function resources(state = {}, action) {
   switch (action.type) {
     case RECEIVE_RESOURCE:
-      return Object.assign({}, state, {
-        [action.key]: action.value
-      });
-    case EDIT_SINGLE_RESOURCE:
-      return {
-        ...state,
-        [action.resource]: {
-          ...state[action.resource],
-          in: action.value
-        }
-      };
-    case EDIT_COMPLEX_RESOURCE_PAIR:
-      return {
-        ...state,
-        [action.resource]: {
-          ...state[action.resource],
-          in: {
-            ...state[action.resource].in,
-            [action.key]: action.value
-          }
-        }
-      };
+      return update(state, { [action.id]: { $set: action.value } });
     case REMOVE_RESOURCES:
-      return [];
+      return {};
     default:
       return state;
   }
@@ -137,9 +114,9 @@ function liveResource(state = {}, action) {
 function selectedItems(state = {}, action) {
   switch (action.type) {
     case SELECT_ITEM:
-      return update(state, { [action.key]: {$set: true} });
+      return update(state, { [action.key]: { $set: true } });
     case DESELECT_ITEM:
-      return update(state, { [action.key]: {$set: false} });
+      return update(state, { [action.key]: { $set: false } });
     case REMOVE_ITEMS:
       return {};
     default:

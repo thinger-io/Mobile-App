@@ -7,10 +7,10 @@ import {
   deselectItem,
   removeItems
 } from "../../actions/actions";
-import styles from "../../utils/styles";
+import styles from "../../styles/common";
 import { getColorByIndex } from "../../utils/colors";
 import { FlatList, ScrollView, Text, View } from "react-native";
-import Card from "../cards/Card";
+import Card from "../Card";
 import Label from "../Label";
 import Pie from "../charts/Pie";
 import LinesChartButton from "../buttons/LinesChart";
@@ -18,12 +18,17 @@ import PieChartButton from "../buttons/PieChart";
 import BarsChartButton from "../buttons/BarsChart";
 import Bars from "../charts/Bars";
 
+const LINES = "LINES";
+const BARS = "BARS";
+const PIE = "PIE";
+
 class ChartsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.refreshInterval = null;
-    this.state = { type: "Lines" };
+    this.state = { type: LINES };
     this.handleOnLabelClick = this.handleOnLabelClick.bind(this);
+    this.handleOnCharTypeClick = this.handleOnCharTypeClick.bind(this);
   }
 
   componentDidMount() {
@@ -45,48 +50,50 @@ class ChartsScreen extends React.Component {
     enabledItems[key] ? onDeselectItem(key) : onSelectItem(key);
   }
 
+  handleOnCharTypeClick(type) {
+    this.setState({ type: type });
+  }
+
   render() {
     const { enabledItems, data, resource, onDeselectItem } = this.props;
     const { type } = this.state;
-    if (Object.keys(data).length === 0 && data.constructor === Object)
-      return null;
+    if (Object.keys(data).length === 0) return null;
 
     return (
       <ScrollView style={{ flex: 1 }}>
-        <Card>
-          <View style={styles.header}>
-            <Text style={styles.title}>{resource}</Text>
-          </View>
-          {type === "Lines" && <Line enabledItems={enabledItems} data={data} />}
-          {type === "Bars" && <Bars enabledItems={enabledItems} data={data} />}
-          {type === "Pie" && (
-            <Pie
-              enabledItems={enabledItems}
-              data={data}
-              deselectItem={onDeselectItem}
-            />
-          )}
-          <View style={styles.footer}>
+        <Card
+          body={
+            <View>
+              <Text style={styles.h1}>{resource}</Text>
+              {type === LINES && (
+                <Line enabledItems={enabledItems} data={data} />
+              )}
+              {type === BARS && (
+                <Bars enabledItems={enabledItems} data={data} />
+              )}
+              {type === PIE && (
+                <Pie
+                  enabledItems={enabledItems}
+                  data={data}
+                  deselectItem={onDeselectItem}
+                />
+              )}
+            </View>
+          }
+          footer={[
             <LinesChartButton
-              onClick={() => {
-                this.setState({ type: "Lines" });
-              }}
-            />
+              onClick={() => this.handleOnCharTypeClick(LINES)}
+            />,
             <BarsChartButton
-              onClick={() => {
-                this.setState({ type: "Bars" });
-              }}
-            />
-            <PieChartButton
-              onClick={() => {
-                this.setState({ type: "Pie" });
-              }}
-            />
-          </View>
-        </Card>
+              onClick={() => this.handleOnCharTypeClick(BARS)}
+            />,
+            <PieChartButton onClick={() => this.handleOnCharTypeClick(PIE)} />
+          ]}
+        />
 
         <FlatList
           data={Object.keys(enabledItems)}
+          keyExtractor={item => item}
           renderItem={({ item, index }) => {
             return (
               <Label

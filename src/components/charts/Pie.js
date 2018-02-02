@@ -13,18 +13,14 @@ export default class extends React.PureComponent {
     const pieData = Object.entries(enabledItems)
       .filter(([key, value]) => {
         if (data[key].slice(-1)[0] < 0) deselectItem(key);
-        return value && data[key].slice(-1)[0] > 0
+        return value && data[key].slice(-1)[0] > 0;
       })
       .map(([key, _], index) => ({
         value: data[key].slice(-1)[0],
         color: getColorByIndex(index * 2),
-        key,
+        key
       }));
 
-    return (
-      <PieChart
-        style={ { height: 200, margin: 15 } }
-        data={pieData}/>
-    );
+    return <PieChart style={{ height: 200, margin: 15 }} data={pieData} />;
   }
 }

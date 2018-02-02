@@ -1,10 +1,9 @@
 import React from "react";
-import styles from "../../../utils/styles";
-import { Switch, TextInput } from "react-native";
+import { StyleSheet, Switch, TextInput } from "react-native";
 
 export class Input extends React.Component {
   render() {
-    const { value, placeholder, onChangeText } = this.props;
+    const { value, placeholder, onChange } = this.props;
     switch (typeof placeholder) {
       case "string":
         return (
@@ -12,7 +11,7 @@ export class Input extends React.Component {
             style={styles.input}
             value={value}
             placeholder={placeholder}
-            onChangeText={text => onChangeText(text)}
+            onChangeText={text => onChange(text)}
           />
         );
       case "number":
@@ -22,7 +21,7 @@ export class Input extends React.Component {
             keyboardType="numeric"
             value={value}
             placeholder={placeholder.toString()}
-            onChangeText={text => onChangeText(text)}
+            onChangeText={text => onChange(text)}
           />
         );
       // TODO
@@ -33,3 +32,15 @@ export class Input extends React.Component {
     }
   }
 }
+
+const styles = StyleSheet.create({
+  input: {
+    fontSize: 18,
+    marginRight: 10,
+    flex: 1,
+    textAlign: "right",
+    backgroundColor: "#F5F5F5",
+    borderRadius: 10,
+    padding: 5
+  }
+});

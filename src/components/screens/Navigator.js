@@ -44,7 +44,7 @@ const tabNavigator = TabNavigator(
   },
   {
     swipeEnabled: true,
-    backBehavior: 'none',
+    backBehavior: "none",
     activeTintColor: "#4f8ef7"
   }
 );

@@ -26,7 +26,6 @@ class DevicesScreen extends React.Component {
 
   render() {
     const { devices, onDeviceClick } = this.props;
-    console.log(devices);
     return (
       <FlatList
         data={Object.values(devices)}

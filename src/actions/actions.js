@@ -8,8 +8,6 @@ export const SELECT_ITEM = "SELECT_ITEM";
 export const DESELECT_ITEM = "DESELECT_ITEM";
 export const REMOVE_ITEMS = "REMOVE_ITEMS";
 export const RECEIVE_RESOURCE = "RECEIVE_RESOURCE";
-export const EDIT_SINGLE_RESOURCE = "EDIT_SINGLE_RESOURCE";
-export const EDIT_COMPLEX_RESOURCE_PAIR = "EDIT_COMPLEX_RESOURCE_PAIR";
 export const REMOVE_RESOURCES = "REMOVE_RESOURCES";
 export const RESTART_LIVE_RESOURCE = "RESTART_LIVE_RESOURCE";
 export const ENABLE_REFRESH = "ENABLE_REFRESH";
@@ -66,26 +64,10 @@ export function removeItems() {
 }
 
 export function receiveResource(id, value) {
+  console.log(id, value);
   return {
     type: RECEIVE_RESOURCE,
     id,
-    value
-  };
-}
-
-export function editSimpleResource(resource, value) {
-  return {
-    type: EDIT_SINGLE_RESOURCE,
-    resource,
-    value
-  };
-}
-
-export function editComplexResourcePair(resource, key, value) {
-  return {
-    type: EDIT_COMPLEX_RESOURCE_PAIR,
-    resource,
-    key,
     value
   };
 }
@@ -193,10 +175,10 @@ export function postResource(device, id, value) {
       }/${id}`,
       generatePOSTHeader(device.jwt, { in: value })
     )
-      .then(response => {
-        response.json();
-      })
-      .then(() => dispatch(getResourcesFromApi(device)))
+      .then(response => response.json())
+      .then(json =>
+        dispatch(receiveResource(id, Object.assign(json, { in: value })))
+      )
       .catch(error => {
         console.error(error);
       });

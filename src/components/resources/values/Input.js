@@ -3,14 +3,14 @@ import { StyleSheet, Switch, TextInput } from "react-native";
 
 export class Input extends React.Component {
   render() {
-    const { value, placeholder, onChange } = this.props;
-    switch (typeof placeholder) {
+    const { value, inputValue, onChange } = this.props;
+    switch (typeof value) {
       case "string":
         return (
           <TextInput
             style={styles.input}
-            value={value}
-            placeholder={placeholder}
+            value={inputValue}
+            placeholder={value}
             onChangeText={text => onChange(text)}
           />
         );
@@ -19,14 +19,16 @@ export class Input extends React.Component {
           <TextInput
             style={styles.input}
             keyboardType="numeric"
-            value={value}
-            placeholder={placeholder.toString()}
+            value={inputValue}
+            placeholder={value.toString()}
             onChangeText={text => onChange(text)}
           />
         );
-      // TODO
       case "boolean":
-        return <Switch value={value} />;
+        return <Switch
+          value={inputValue}
+          onValueChange={value => onChange(value)}
+        />;
       default:
         return null;
     }

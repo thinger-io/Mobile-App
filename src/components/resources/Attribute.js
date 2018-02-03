@@ -21,8 +21,8 @@ export default class Attribute extends React.Component {
           <Output value={value} />
         ) : (
           <Input
-            value={inputValue}
-            placeholder={value}
+            value={value}
+            inputValue={inputValue}
             onChange={value => onChange(id, value)}
           />
         )}

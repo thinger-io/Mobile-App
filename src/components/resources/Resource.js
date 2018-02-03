@@ -1,19 +1,24 @@
 import React from "react";
-import styles, { PADDING } from "../../styles/common";
+import styles from "../../styles/common";
 import Card from "../Card";
 import { FlatList, Text, View } from "react-native";
 import ChartButton from "../buttons/Chart";
 import UpdateButton from "../buttons/Update";
 import PostButton from "../buttons/Post";
 import Attribute from "./Attribute";
+import update from "update-immutable";
 
 class Resource extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { input: {} };
+    this.state = { input: this.props.data };
     this.handleOnUpdateClick = this.handleOnUpdateClick.bind(this);
     this.handleOnPostClick = this.handleOnPostClick.bind(this);
     this.handleOnChangeAttribute = this.handleOnChangeAttribute.bind(this);
+  }
+
+  componentWillReceiveProps(props) {
+    this.state = { input: props.data };
   }
 
   handleOnUpdateClick() {
@@ -28,13 +33,11 @@ class Resource extends React.Component {
   }
 
   handleOnChangeAttribute(id, value) {
-    const input = Object.assign({}, this.state.input);
-    input[id] = value;
-    this.setState({ input });
+    this.setState(update(this.state, { input: { [id]: { $set: value } } }));
   }
 
   clearInputs() {
-    this.setState({ input: {} });
+    this.setState({ input: this.props.data });
   }
 
   render() {
@@ -72,17 +75,15 @@ class Resource extends React.Component {
           )
         }
         footer={
-          output ? (
-            [
-              <ChartButton onClick={onChartClick} />,
-              <UpdateButton onClick={this.handleOnUpdateClick} />
-            ]
-          ) : (
-            [
-              <UpdateButton onClick={this.handleOnUpdateClick} />,
-              <PostButton onClick={this.handleOnPostClick} />
-            ]
-          )
+          output
+            ? [
+                <ChartButton onClick={onChartClick} />,
+                <UpdateButton onClick={this.handleOnUpdateClick} />
+              ]
+            : [
+                <UpdateButton onClick={this.handleOnUpdateClick} />,
+                <PostButton onClick={this.handleOnPostClick} />
+              ]
         }
       />
     );
@@ -104,10 +105,9 @@ function castInputData(editedData, data, isSimple) {
 function castAttributeValue(value, type) {
   switch (type) {
     case "number":
-      return Number(value.replace(",", "."));
-    default:
-      return value;
+      return Number(String(value).replace(",", "."));
   }
+  return value;
 }
 
 export default Resource;

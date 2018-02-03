@@ -64,7 +64,6 @@ export function removeItems() {
 }
 
 export function receiveResource(id, value) {
-  console.log(id, value);
   return {
     type: RECEIVE_RESOURCE,
     id,

@@ -39,7 +39,6 @@ exp start
 
 Some of the planned features for the Thinger.io App are the following:
 
-* Implement booleans attributes.
 * Improve for Android devices.
 * Improve device discovery screen.
 * Android Wear and Apple Watch support.

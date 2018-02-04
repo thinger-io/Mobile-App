@@ -20,7 +20,7 @@ export class Output extends React.Component {
 const styles = StyleSheet.create({
   value: {
     fontSize: 18,
-    marginRight: 10,
+    marginRight: 15,
     textAlign: "right",
     flex: 1
   }

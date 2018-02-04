@@ -178,7 +178,7 @@ export function postResource(device, id, value) {
     )
       .then(response => response.json())
       .then(json =>
-        dispatch(receiveResource(id, Object.assign(json, { in: value })))
+        dispatch(receiveResource(id, Object.assign({}, { in: value }, json)))
       )
       .catch(error => {
         console.error(error);

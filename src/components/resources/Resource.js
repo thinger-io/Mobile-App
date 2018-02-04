@@ -7,18 +7,19 @@ import UpdateButton from "../buttons/Update";
 import PostButton from "../buttons/Post";
 import Attribute from "./Attribute";
 import update from "update-immutable";
+import * as PropTypes from "prop-types";
 
 class Resource extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { input: this.props.data };
+    this.state = { data: this.props.data };
     this.handleOnUpdateClick = this.handleOnUpdateClick.bind(this);
     this.handleOnPostClick = this.handleOnPostClick.bind(this);
     this.handleOnChangeAttribute = this.handleOnChangeAttribute.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    this.state = { input: props.data };
+    this.state = { data: props.data };
   }
 
   handleOnUpdateClick() {
@@ -27,71 +28,84 @@ class Resource extends React.Component {
   }
 
   handleOnPostClick() {
-    const { id, data, simple, onPostClick } = this.props;
-    const castedData = castInputData(this.state.input, data, simple);
-    onPostClick(id, castedData).then(() => this.clearInputs());
+    const { id, data, onPostClick } = this.props;
+    const castedData = castInputData(this.state.data.in, data.in);
+    onPostClick(id, castedData).then(() =>
+      this.setState({ input: this.props.data.in })
+    );
   }
 
   handleOnChangeAttribute(id, value) {
-    this.setState(update(this.state, { input: { [id]: { $set: value } } }));
+    this.setState(
+      update(this.state, { data: { in: { [id]: { $set: value } } } })
+    );
   }
 
-  clearInputs() {
-    this.setState({ input: this.props.data });
+  renderAttributes() {
+    const { id, data } = this.props;
+
+    if (typeof Object.values(data)[0] !== "object") {
+      return (
+        <Attribute
+          id={id}
+          value={Object.values(data)[0]}
+          inputValue={this.state.data.in}
+          type={Object.keys(data)[0]}
+          isSimple
+          onChange={(id, value) => this.setState({ data: { in: value } })}
+        />
+      );
+    } else {
+      const mappedData = [].concat.apply(
+        [],
+        Object.entries(data).map(([type, value]) =>
+          Object.keys(value).map(key => ({ type, key }))
+        )
+      );
+      return (
+        <View>
+          <Text style={styles.h1}>{id}</Text>
+          <FlatList
+            data={mappedData}
+            renderItem={({ item }) => (
+              <Attribute
+                id={item.key}
+                value={data[item.type][item.key]}
+                inputValue={
+                  this.state.data.hasOwnProperty("in")
+                    ? this.state.data.in[item.key]
+                    : null
+                }
+                type={item.type}
+                onChange={this.handleOnChangeAttribute}
+              />
+            )}
+          />
+        </View>
+      );
+    }
+  }
+
+  renderButtons() {
+    const { data, onChartClick } = this.props;
+    const buttons = [<UpdateButton onClick={this.handleOnUpdateClick} />];
+    if (data.hasOwnProperty("out"))
+      buttons.push(<ChartButton onClick={onChartClick} />);
+    if (data.hasOwnProperty("in"))
+      buttons.push(<PostButton onClick={this.handleOnPostClick} />);
+    return buttons;
   }
 
   render() {
-    const { id, data, onChartClick, simple, output } = this.props;
-
     return (
-      <Card
-        body={
-          simple ? (
-            <Attribute
-              id={id}
-              value={data}
-              inputValue={this.state.input}
-              isOutput={output}
-              isSimple
-              onChange={(id, value) => this.setState({ input: value })}
-            />
-          ) : (
-            <View>
-              <Text style={styles.h1}>{id}</Text>
-              <FlatList
-                data={Object.keys(data)}
-                keyExtractor={item => item}
-                renderItem={({ item }) => (
-                  <Attribute
-                    id={item}
-                    value={data[item]}
-                    inputValue={this.state.input[item]}
-                    isOutput={output}
-                    onChange={this.handleOnChangeAttribute}
-                  />
-                )}
-              />
-            </View>
-          )
-        }
-        footer={
-          output
-            ? [
-                <ChartButton onClick={onChartClick} />,
-                <UpdateButton onClick={this.handleOnUpdateClick} />
-              ]
-            : [
-                <UpdateButton onClick={this.handleOnUpdateClick} />,
-                <PostButton onClick={this.handleOnPostClick} />
-              ]
-        }
-      />
+      <Card body={this.renderAttributes()} footer={this.renderButtons()} />
     );
   }
 }
 
-function castInputData(editedData, data, isSimple) {
-  if (isSimple) return castAttributeValue(editedData, typeof data);
+function castInputData(editedData, data) {
+  if (typeof data !== "object")
+    return castAttributeValue(editedData, typeof data);
   else {
     return Object.assign.apply(
       {},
@@ -109,5 +123,17 @@ function castAttributeValue(value, type) {
   }
   return value;
 }
+
+Resource.propTypes = {
+  id: PropTypes.string.isRequired,
+  data: PropTypes.shape({
+    in: PropTypes.any,
+    out: PropTypes.any,
+    run: PropTypes.any
+  }).isRequired,
+  onPostClick: PropTypes.func,
+  onUpdateClick: PropTypes.func,
+  onChartClick: PropTypes.func
+};
 
 export default Resource;

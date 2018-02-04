@@ -26,21 +26,10 @@ class ResourcesScreen extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    const {
-      resources,
-      type,
-      onUpdateClick,
-      onPostClick,
-      onChartClick
-    } = this.props;
-
-    const simple = typeof resources[item] !== "object";
-    const output = type === "out";
+    const { resources, onUpdateClick, onPostClick, onChartClick } = this.props;
 
     return (
       <Resource
-        simple={simple}
-        output={output}
         id={item}
         data={resources[item]}
         onUpdateClick={onUpdateClick}
@@ -57,7 +46,7 @@ class ResourcesScreen extends React.Component {
         <FlatList
           data={Object.keys(resources)}
           renderItem={this.renderItem}
-          keyExtractor={item => item.key}
+          keyExtractor={item => item}
           refreshing={refreshing}
           onRefresh={this.onRefresh}
         />
@@ -67,23 +56,13 @@ class ResourcesScreen extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   const jti = state.selectedDevice;
-  const resources = state.resources;
-  const type = ownProps.navigation.state.key;
-
-  const mappedResources = {};
-  for (const [key, value] of Object.entries(resources)) {
-    if (value[type] !== undefined) {
-      mappedResources[key] = value[type];
-    }
-  }
 
   return {
     device: state.devices[jti],
-    resources: mappedResources,
-    refreshing: state.refreshing,
-    type
+    resources: state.resources,
+    refreshing: state.refreshing
   };
 };
 

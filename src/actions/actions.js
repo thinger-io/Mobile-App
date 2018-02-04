@@ -4,8 +4,8 @@ export const ADD_DEVICE = "ADD_DEVICE";
 export const REMOVE_DEVICE = "REMOVE_DEVICE";
 export const SELECT_DEVICE = "SELECT_DEVICE";
 export const SELECT_RESOURCE = "SELECT_RESOURCE";
-export const SELECT_ITEM = "SELECT_ITEM";
-export const DESELECT_ITEM = "DESELECT_ITEM";
+export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
+export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
 export const REMOVE_ITEMS = "REMOVE_ITEMS";
 export const RECEIVE_RESOURCE = "RECEIVE_RESOURCE";
 export const REMOVE_RESOURCES = "REMOVE_RESOURCES";
@@ -43,17 +43,19 @@ export function selectResource(key) {
   };
 }
 
-export function selectItem(key) {
+export function selectAttribute(attribute, chart) {
   return {
-    type: SELECT_ITEM,
-    key
+    type: SELECT_ATTRIBUTE,
+    attribute,
+    chart,
   };
 }
 
-export function deselectItem(key) {
+export function deselectAttribute(attribute, chart) {
   return {
-    type: DESELECT_ITEM,
-    key
+    type: DESELECT_ATTRIBUTE,
+    attribute,
+    chart,
   };
 }
 

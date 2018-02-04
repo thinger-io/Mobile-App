@@ -1,7 +1,7 @@
 import "babel-polyfill";
 
 import { Provider } from "react-redux";
-import Navigator from "./src/components/screens/Navigator";
+import Navigator from "./src/components/navigators/Navigator";
 import React from "react";
 import { PersistGate } from "redux-persist/es/integration/react";
 import createStore from "./src/configs/Store";

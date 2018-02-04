@@ -1,6 +1,7 @@
 import React from "react";
 import { PieChart } from "react-native-svg-charts";
 import { getColorByIndex } from "../../utils/colors";
+import { PIE } from "../navigators/Charts";
 
 export default class extends React.PureComponent {
   constructor(props) {
@@ -8,18 +9,19 @@ export default class extends React.PureComponent {
   }
 
   render() {
-    const { enabledItems, data, deselectItem } = this.props;
+    const { enabledItems, data, deselectAttribute } = this.props;
 
     const pieData = Object.entries(enabledItems)
-      .filter(([key, value]) => {
-        if (data[key].slice(-1)[0] < 0) deselectItem(key);
-        return value && data[key].slice(-1)[0] > 0;
-      })
-      .map(([key, _], index) => ({
+      .map(([key, value], index) => ({
         value: data[key].slice(-1)[0],
         color: getColorByIndex(index * 2),
-        key
-      }));
+        key,
+        enabled: value
+      }))
+      .filter(({value, key, enabled}) => {
+        if (value < 0) deselectAttribute(key, PIE);
+        return enabled && value > 0;
+      });
 
     return <PieChart style={{ height: 200, margin: 15 }} data={pieData} />;
   }

@@ -9,15 +9,16 @@ import {
   SELECT_RESOURCE,
   RECEIVE_RESOURCE,
   REMOVE_ITEMS,
-  DESELECT_ITEM,
-  SELECT_ITEM,
   NAVIGATE,
   GO_BACK,
+  SELECT_ATTRIBUTE,
+  DESELECT_ATTRIBUTE
 } from "../actions/actions";
 import base64 from "base-64";
-import { Routes } from "../components/screens/Navigator";
+import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
 import update from "update-immutable";
+import { BARS, LINES, PIE } from "../components/navigators/Charts";
 
 const { getActionForPathAndParams, getStateForAction } = Routes.router;
 
@@ -111,14 +112,15 @@ function liveResource(state = {}, action) {
   }
 }
 
-function selectedItems(state = {}, action) {
+defaultState = { [LINES]: {}, [PIE]: {}, [BARS]: {} };
+function selectedAttributes(state = defaultState, action) {
   switch (action.type) {
-    case SELECT_ITEM:
-      return update(state, { [action.key]: { $set: true } });
-    case DESELECT_ITEM:
-      return update(state, { [action.key]: { $set: false } });
+    case SELECT_ATTRIBUTE:
+      return update(state, { [action.chart]: { [action.attribute]: { $set: true } } });
+    case DESELECT_ATTRIBUTE:
+      return update(state, { [action.chart]: { [action.attribute]: { $set: false } } });
     case REMOVE_ITEMS:
-      return {};
+      return defaultState;
     default:
       return state;
   }
@@ -143,7 +145,7 @@ export default {
   devices,
   selectedDevice,
   selectedResource,
-  selectedItems,
+  selectedAttributes,
   refreshing,
   resources,
   liveResource,

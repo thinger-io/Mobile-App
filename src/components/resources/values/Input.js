@@ -25,10 +25,9 @@ export class Input extends React.Component {
           />
         );
       case "boolean":
-        return <Switch
-          value={inputValue}
-          onValueChange={value => onChange(value)}
-        />;
+        return (
+          <Switch value={inputValue} onValueChange={value => onChange(value)} />
+        );
       default:
         return null;
     }

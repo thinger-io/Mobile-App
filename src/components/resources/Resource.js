@@ -31,20 +31,30 @@ class Resource extends React.Component {
     const { id, data, onPostClick } = this.props;
     const castedData = castInputData(this.state.data.in, data.in);
     onPostClick(id, castedData).then(() =>
-      this.setState({ input: this.props.data.in })
+      this.setState({ data: this.props.data.in })
     );
   }
 
   handleOnChangeAttribute(id, value) {
-    this.setState(
-      update(this.state, { data: { in: { [id]: { $set: value } } } })
-    );
+    const { onPostClick } = this.props;
+    if (this.isSimple()) {
+      this.setState({ data: { in: value } });
+      if (typeof value === "boolean") onPostClick(id, value);
+    } else {
+      this.setState(
+        update(this.state, { data: { in: { [id]: { $set: value } } } })
+      );
+    }
+  }
+
+  isSimple() {
+    const { data } = this.props;
+    return typeof Object.values(data)[0] !== "object";
   }
 
   renderAttributes() {
     const { id, data } = this.props;
-
-    if (typeof Object.values(data)[0] !== "object") {
+    if (this.isSimple()) {
       return (
         <Attribute
           id={id}
@@ -52,7 +62,7 @@ class Resource extends React.Component {
           inputValue={this.state.data.in}
           type={Object.keys(data)[0]}
           isSimple
-          onChange={(id, value) => this.setState({ data: { in: value } })}
+          onChange={this.handleOnChangeAttribute}
         />
       );
     } else {
@@ -88,10 +98,12 @@ class Resource extends React.Component {
 
   renderButtons() {
     const { data, onChartClick } = this.props;
-    const buttons = [<UpdateButton onClick={this.handleOnUpdateClick} />];
-    if (data.hasOwnProperty("out"))
+    const buttons = [];
+    if (data.hasOwnProperty("out")) {
+      buttons.push(<UpdateButton onClick={this.handleOnUpdateClick} />);
       buttons.push(<ChartButton onClick={onChartClick} />);
-    if (data.hasOwnProperty("in"))
+    }
+    if (data.hasOwnProperty("in") && typeof data.in !== "boolean")
       buttons.push(<PostButton onClick={this.handleOnPostClick} />);
     return buttons;
   }

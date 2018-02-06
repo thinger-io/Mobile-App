@@ -6,14 +6,14 @@ import { connect } from "react-redux";
 import React from "react";
 import DevicesScreen from "../screens/Devices";
 import QRScannerScreen from "../screens/QRScanner";
-import ResourcesScreen from "../screens/Resources";
 import ChartsTabNavigator from "./Charts";
+import DeviceTabNavigator from "./Device";
 
 
 export const Routes = StackNavigator({
   Main: { screen: DevicesScreen },
   Scanner: { screen: QRScannerScreen },
-  Resources: { screen: ResourcesScreen },
+  Device: { screen: DeviceTabNavigator },
   Chart: { screen: ChartsTabNavigator }
 });
 

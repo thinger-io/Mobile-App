@@ -51,7 +51,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(selectDevice(device.jti));
       dispatch(enableRefresh());
       dispatch(getResourcesFromApi(device)).then(dispatch(disableRefresh()));
-      dispatch(navigate("Resources"));
+      dispatch(navigate("Device"));
     }
   };
 };

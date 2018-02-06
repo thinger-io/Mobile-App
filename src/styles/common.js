@@ -9,10 +9,8 @@ export default StyleSheet.create({
   h1: {
     fontSize: 22,
     fontWeight: "800",
-    flex: 1
   },
   h2: {
     fontSize: 18,
-    flex: 1
   }
 });

@@ -44,12 +44,4 @@ class DeviceNavigator extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  const jti = state.selectedDevice;
-
-  return {
-    device: state.devices[jti].dev
-  };
-};
-
-export default connect(mapStateToProps)(DeviceNavigator);
+export default connect()(DeviceNavigator);

@@ -1,21 +1,36 @@
 import { connect } from "react-redux";
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import React from "react";
 import QRCode from "react-native-qrcode-svg/src/index";
 import styles from "../../styles/common";
+import { removeDevice, goBack } from "../../actions/actions";
 
 class DeviceInfo extends React.Component {
   render() {
-    const { device } = this.props;
-    return (
-      <View style={{ flex: 1, alignItems: "center" }}>
-        <View style={{ marginVertical: 50 }}>
+    const { device, removeDevice } = this.props;
+
+    return device ? (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={{ marginBottom: 50 }}>
           <QRCode value={device.jwt} size={300} />
         </View>
         <Text style={styles.h1}>{device.dev}</Text>
         <Text style={styles.h2}>{device.usr}</Text>
+        <View
+          style={{
+            marginTop: 20,
+            borderRadius: 5,
+            backgroundColor: "red"
+          }}
+        >
+          <Button
+            onPress={() => (removeDevice(device.jti))}
+            title="Remove"
+            color="white"
+          />
+        </View>
       </View>
-    );
+    ) : null;
   }
 }
 
@@ -27,4 +42,13 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(DeviceInfo);
+const mapDispatchToProps = dispatch => {
+  return {
+    removeDevice: jti => {
+      dispatch(removeDevice(jti));
+      dispatch(goBack());
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeviceInfo);

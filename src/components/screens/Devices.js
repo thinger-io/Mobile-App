@@ -7,7 +7,7 @@ import {
   disableRefresh,
   enableRefresh
 } from "../../actions/actions";
-import { FlatList, Button, Text } from "react-native";
+import {FlatList, Button, View} from "react-native";
 import Device from "../devices/Device";
 import React from "react";
 
@@ -24,6 +24,18 @@ class DevicesScreen extends React.Component {
     };
   };
 
+  renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "100%",
+          backgroundColor: "#CED0CE",
+        }}
+      />
+    );
+  };
+
   render() {
     const { devices, onDeviceClick } = this.props;
     return (
@@ -37,6 +49,7 @@ class DevicesScreen extends React.Component {
             onClick={() => onDeviceClick(item)}
           />
         )}
+        ItemSeparatorComponent={this.renderSeparator}
       />
     );
   }

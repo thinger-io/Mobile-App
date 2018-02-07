@@ -1,7 +1,6 @@
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import styles from "../../styles/common";
-import Card from "../Card";
 import * as PropTypes from "prop-types";
 
 export default class Device extends React.Component {
@@ -10,10 +9,10 @@ export default class Device extends React.Component {
 
     return (
       <TouchableOpacity onPress={onClick}>
-        <Card>
+        <View style={{ backgroundColor: "white", padding: 15 }}>
           <Text style={styles.h1}>{name}</Text>
           <Text style={styles.h2}>{user}</Text>
-        </Card>
+        </View>
       </TouchableOpacity>
     );
   }

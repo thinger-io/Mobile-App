@@ -47,7 +47,7 @@ export function selectAttribute(attribute, chart) {
   return {
     type: SELECT_ATTRIBUTE,
     attribute,
-    chart,
+    chart
   };
 }
 
@@ -55,7 +55,7 @@ export function deselectAttribute(attribute, chart) {
   return {
     type: DESELECT_ATTRIBUTE,
     attribute,
-    chart,
+    chart
   };
 }
 
@@ -133,6 +133,18 @@ function generatePOSTHeader(jwt, json) {
   };
 }
 
+function generatePOSTHeader(jwt, json) {
+  return {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Authorization: "Bearer " + jwt,
+      Accept: "application/json, text/plain, */*"
+    },
+    body: JSON.stringify(json)
+  };
+}
+
 export function getResourceFromApi(device, key) {
   return dispatch =>
     fetch(
@@ -183,4 +195,13 @@ export function postResource(device, id, value) {
       .catch(error => {
         console.error(error);
       });
+}
+
+export function runResource(device, id) {
+  fetch(
+    `https://api.thinger.io/v2/users/${device.usr}/devices/${device.dev}/${id}`,
+    generateGETHeader(device.jwt)
+  ).catch(error => {
+    console.error(error);
+  });
 }

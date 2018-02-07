@@ -5,7 +5,7 @@ import { FlatList, Text, View } from "react-native";
 import ChartButton from "../buttons/Chart";
 import UpdateButton from "../buttons/Update";
 import PostButton from "../buttons/Post";
-import Attribute from "./Attribute";
+import Attribute, { RUN } from "./Attribute";
 import update from "update-immutable";
 import * as PropTypes from "prop-types";
 
@@ -30,9 +30,9 @@ class Resource extends React.Component {
   handleOnPostClick() {
     const { id, data, onPostClick } = this.props;
     const castedData = castInputData(this.state.data.in, data.in);
-    onPostClick(id, castedData).then(() =>
-      this.setState({ data: this.props.data.in })
-    );
+    onPostClick(id, castedData).then(() => {
+      this.setState({ data: this.props.data });
+    });
   }
 
   handleOnChangeAttribute(id, value) {
@@ -47,14 +47,21 @@ class Resource extends React.Component {
     }
   }
 
+  isRunType() {
+    const { data } = this.props;
+    return Object.keys(data).length === 0;
+  }
+
   isSimple() {
     const { data } = this.props;
     return typeof Object.values(data)[0] !== "object";
   }
 
   renderAttributes() {
-    const { id, data } = this.props;
-    if (this.isSimple()) {
+    const { id, data, onRun } = this.props;
+    if (this.isRunType()) {
+      return <Attribute id={id} isSimple type={RUN} onRun={() => onRun(id)} />;
+    } else if (this.isSimple()) {
       return (
         <Attribute
           id={id}

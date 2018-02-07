@@ -7,7 +7,8 @@ import {
   getResourceFromApi,
   navigate,
   selectResource,
-  restartLiveResource
+  restartLiveResource,
+  runResource
 } from "../../actions/actions";
 import { FlatList, KeyboardAvoidingView, View } from "react-native";
 import React from "react";
@@ -26,7 +27,13 @@ class ResourcesScreen extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    const { resources, onUpdateClick, onPostClick, onChartClick } = this.props;
+    const {
+      resources,
+      onUpdateClick,
+      onPostClick,
+      onChartClick,
+      onRun
+    } = this.props;
 
     return (
       <Resource
@@ -35,6 +42,7 @@ class ResourcesScreen extends React.Component {
         onUpdateClick={onUpdateClick}
         onPostClick={onPostClick}
         onChartClick={() => onChartClick(item)}
+        onRun={onRun}
       />
     );
   };
@@ -73,6 +81,7 @@ const mapDispatchToProps = dispatch => {
     },
     onPostClick: (device, id, value) =>
       dispatch(postResource(device, id, value)),
+    onRun: (device, id) => runResource(device, id),
     onChartClick: resource => {
       dispatch(restartLiveResource());
       dispatch(selectResource(resource));
@@ -96,6 +105,10 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     onPostClick: (id, value) => {
       const { device } = stateProps;
       return dispatchProps.onPostClick(device, id, value);
+    },
+    onRun: id => {
+      const { device } = stateProps;
+      return dispatchProps.onRun(device, id);
     }
   });
 };

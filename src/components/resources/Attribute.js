@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { Output } from "./values/Output";
 import { Input } from "./values/Input";
 import * as PropTypes from "prop-types";
-import {Run} from "./values/Run";
+import { Run } from "./values/Run";
 
 export const IN = "in";
 export const OUT = "out";
@@ -27,7 +27,7 @@ export default class Attribute extends React.Component {
           />
         );
       case "run":
-        return <Run onPress={onRun}/>;
+        return <Run onPress={onRun} />;
     }
   }
 
@@ -41,7 +41,9 @@ export default class Attribute extends React.Component {
           flexDirection: "row"
         }}
       >
-        <Text style={[isSimple ? styles.h1 : styles.h2, {flex: 1}]}>{id}</Text>
+        <Text style={[isSimple ? styles.h1 : styles.h2, { flex: 1 }]}>
+          {id}
+        </Text>
         {this.renderValue()}
       </View>
     );
@@ -55,5 +57,5 @@ Attribute.propTypes = {
   inputValue: PropTypes,
   isSimple: PropTypes.bool,
   onChange: PropTypes.func,
-  onRun: PropTypes.func,
+  onRun: PropTypes.func
 };

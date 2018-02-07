@@ -8,9 +8,9 @@ export const MARGIN = 10;
 export default StyleSheet.create({
   h1: {
     fontSize: 22,
-    fontWeight: "800",
+    fontWeight: "800"
   },
   h2: {
-    fontSize: 18,
+    fontSize: 18
   }
 });

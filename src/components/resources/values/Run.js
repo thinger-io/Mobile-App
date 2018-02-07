@@ -12,7 +12,7 @@ export class Run extends React.Component {
         style={{
           flex: 1,
           alignItems: "flex-end",
-          marginRight: 15,
+          marginRight: 15
         }}
         onPress={onPress}
       >

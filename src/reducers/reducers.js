@@ -116,9 +116,13 @@ defaultState = { [LINES]: {}, [PIE]: {}, [BARS]: {} };
 function selectedAttributes(state = defaultState, action) {
   switch (action.type) {
     case SELECT_ATTRIBUTE:
-      return update(state, { [action.chart]: { [action.attribute]: { $set: true } } });
+      return update(state, {
+        [action.chart]: { [action.attribute]: { $set: true } }
+      });
     case DESELECT_ATTRIBUTE:
-      return update(state, { [action.chart]: { [action.attribute]: { $set: false } } });
+      return update(state, {
+        [action.chart]: { [action.attribute]: { $set: false } }
+      });
     case REMOVE_ITEMS:
       return defaultState;
     default:
@@ -133,7 +137,10 @@ function nav(state = initScreen, action) {
       return getStateForAction(NavigationActions.back(), state);
     case NAVIGATE:
       return getStateForAction(
-        NavigationActions.navigate({ routeName: action.routeName }),
+        NavigationActions.navigate({
+          routeName: action.routeName,
+          params: { title: action.title }
+        }),
         state
       );
     default:

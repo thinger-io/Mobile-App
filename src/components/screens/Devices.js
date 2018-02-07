@@ -7,7 +7,7 @@ import {
   disableRefresh,
   enableRefresh
 } from "../../actions/actions";
-import {FlatList, Button, Text} from "react-native";
+import { FlatList, Button, Text } from "react-native";
 import Device from "../devices/Device";
 import React from "react";
 
@@ -30,8 +30,12 @@ class DevicesScreen extends React.Component {
       <FlatList
         data={Object.values(devices)}
         keyExtractor={item => item.jti}
-        renderItem={ ({item}) => (
-          <Device name={item.dev} user={item.usr} onClick={() => onDeviceClick(item)} />
+        renderItem={({ item }) => (
+          <Device
+            name={item.dev}
+            user={item.usr}
+            onClick={() => onDeviceClick(item)}
+          />
         )}
       />
     );
@@ -51,7 +55,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(selectDevice(device.jti));
       dispatch(enableRefresh());
       dispatch(getResourcesFromApi(device)).then(dispatch(disableRefresh()));
-      dispatch(navigate("Device"));
+      dispatch(navigate("Device", device.dev));
     }
   };
 };

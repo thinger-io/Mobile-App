@@ -18,7 +18,7 @@ export default class extends React.PureComponent {
         key,
         enabled: value
       }))
-      .filter(({value, key, enabled}) => {
+      .filter(({ value, key, enabled }) => {
         if (value < 0) deselectAttribute(key, PIE);
         return enabled && value > 0;
       });

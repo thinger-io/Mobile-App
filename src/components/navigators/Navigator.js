@@ -1,14 +1,10 @@
-import {
-  addNavigationHelpers,
-  StackNavigator,
-} from "react-navigation";
+import { addNavigationHelpers, StackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import React from "react";
 import DevicesScreen from "../screens/Devices";
 import QRScannerScreen from "../screens/QRScanner";
 import ChartsTabNavigator from "./Charts";
 import DeviceTabNavigator from "./Device";
-
 
 export const Routes = StackNavigator({
   Main: { screen: DevicesScreen },

@@ -97,10 +97,11 @@ export function disableRefresh() {
   };
 }
 
-export function navigate(screen) {
+export function navigate(screen, title) {
   return {
     type: NAVIGATE,
-    routeName: screen
+    routeName: screen,
+    title
   };
 }
 

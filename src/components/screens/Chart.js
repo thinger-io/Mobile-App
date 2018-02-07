@@ -30,7 +30,13 @@ class ChartScreen extends React.Component {
   }
 
   render() {
-    const { enabledItems, data, resource, type, onDeselectAttribute } = this.props;
+    const {
+      enabledItems,
+      data,
+      resource,
+      type,
+      onDeselectAttribute
+    } = this.props;
     if (Object.keys(data).length === 0) return null;
 
     return (

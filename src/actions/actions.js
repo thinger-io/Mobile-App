@@ -133,18 +133,6 @@ function generatePOSTHeader(jwt, json) {
   };
 }
 
-function generatePOSTHeader(jwt, json) {
-  return {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8",
-      Authorization: "Bearer " + jwt,
-      Accept: "application/json, text/plain, */*"
-    },
-    body: JSON.stringify(json)
-  };
-}
-
 export function getResourceFromApi(device, key) {
   return dispatch =>
     fetch(

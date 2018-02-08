@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/common";
+import styles from "../../styles/TIOStyles";
 import Card from "../Card";
 import { FlatList, Text, View } from "react-native";
 import ChartButton from "../buttons/Chart";

@@ -10,9 +10,11 @@ import {
   restartLiveResource,
   runResource
 } from "../../actions/actions";
-import { FlatList, KeyboardAvoidingView, View } from "react-native";
+import { FlatList, KeyboardAvoidingView, Text, View } from "react-native";
 import React from "react";
 import Resource from "../resources/Resource";
+import Icon from "react-native-vector-icons/FontAwesome";
+import TIOStyles, { MARGIN } from "../../styles/TIOStyles";
 
 class ResourcesScreen extends React.Component {
   constructor(props) {
@@ -48,8 +50,8 @@ class ResourcesScreen extends React.Component {
   };
 
   render() {
-    const { resources, refreshing } = this.props;
-    return (
+    const { device, resources, refreshing } = this.props;
+    return device.online ? (
       <KeyboardAvoidingView behavior="padding">
         <FlatList
           data={Object.keys(resources)}
@@ -60,6 +62,11 @@ class ResourcesScreen extends React.Component {
         />
         <View style={{ height: 65 }} />
       </KeyboardAvoidingView>
+    ) : (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Icon name="plug" size={30} style={{ color: "gray", margin: MARGIN }} />
+        <Text style={TIOStyles.h2}>{device.dev} is offline</Text>
+      </View>
     );
   }
 }

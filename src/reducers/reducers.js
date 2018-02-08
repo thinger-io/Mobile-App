@@ -12,7 +12,8 @@ import {
   NAVIGATE,
   GO_BACK,
   SELECT_ATTRIBUTE,
-  DESELECT_ATTRIBUTE
+  DESELECT_ATTRIBUTE,
+  SET_DEVICE_STATE
 } from "../actions/actions";
 import base64 from "base-64";
 import { Routes } from "../components/navigators/Navigator";
@@ -33,6 +34,7 @@ function devices(state = {}, action) {
         return Object.assign({}, state, {
           [json.jti]: {
             isFetching: false,
+            online: false,
             dev: json.dev,
             iat: json.iat,
             jti: json.jti,
@@ -42,6 +44,10 @@ function devices(state = {}, action) {
         });
       }
       return state;
+    case SET_DEVICE_STATE:
+      return update(state, {
+        [action.device]: { online: { $set: action.online } }
+      });
     case REMOVE_DEVICE:
       const newState = Object.assign({}, state);
       delete newState[action.jti];

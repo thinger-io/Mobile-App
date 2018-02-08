@@ -3,6 +3,7 @@ import fetch from "cross-fetch";
 export const ADD_DEVICE = "ADD_DEVICE";
 export const REMOVE_DEVICE = "REMOVE_DEVICE";
 export const SELECT_DEVICE = "SELECT_DEVICE";
+export const SET_DEVICE_STATE = "SET_DEVICE_STATE";
 export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
 export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
@@ -33,6 +34,14 @@ export function selectDevice(jti) {
   return {
     type: SELECT_DEVICE,
     jti
+  };
+}
+
+export function setDeviceState(device, online) {
+  return {
+    type: SET_DEVICE_STATE,
+    device,
+    online
   };
 }
 
@@ -155,7 +164,12 @@ export function getResourcesFromApi(device) {
       `https://api.thinger.io/v2/users/${device.usr}/devices/${device.dev}/api`,
       generateGETHeader(device.jwt)
     )
-      .then(response => response.json())
+      .then(response => {
+        if (response.status === 200) dispatch(setDeviceState(device.jti, true));
+        if (response.status === 404)
+          dispatch(setDeviceState(device.jti, false));
+        return response.json();
+      })
       .then(json => {
         const keys = Object.keys(json);
         let promises = [];

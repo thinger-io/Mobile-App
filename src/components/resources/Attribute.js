@@ -1,6 +1,6 @@
 import React from "react";
-import { SEPARATOR_PADDING } from "../../styles/common";
-import styles from "../../styles/common";
+import { SEPARATOR_PADDING } from "../../styles/TIOStyles";
+import styles from "../../styles/TIOStyles";
 import { Text, View } from "react-native";
 import { Output } from "./values/Output";
 import { Input } from "./values/Input";

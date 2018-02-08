@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Line from "../charts/Line";
 import { selectAttribute, deselectAttribute } from "../../actions/actions";
-import styles from "../../styles/common";
+import styles from "../../styles/TIOStyles";
 import { getColorByIndex } from "../../utils/colors";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import Card from "../Card";

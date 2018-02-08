@@ -1,4 +1,4 @@
-import styles from "../../styles/common";
+import styles from "../../styles/TIOStyles";
 import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 

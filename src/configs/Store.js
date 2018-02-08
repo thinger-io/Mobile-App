@@ -15,6 +15,9 @@ function configureStore() {
   const store = createStore(reducer, applyMiddleware(thunkMiddleware));
   const persistor = persistStore(store);
 
+  // For purge the Store
+  // persistor.purge();
+
   return { store, persistor };
 }
 

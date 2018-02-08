@@ -5,7 +5,7 @@ export const SEPARATOR_PADDING = 7;
 export const BORDER_RADIUS = 10;
 export const MARGIN = 10;
 
-export default StyleSheet.create({
+export default (TIOStyles = StyleSheet.create({
   h1: {
     fontSize: 22,
     fontWeight: "800"
@@ -13,4 +13,4 @@ export default StyleSheet.create({
   h2: {
     fontSize: 18
   }
-});
+}));

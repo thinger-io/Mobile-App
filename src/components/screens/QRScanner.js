@@ -45,14 +45,19 @@ class QRScanner extends React.Component {
   }
 
   handleOnBarCodeRead(data) {
-    const { dispatch } = this.props;
+    const { dispatch, devices } = this.props;
 
     try {
       const device = parseJWT(data.data);
+      const id = Object.keys(device)[0];
+      if (devices.includes(id)) {
+        this.alert.alertWithType("warn", "Warn", "This device already exists");
+        return;
+      }
       dispatch(addDevice(device));
       dispatch(goBack());
     } catch (e) {
-      this.alert.alertWithType("error", "Error", "Incorrect QR");
+      this.alert.alertWithType("error", "Error", "This QR isn't a device");
     }
   }
 
@@ -97,4 +102,10 @@ class QRScanner extends React.Component {
   }
 }
 
-export default connect()(QRScanner);
+mapStateToProps = state => {
+  return {
+    devices: Object.keys(state.devices)
+  }
+};
+
+export default connect(mapStateToProps)(QRScanner);

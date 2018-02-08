@@ -15,6 +15,7 @@ import React from "react";
 import Resource from "../resources/Resource";
 import Icon from "react-native-vector-icons/FontAwesome";
 import TIOStyles, { MARGIN } from "../../styles/TIOStyles";
+import ErrorMessage from "../ErrorMessage";
 
 class ResourcesScreen extends React.Component {
   constructor(props) {
@@ -49,32 +50,33 @@ class ResourcesScreen extends React.Component {
     );
   };
 
+  renderItemList() {
+    const { resources, refreshing } = this.props;
+
+    return (
+      <KeyboardAvoidingView behavior="padding">
+        <FlatList
+          data={Object.keys(resources)}
+          renderItem={this.renderItem}
+          keyExtractor={item => item}
+          refreshing={refreshing}
+          onRefresh={this.onRefresh}
+        />
+        <View style={{ height: 65 }} />
+      </KeyboardAvoidingView>
+    );
+  }
+
   render() {
-    const { device, resources, refreshing } = this.props;
+    const { device } = this.props;
 
     return device ? (
-      device.online ? (
-        <KeyboardAvoidingView behavior="padding">
-          <FlatList
-            data={Object.keys(resources)}
-            renderItem={this.renderItem}
-            keyExtractor={item => item}
-            refreshing={refreshing}
-            onRefresh={this.onRefresh}
-          />
-          <View style={{ height: 65 }} />
-        </KeyboardAvoidingView>
+      !device.authorized ? (
+        <ErrorMessage message={device.usr + " isn't authorized"} icon="lock" />
+      ) : !device.online ? (
+        <ErrorMessage message={device.dev + " is offline"} icon="plug" />
       ) : (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Icon
-            name="plug"
-            size={30}
-            style={{ color: "gray", margin: MARGIN }}
-          />
-          <Text style={TIOStyles.h2}>{device.dev} is offline</Text>
-        </View>
+        this.renderItemList()
       )
     ) : null;
   }

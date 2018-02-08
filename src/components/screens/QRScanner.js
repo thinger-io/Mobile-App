@@ -16,6 +16,7 @@ function parseJWT(jwt) {
       [json.jti]: {
         isFetching: false,
         online: false,
+        authorized: false,
         dev: json.dev,
         iat: json.iat,
         jti: json.jti,
@@ -105,7 +106,7 @@ class QRScanner extends React.Component {
 mapStateToProps = state => {
   return {
     devices: Object.keys(state.devices)
-  }
+  };
 };
 
 export default connect(mapStateToProps)(QRScanner);

@@ -13,7 +13,8 @@ import {
   GO_BACK,
   SELECT_ATTRIBUTE,
   DESELECT_ATTRIBUTE,
-  SET_DEVICE_STATE
+  SET_DEVICE_STATE,
+  SET_DEVICE_AUTHORIZATION
 } from "../actions/actions";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
@@ -29,6 +30,10 @@ function devices(state = {}, action) {
     case SET_DEVICE_STATE:
       return update(state, {
         [action.device]: { online: { $set: action.online } }
+      });
+    case SET_DEVICE_AUTHORIZATION:
+      return update(state, {
+        [action.device]: { authorized: { $set: action.authorization } }
       });
     case REMOVE_DEVICE:
       const newState = Object.assign({}, state);

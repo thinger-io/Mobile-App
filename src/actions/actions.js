@@ -4,6 +4,7 @@ export const ADD_DEVICE = "ADD_DEVICE";
 export const REMOVE_DEVICE = "REMOVE_DEVICE";
 export const SELECT_DEVICE = "SELECT_DEVICE";
 export const SET_DEVICE_STATE = "SET_DEVICE_STATE";
+export const SET_DEVICE_AUTHORIZATION = "SET_DEVICE_AUTHORIZATION";
 export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
 export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
@@ -42,6 +43,14 @@ export function setDeviceState(device, online) {
     type: SET_DEVICE_STATE,
     device,
     online
+  };
+}
+
+export function setDeviceAuthorization(device, authorization) {
+  return {
+    type: SET_DEVICE_AUTHORIZATION,
+    device,
+    authorization
   };
 }
 
@@ -165,9 +174,20 @@ export function getResourcesFromApi(device) {
       generateGETHeader(device.jwt)
     )
       .then(response => {
-        if (response.status === 200) dispatch(setDeviceState(device.jti, true));
-        if (response.status === 404)
-          dispatch(setDeviceState(device.jti, false));
+        switch (response.status) {
+          case 200:
+            dispatch(setDeviceState(device.jti, true));
+            dispatch(setDeviceAuthorization(device.jti, true));
+            break;
+          case 401:
+            dispatch(setDeviceAuthorization(device.jti, false));
+            break;
+          case 404:
+            dispatch(setDeviceState(device.jti, false));
+            dispatch(setDeviceAuthorization(device.jti, true));
+            break;
+        }
+
         return response.json();
       })
       .then(json => {
@@ -178,9 +198,7 @@ export function getResourcesFromApi(device) {
         }
         return Promise.all(promises);
       })
-      .catch(error => {
-        console.error(error);
-      });
+      .catch(error => {});
 }
 
 export function postResource(device, id, value) {

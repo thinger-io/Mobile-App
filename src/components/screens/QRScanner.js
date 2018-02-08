@@ -4,6 +4,29 @@ import { Camera, Permissions } from "expo";
 import { connect } from "react-redux";
 import { addDevice } from "../../actions/actions";
 import { goBack } from "../../actions/actions";
+import base64 from "base-64";
+import DropdownAlert from "react-native-dropdownalert";
+
+function parseJWT(jwt) {
+  try {
+    const data = jwt.split(".")[1];
+    const payload = base64.decode(data);
+    const json = JSON.parse(payload);
+    return {
+      [json.jti]: {
+        isFetching: false,
+        online: false,
+        dev: json.dev,
+        iat: json.iat,
+        jti: json.jti,
+        usr: json.usr,
+        jwt
+      }
+    };
+  } catch (e) {
+    throw e;
+  }
+}
 
 class QRScanner extends React.Component {
   static navigationOptions = {
@@ -21,8 +44,19 @@ class QRScanner extends React.Component {
     this.setState({ hasCameraPermission: status === "granted" });
   }
 
+  handleOnBarCodeRead(data) {
+    const { dispatch } = this.props;
+
+    try {
+      const device = parseJWT(data.data);
+      dispatch(addDevice(device));
+      dispatch(goBack());
+    } catch (e) {
+      this.alert.alertWithType("error", "Error", "Incorrect QR");
+    }
+  }
+
   render() {
-    const { dispatch, navigation } = this.props;
     const { hasCameraPermission } = this.state;
 
     if (hasCameraPermission === null) {
@@ -37,8 +71,7 @@ class QRScanner extends React.Component {
             type={this.state.type}
             barCodeTypes={this.state.barCodeTypes}
             onBarCodeRead={data => {
-              dispatch(addDevice(data.data));
-              dispatch(goBack());
+              this.handleOnBarCodeRead(data);
             }}
           >
             <View
@@ -49,6 +82,15 @@ class QRScanner extends React.Component {
               }}
             />
           </Camera>
+          <DropdownAlert
+            ref={ref => (this.alert = ref)}
+            replaceEnabled={false}
+            defaultContainer={{
+              padding: 8,
+              paddingTop: 10,
+              flexDirection: "row"
+            }}
+          />
         </View>
       );
     }

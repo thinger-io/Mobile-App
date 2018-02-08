@@ -16,10 +16,10 @@ export const DISABLE_REFRESH = "DISABLE_REFRESH";
 export const NAVIGATE = "Navigation/NAVIGATE";
 export const GO_BACK = "Navigation/BACK";
 
-export function addDevice(jwt) {
+export function addDevice(device) {
   return {
     type: ADD_DEVICE,
-    jwt
+    device
   };
 }
 

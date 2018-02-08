@@ -15,7 +15,6 @@ import {
   DESELECT_ATTRIBUTE,
   SET_DEVICE_STATE
 } from "../actions/actions";
-import base64 from "base-64";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
 import update from "update-immutable";
@@ -26,24 +25,7 @@ const { getActionForPathAndParams, getStateForAction } = Routes.router;
 function devices(state = {}, action) {
   switch (action.type) {
     case ADD_DEVICE:
-      // Parse
-      const parts = action.jwt.split(".");
-      if (parts.length === 3) {
-        const payload = base64.decode(parts[1]);
-        const json = JSON.parse(payload);
-        return Object.assign({}, state, {
-          [json.jti]: {
-            isFetching: false,
-            online: false,
-            dev: json.dev,
-            iat: json.iat,
-            jti: json.jti,
-            usr: json.usr,
-            jwt: action.jwt
-          }
-        });
-      }
-      return state;
+      return Object.assign({}, state, action.device);
     case SET_DEVICE_STATE:
       return update(state, {
         [action.device]: { online: { $set: action.online } }

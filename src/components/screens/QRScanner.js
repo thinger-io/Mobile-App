@@ -6,6 +6,7 @@ import { addDevice } from "../../actions/actions";
 import { goBack } from "../../actions/actions";
 import base64 from "base-64";
 import DropdownAlert from "react-native-dropdownalert";
+import TIOStyles, {PADDING} from "../../styles/TIOStyles";
 
 function parseJWT(jwt) {
   try {
@@ -52,14 +53,30 @@ class QRScanner extends React.Component {
       const device = parseJWT(data.data);
       const id = Object.keys(device)[0];
       if (devices.includes(id)) {
-        this.alert.alertWithType("warn", "Warn", "This device already exists");
+        this.alert.alertWithType("error", "Ups!", "This device already exists");
         return;
       }
       dispatch(addDevice(device));
       dispatch(goBack());
     } catch (e) {
-      this.alert.alertWithType("error", "Error", "This QR isn't a device");
+      this.alert.alertWithType("error", "Ups!", "This QR isn't a device");
     }
+  }
+
+  renderCamera() {
+    return (
+      <Camera
+        style={{
+          flex: 1,
+          backgroundColor: "transparent"
+        }}
+        type={this.state.type}
+        barCodeTypes={this.state.barCodeTypes}
+        onBarCodeRead={data => {
+          this.handleOnBarCodeRead(data);
+        }}
+      />
+    );
   }
 
   render() {
@@ -72,22 +89,10 @@ class QRScanner extends React.Component {
     } else {
       return (
         <View style={{ flex: 1 }}>
-          <Camera
-            style={{ flex: 1 }}
-            type={this.state.type}
-            barCodeTypes={this.state.barCodeTypes}
-            onBarCodeRead={data => {
-              this.handleOnBarCodeRead(data);
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: "transparent",
-                flexDirection: "row"
-              }}
-            />
-          </Camera>
+          {this.renderCamera()}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', padding: PADDING }}>
+            <Text style={TIOStyles.h2}>Scan your device token QR</Text>
+          </View>
           <DropdownAlert
             ref={ref => (this.alert = ref)}
             replaceEnabled={false}

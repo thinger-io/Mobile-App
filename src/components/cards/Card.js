@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
-import { BORDER_RADIUS, MARGIN, PADDING } from "../styles/TIOStyles";
+import { BORDER_RADIUS, MARGIN, PADDING } from "../../styles/TIOStyles";
 import * as PropTypes from "prop-types";
 
 export default class Card extends React.Component {
@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    height: 40,
   }
 });
 

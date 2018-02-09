@@ -14,7 +14,8 @@ import {
   SELECT_ATTRIBUTE,
   DESELECT_ATTRIBUTE,
   SET_DEVICE_STATE,
-  SET_DEVICE_AUTHORIZATION
+  SET_DEVICE_AUTHORIZATION,
+  REQUEST_RESOURCE
 } from "../actions/actions";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
@@ -75,8 +76,11 @@ function refreshing(state = false, action) {
 
 function resources(state = {}, action) {
   switch (action.type) {
+    case REQUEST_RESOURCE:
+      return update(state, { [action.id]: { isFetching: { $set: true } } });
     case RECEIVE_RESOURCE:
-      return update(state, { [action.id]: { $set: action.value } });
+      const newState = update(state, { [action.id]: { $set: action.value } });
+      return update(newState, { [action.id]: { isFetching: { $set: false } } });
     case REMOVE_RESOURCES:
       return {};
     default:

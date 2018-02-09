@@ -9,6 +9,7 @@ export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
 export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
 export const REMOVE_ITEMS = "REMOVE_ITEMS";
+export const REQUEST_RESOURCE = "REQUEST_RESOURCE";
 export const RECEIVE_RESOURCE = "RECEIVE_RESOURCE";
 export const REMOVE_RESOURCES = "REMOVE_RESOURCES";
 export const RESTART_LIVE_RESOURCE = "RESTART_LIVE_RESOURCE";
@@ -83,6 +84,13 @@ export function removeItems() {
   };
 }
 
+export function requestResource(id) {
+  return {
+    type: REQUEST_RESOURCE,
+    id
+  };
+}
+
 export function receiveResource(id, value) {
   return {
     type: RECEIVE_RESOURCE,
@@ -153,8 +161,9 @@ function generatePOSTHeader(jwt, json) {
 }
 
 export function getResourceFromApi(device, key) {
-  return dispatch =>
-    fetch(
+  return dispatch => {
+    dispatch(requestResource(key));
+    return fetch(
       `https://api.thinger.io/v2/users/${device.usr}/devices/${
         device.dev
       }/${key}/api`,
@@ -165,6 +174,7 @@ export function getResourceFromApi(device, key) {
       .catch(error => {
         console.error(error);
       });
+  };
 }
 
 export function getResourcesFromApi(device) {
@@ -187,7 +197,6 @@ export function getResourcesFromApi(device) {
             dispatch(setDeviceAuthorization(device.jti, true));
             break;
         }
-
         return response.json();
       })
       .then(json => {
@@ -202,11 +211,12 @@ export function getResourcesFromApi(device) {
 }
 
 export function postResource(device, id, value) {
-  return dispatch =>
-    fetch(
+  return dispatch => {
+    dispatch(requestResource(id));
+    return fetch(
       `https://api.thinger.io/v2/users/${device.usr}/devices/${
         device.dev
-      }/${id}`,
+        }/${id}`,
       generatePOSTHeader(device.jwt, { in: value })
     )
       .then(response => response.json())
@@ -216,6 +226,7 @@ export function postResource(device, id, value) {
       .catch(error => {
         console.error(error);
       });
+  }
 }
 
 export function runResource(device, id) {

@@ -5,7 +5,7 @@ import { selectAttribute, deselectAttribute } from "../../actions/actions";
 import styles from "../../styles/TIOStyles";
 import { getColorByIndex } from "../../utils/colors";
 import { FlatList, ScrollView, Text, View } from "react-native";
-import Card from "../Card";
+import Card from "../cards/Card";
 import Label from "../Label";
 import Pie from "../charts/Pie";
 import Bars from "../charts/Bars";

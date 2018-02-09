@@ -1,13 +1,11 @@
 import React from "react";
 import styles from "../../styles/TIOStyles";
-import Card from "../Card";
+import Card from "../cards/Card";
 import { FlatList, Text, View } from "react-native";
-import ChartButton from "../buttons/Chart";
-import UpdateButton from "../buttons/Update";
-import PostButton from "../buttons/Post";
 import Attribute, { RUN } from "./Attribute";
 import update from "update-immutable";
 import * as PropTypes from "prop-types";
+import Button from "../cards/Button";
 
 class Resource extends React.Component {
   constructor(props) {
@@ -107,11 +105,25 @@ class Resource extends React.Component {
     const { data, onChartClick } = this.props;
     const buttons = [];
     if (data.hasOwnProperty("out")) {
-      buttons.push(<UpdateButton onClick={this.handleOnUpdateClick} />);
-      buttons.push(<ChartButton onClick={onChartClick} />);
+      buttons.push(
+        <Button
+          text={"Update"}
+          color={"#08c"}
+          isLoading={data.isFetching}
+          onClick={this.handleOnUpdateClick}
+        />
+      );
+      buttons.push(<Button text={"Charts"} color={"#F48FB1"} onClick={onChartClick} />);
     }
     if (data.hasOwnProperty("in") && typeof data.in !== "boolean")
-      buttons.push(<PostButton onClick={this.handleOnPostClick} />);
+      buttons.push(
+        <Button
+          text={"Post"}
+          color={"#27c24c"}
+          isLoading={data.isFetching}
+          onClick={this.handleOnPostClick}
+        />
+      );
     return buttons;
   }
 
@@ -146,6 +158,7 @@ function castAttributeValue(value, type) {
 Resource.propTypes = {
   id: PropTypes.string.isRequired,
   data: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
     in: PropTypes.any,
     out: PropTypes.any,
     run: PropTypes.any

@@ -216,7 +216,7 @@ export function postResource(device, id, value) {
     return fetch(
       `https://api.thinger.io/v2/users/${device.usr}/devices/${
         device.dev
-        }/${id}`,
+      }/${id}`,
       generatePOSTHeader(device.jwt, { in: value })
     )
       .then(response => response.json())
@@ -226,7 +226,7 @@ export function postResource(device, id, value) {
       .catch(error => {
         console.error(error);
       });
-  }
+  };
 }
 
 export function runResource(device, id) {

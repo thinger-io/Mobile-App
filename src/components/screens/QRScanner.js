@@ -6,7 +6,7 @@ import { addDevice } from "../../actions/actions";
 import { goBack } from "../../actions/actions";
 import base64 from "base-64";
 import DropdownAlert from "react-native-dropdownalert";
-import TIOStyles, {PADDING} from "../../styles/TIOStyles";
+import TIOStyles, { PADDING } from "../../styles/TIOStyles";
 
 function parseJWT(jwt) {
   try {
@@ -90,7 +90,13 @@ class QRScanner extends React.Component {
       return (
         <View style={{ flex: 1 }}>
           {this.renderCamera()}
-          <View style={{ flexDirection: 'row', justifyContent: 'center', padding: PADDING }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              padding: PADDING
+            }}
+          >
             <Text style={TIOStyles.h2}>Scan your device token QR</Text>
           </View>
           <DropdownAlert

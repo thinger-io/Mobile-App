@@ -10,14 +10,14 @@ import Button from "../cards/Button";
 class Resource extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: this.props.data };
+    this.state = { in: this.props.data.in };
     this.handleOnUpdateClick = this.handleOnUpdateClick.bind(this);
     this.handleOnPostClick = this.handleOnPostClick.bind(this);
     this.handleOnChangeAttribute = this.handleOnChangeAttribute.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    this.state = { data: props.data };
+    if (!props.data.isFetching) this.state.in = props.data.in;
   }
 
   handleOnUpdateClick() {
@@ -27,21 +27,17 @@ class Resource extends React.Component {
 
   handleOnPostClick() {
     const { id, data, onPostClick } = this.props;
-    const castedData = castInputData(this.state.data.in, data.in);
-    onPostClick(id, castedData).then(() => {
-      this.setState({ data: this.props.data });
-    });
+    const castedData = castInputData(this.state.in, data.in);
+    onPostClick(id, castedData);
   }
 
   handleOnChangeAttribute(id, value) {
     const { onPostClick } = this.props;
     if (this.isSimple()) {
-      this.setState({ data: { in: value } });
+      this.setState({ in: value });
       if (typeof value === "boolean") onPostClick(id, value);
     } else {
-      this.setState(
-        update(this.state, { data: { in: { [id]: { $set: value } } } })
-      );
+      this.setState(update(this.state, { in: { [id]: { $set: value } } }));
     }
   }
 
@@ -64,7 +60,7 @@ class Resource extends React.Component {
         <Attribute
           id={id}
           value={Object.values(data)[0]}
-          inputValue={this.state.data.in}
+          inputValue={this.state.in}
           type={Object.keys(data)[0]}
           isSimple
           onChange={this.handleOnChangeAttribute}
@@ -86,11 +82,7 @@ class Resource extends React.Component {
               <Attribute
                 id={item.key}
                 value={data[item.type][item.key]}
-                inputValue={
-                  this.state.data.hasOwnProperty("in")
-                    ? this.state.data.in[item.key]
-                    : null
-                }
+                inputValue={this.state.in ? this.state.in[item.key] : null}
                 type={item.type}
                 onChange={this.handleOnChangeAttribute}
               />
@@ -113,7 +105,9 @@ class Resource extends React.Component {
           onClick={this.handleOnUpdateClick}
         />
       );
-      buttons.push(<Button text={"Charts"} color={"#F48FB1"} onClick={onChartClick} />);
+      buttons.push(
+        <Button text={"Charts"} color={"#F48FB1"} onClick={onChartClick} />
+      );
     }
     if (data.hasOwnProperty("in") && typeof data.in !== "boolean")
       buttons.push(
@@ -158,11 +152,11 @@ function castAttributeValue(value, type) {
 Resource.propTypes = {
   id: PropTypes.string.isRequired,
   data: PropTypes.shape({
-    isFetching: PropTypes.bool.isRequired,
     in: PropTypes.any,
     out: PropTypes.any,
     run: PropTypes.any
   }).isRequired,
+  isFetching: PropTypes.bool.isRequired,
   onPostClick: PropTypes.func,
   onUpdateClick: PropTypes.func,
   onChartClick: PropTypes.func

@@ -31,8 +31,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "flex-end",
-    height: 40,
+    justifyContent: "flex-end"
   }
 });
 

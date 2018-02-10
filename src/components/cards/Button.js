@@ -19,7 +19,7 @@ export default class CardButton extends React.Component {
       <TouchableOpacity
         style={[styles.container, { backgroundColor: color }]}
         onPress={onClick}
-        activeOpacity={ isLoading === undefined ? 0.2 : 1 }
+        activeOpacity={isLoading === undefined ? 0.2 : 1}
       >
         <Text
           style={{

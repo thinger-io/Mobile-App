@@ -1,6 +1,6 @@
 import React from "react";
-import { SEPARATOR_PADDING } from "../../styles/TIOStyles";
-import styles from "../../styles/TIOStyles";
+import { SEPARATOR_PADDING } from "../../styles/ThingerStyles";
+import styles from "../../styles/ThingerStyles";
 import { Text, View } from "react-native";
 import { Output } from "./values/Output";
 import { Input } from "./values/Input";
@@ -14,7 +14,6 @@ export const RUN = "run";
 export default class Attribute extends React.Component {
   renderValue() {
     const { id, value, inputValue, type, onChange, onRun } = this.props;
-
     switch (type) {
       case "out":
         return <Output value={value} />;

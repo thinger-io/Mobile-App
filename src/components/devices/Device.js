@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import styles from "../../styles/TIOStyles";
+import styles from "../../styles/ThingerStyles";
 import * as PropTypes from "prop-types";
 
 export default class Device extends React.Component {

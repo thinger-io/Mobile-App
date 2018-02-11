@@ -41,7 +41,7 @@ export default class extends React.PureComponent {
       >
         <BarChart
           style={{
-            height: 200,
+            flex: 1,
             width: Math.min(400, 25 * barData.length),
             margin: 15
           }}

@@ -6,29 +6,33 @@ import {
   StyleSheet
 } from "react-native";
 import React from "react";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class CardButton extends React.Component {
   render() {
-    const { color, onClick, isLoading, text } = this.props;
+    const { onClick, isLoading, text, icon } = this.props;
 
     return isLoading ? (
-      <View style={[styles.container, { backgroundColor: color }]}>
-        <ActivityIndicator size="small" color="#ffffff" />
+      <View style={styles.container}>
+        <ActivityIndicator size="small" color="#000000" />
       </View>
     ) : (
       <TouchableOpacity
-        style={[styles.container, { backgroundColor: color }]}
+        style={styles.container}
         onPress={onClick}
         activeOpacity={isLoading === undefined ? 0.2 : 1}
       >
-        <Text
-          style={{
-            color: "white",
-            fontSize: 18
-          }}
-        >
-          {text}
-        </Text>
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <Icon name={icon} size={16} style={{ color: "black" }}/>
+          <Text
+            style={{
+              marginLeft: 5,
+              fontSize: 18
+            }}
+          >
+            {text}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   }

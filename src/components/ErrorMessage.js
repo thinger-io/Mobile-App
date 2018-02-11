@@ -1,6 +1,6 @@
 import React from "react";
 import * as PropTypes from "prop-types";
-import TIOStyles, { MARGIN } from "../styles/TIOStyles";
+import TIOStyles, { MARGIN } from "../styles/ThingerStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { View, Text } from "react-native";
 
@@ -17,7 +17,7 @@ export default class ErrorMessage extends React.Component {
           <Icon
             name={this.props.icon}
             size={30}
-            style={{ color: "gray", margin: MARGIN }}
+            style={{ color: "black", margin: MARGIN }}
           />
         ) : null}
 

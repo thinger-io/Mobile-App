@@ -23,6 +23,6 @@ export default class extends React.PureComponent {
         return enabled && value > 0;
       });
 
-    return <PieChart style={{ height: 200, margin: 15 }} data={pieData} />;
+    return <PieChart style={{ flex: 1, margin: 15 }} data={pieData} />;
   }
 }

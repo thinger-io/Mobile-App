@@ -6,7 +6,7 @@ import { addDevice } from "../../actions/actions";
 import { goBack } from "../../actions/actions";
 import base64 from "base-64";
 import DropdownAlert from "react-native-dropdownalert";
-import TIOStyles, { PADDING } from "../../styles/TIOStyles";
+import TIOStyles, { PADDING } from "../../styles/ThingerStyles";
 
 function parseJWT(jwt) {
   try {

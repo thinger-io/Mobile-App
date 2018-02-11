@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { Button, Text, View } from "react-native";
 import React from "react";
 import QRCode from "react-native-qrcode-svg/src/index";
-import styles from "../../styles/TIOStyles";
+import styles from "../../styles/ThingerStyles";
 import { removeDevice, goBack } from "../../actions/actions";
 
 class DeviceInfo extends React.Component {

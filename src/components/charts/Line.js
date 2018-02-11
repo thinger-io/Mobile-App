@@ -24,7 +24,7 @@ export default class extends React.PureComponent {
     const max = Math.max(...dataPoints);
 
     return (
-      <View style={{ height: 200, flexDirection: "row", margin: 15 }}>
+      <View style={{ flex: 1, flexDirection: "row", margin: 15 }}>
         <YAxis
           style={{ top: 0, bottom: 0 }}
           dataPoints={dataPoints}

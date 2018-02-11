@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/TIOStyles";
+import styles from "../../styles/ThingerStyles";
 import Card from "../cards/Card";
 import { FlatList, Text, View } from "react-native";
 import Attribute, { RUN } from "./Attribute";
@@ -10,14 +10,14 @@ import Button from "../cards/Button";
 class Resource extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { in: this.props.data.in };
+    this.state = { in: props.data.in };
     this.handleOnUpdateClick = this.handleOnUpdateClick.bind(this);
     this.handleOnPostClick = this.handleOnPostClick.bind(this);
     this.handleOnChangeAttribute = this.handleOnChangeAttribute.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    if (!props.data.isFetching) this.state.in = props.data.in;
+    if (!props.isFetching) this.state.in = props.data.in;
   }
 
   handleOnUpdateClick() {
@@ -42,8 +42,7 @@ class Resource extends React.Component {
   }
 
   isRunType() {
-    const { data } = this.props;
-    return Object.keys(data).length === 0;
+    return !Object.keys(this.props.data).length;
   }
 
   isSimple() {
@@ -94,27 +93,27 @@ class Resource extends React.Component {
   }
 
   renderButtons() {
-    const { data, onChartClick } = this.props;
+    const { data, isFetching, onChartClick } = this.props;
     const buttons = [];
     if (data.hasOwnProperty("out")) {
       buttons.push(
         <Button
           text={"Update"}
-          color={"#08c"}
-          isLoading={data.isFetching}
+          icon="spinner"
+          isLoading={isFetching}
           onClick={this.handleOnUpdateClick}
         />
       );
       buttons.push(
-        <Button text={"Charts"} color={"#F48FB1"} onClick={onChartClick} />
+        <Button text={"Charts"} icon="line-chart" onClick={onChartClick} />
       );
     }
     if (data.hasOwnProperty("in") && typeof data.in !== "boolean")
       buttons.push(
         <Button
           text={"Post"}
-          color={"#27c24c"}
-          isLoading={data.isFetching}
+          icon="paper-plane"
+          isLoading={isFetching}
           onClick={this.handleOnPostClick}
         />
       );
@@ -153,8 +152,7 @@ Resource.propTypes = {
   id: PropTypes.string.isRequired,
   data: PropTypes.shape({
     in: PropTypes.any,
-    out: PropTypes.any,
-    run: PropTypes.any
+    out: PropTypes.any
   }).isRequired,
   isFetching: PropTypes.bool.isRequired,
   onPostClick: PropTypes.func,

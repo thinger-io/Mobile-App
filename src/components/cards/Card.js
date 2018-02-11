@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
-import { BORDER_RADIUS, MARGIN, PADDING } from "../../styles/TIOStyles";
+import { BORDER_RADIUS, MARGIN, PADDING } from "../../styles/ThingerStyles";
 import * as PropTypes from "prop-types";
 
 export default class Card extends React.Component {
@@ -12,7 +12,19 @@ export default class Card extends React.Component {
           {children}
           {body}
         </View>
-        <View style={styles.footer}>{footer}</View>
+        <View style={{ alignItems: "center" }}>
+          {footer &&
+            footer.length > 0 && (
+              <View
+                style={{
+                  height: 1,
+                  width: "90%",
+                  backgroundColor: "#CED0CE"
+                }}
+              />
+            )}
+          <View style={styles.footer}>{footer}</View>
+        </View>
       </View>
     );
   }
@@ -20,11 +32,14 @@ export default class Card extends React.Component {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     margin: MARGIN,
     marginBottom: MARGIN / 2,
     borderRadius: BORDER_RADIUS,
-    overflow: "hidden"
+    shadowOffset: { width: 3, height: 3 },
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+    shadowRadius: 3
   },
   body: {
     padding: PADDING

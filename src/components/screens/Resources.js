@@ -13,8 +13,6 @@ import {
 import { FlatList, KeyboardAvoidingView, Text, View } from "react-native";
 import React from "react";
 import Resource from "../resources/Resource";
-import Icon from "react-native-vector-icons/FontAwesome";
-import TIOStyles, { MARGIN } from "../../styles/TIOStyles";
 import ErrorMessage from "../ErrorMessage";
 
 class ResourcesScreen extends React.Component {
@@ -41,12 +39,12 @@ class ResourcesScreen extends React.Component {
     return (
       <Resource
         id={item}
-        data={resources[item]}
+        data={resources[item].data || {}}
+        isFetching={resources[item].isFetching}
         onUpdateClick={onUpdateClick}
         onPostClick={onPostClick}
         onChartClick={() => onChartClick(item)}
-        onRun={onRun}
-      />
+        onRun={onRun}/>
     );
   };
 

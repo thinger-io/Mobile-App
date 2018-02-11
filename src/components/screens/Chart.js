@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Line from "../charts/Line";
 import { selectAttribute, deselectAttribute } from "../../actions/actions";
-import styles from "../../styles/TIOStyles";
+import styles from "../../styles/ThingerStyles";
 import { getColorByIndex } from "../../utils/colors";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import Card from "../cards/Card";
@@ -10,6 +10,7 @@ import Label from "../Label";
 import Pie from "../charts/Pie";
 import Bars from "../charts/Bars";
 import { BARS, LINES, PIE } from "../navigators/Charts";
+import GradientContainer from "../GradientContainer";
 
 class ChartScreen extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class ChartScreen extends React.Component {
     return (
       <ScrollView style={{ flex: 1 }}>
         <Card>
-          <View>
+          <View style={{height: 250}}>
             <Text style={styles.h1}>{resource}</Text>
             {type === LINES && <Line enabledItems={enabledItems} data={data} />}
             {type === BARS && <Bars enabledItems={enabledItems} data={data} />}

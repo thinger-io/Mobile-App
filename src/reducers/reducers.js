@@ -79,7 +79,7 @@ function resources(state = {}, action) {
     case REQUEST_RESOURCE:
       return update(state, { [action.id]: { isFetching: { $set: true } } });
     case RECEIVE_RESOURCE:
-      const newState = update(state, { [action.id]: { $set: action.value } });
+      const newState = update(state, { [action.id]: { data: { $set: action.value } }});
       return update(newState, { [action.id]: { isFetching: { $set: false } } });
     case REMOVE_RESOURCES:
       return {};

@@ -1,4 +1,4 @@
-import fetch from "cross-fetch";
+import ThingerAPI from "../API/Thinger";
 
 export const ADD_DEVICE = "ADD_DEVICE";
 export const REMOVE_DEVICE = "REMOVE_DEVICE";
@@ -139,38 +139,10 @@ export function goBack() {
   };
 }
 
-function generateGETHeader(jwt) {
-  return {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8",
-      Authorization: "Bearer " + jwt,
-      Accept: "application/json, text/plain, */*"
-    }
-  };
-}
-
-function generatePOSTHeader(jwt, json) {
-  return {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8",
-      Authorization: "Bearer " + jwt,
-      Accept: "application/json, text/plain, */*"
-    },
-    body: JSON.stringify(json)
-  };
-}
-
 export function getResourceFromApi(device, key) {
   return dispatch => {
     dispatch(requestResource(key));
-    return fetch(
-      `https://api.thinger.io/v2/users/${device.usr}/devices/${
-        device.dev
-      }/${key}/api`,
-      generateGETHeader(device.jwt)
-    )
+    return ThingerAPI.getResource(device.usr, device.dev, key, device.jwt)
       .then(response => response.json())
       .then(json => dispatch(receiveResource(key, json)))
       .catch(error => {
@@ -182,10 +154,7 @@ export function getResourceFromApi(device, key) {
 export function getResourcesFromApi(device) {
   return dispatch => {
     dispatch(requestDevice(device.jti));
-    return fetch(
-      `https://api.thinger.io/v2/users/${device.usr}/devices/${device.dev}/api`,
-      generateGETHeader(device.jwt)
-    )
+    return ThingerAPI.getResources(device.usr, device.dev, device.jwt)
       .then(response => {
         switch (response.status) {
           case 200:
@@ -218,12 +187,7 @@ export function getResourcesFromApi(device) {
 export function postResource(device, id, value) {
   return dispatch => {
     dispatch(requestResource(id));
-    return fetch(
-      `https://api.thinger.io/v2/users/${device.usr}/devices/${
-        device.dev
-      }/${id}`,
-      generatePOSTHeader(device.jwt, { in: value })
-    )
+    return ThingerAPI.post(device.usr, device.dev, id, value, device.jwt)
       .then(response => response.json())
       .then(json =>
         dispatch(receiveResource(id, Object.assign({}, { in: value }, json)))
@@ -235,10 +199,7 @@ export function postResource(device, id, value) {
 }
 
 export function runResource(device, id) {
-  fetch(
-    `https://api.thinger.io/v2/users/${device.usr}/devices/${device.dev}/${id}`,
-    generateGETHeader(device.jwt)
-  ).catch(error => {
+  return ThingerAPI.run(device.usr, device.dev, id, device.jwt).catch(error => {
     console.error(error);
   });
 }

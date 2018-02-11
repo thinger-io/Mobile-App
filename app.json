@@ -3,6 +3,10 @@
     "name": "thinger.io",
     "slug": "thingerio",
     "sdkVersion": "25.0.0",
-    "privacy": "unlisted"
+    "privacy": "unlisted",
+    "githubUrl": "https://github.com/carloscpda/thingerioapp",
+    "orientation": "portrait",
+    "primaryColor": "#0088CC",
+    "icon": "icon.png"
   }
 }

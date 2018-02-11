@@ -43,7 +43,7 @@ class ChartScreen extends React.Component {
     return (
       <ScrollView style={{ flex: 1 }}>
         <Card>
-          <View style={{height: 250}}>
+          <View style={{ height: 250 }}>
             <Text style={styles.h1}>{resource}</Text>
             {type === LINES && <Line enabledItems={enabledItems} data={data} />}
             {type === BARS && <Bars enabledItems={enabledItems} data={data} />}

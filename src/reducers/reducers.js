@@ -1,7 +1,5 @@
 import {
   ADD_DEVICE,
-  DISABLE_REFRESH,
-  ENABLE_REFRESH,
   REMOVE_DEVICE,
   REMOVE_RESOURCES,
   RESTART_LIVE_RESOURCE,
@@ -15,7 +13,9 @@ import {
   DESELECT_ATTRIBUTE,
   SET_DEVICE_STATE,
   SET_DEVICE_AUTHORIZATION,
-  REQUEST_RESOURCE
+  REQUEST_RESOURCE,
+  RECEIVE_DEVICE,
+  REQUEST_DEVICE
 } from "../actions/actions";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
@@ -36,10 +36,13 @@ function devices(state = {}, action) {
       return update(state, {
         [action.device]: { authorized: { $set: action.authorization } }
       });
+    case REQUEST_DEVICE:
+      return update(state, { [action.jti]: { isFetching: { $set: true } } });
+    case RECEIVE_DEVICE:
+      return update(state, { [action.jti]: { isFetching: { $set: false } } });
     case REMOVE_DEVICE:
       const newState = Object.assign({}, state);
-      delete newState[action.jti];
-      return newState;
+      return delete newState[action.jti];
     default:
       return state;
   }
@@ -63,23 +66,14 @@ function selectedResource(state = null, action) {
   }
 }
 
-function refreshing(state = false, action) {
-  switch (action.type) {
-    case ENABLE_REFRESH:
-      return true;
-    case DISABLE_REFRESH:
-      return false;
-    default:
-      return false;
-  }
-}
-
 function resources(state = {}, action) {
   switch (action.type) {
     case REQUEST_RESOURCE:
       return update(state, { [action.id]: { isFetching: { $set: true } } });
     case RECEIVE_RESOURCE:
-      const newState = update(state, { [action.id]: { data: { $set: action.value } }});
+      const newState = update(state, {
+        [action.id]: { data: { $set: action.value } }
+      });
       return update(newState, { [action.id]: { isFetching: { $set: false } } });
     case REMOVE_RESOURCES:
       return {};
@@ -150,7 +144,6 @@ export default {
   selectedDevice,
   selectedResource,
   selectedAttributes,
-  refreshing,
   resources,
   liveResource,
   nav

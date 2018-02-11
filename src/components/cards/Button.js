@@ -22,8 +22,8 @@ export default class CardButton extends React.Component {
         onPress={onClick}
         activeOpacity={isLoading === undefined ? 0.2 : 1}
       >
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name={icon} size={16} style={{ color: "black" }}/>
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+          <Icon name={icon} size={16} style={{ color: "black" }} />
           <Text
             style={{
               marginLeft: 5,

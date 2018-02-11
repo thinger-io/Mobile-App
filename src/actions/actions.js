@@ -9,12 +9,12 @@ export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
 export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
 export const REMOVE_ITEMS = "REMOVE_ITEMS";
+export const REQUEST_DEVICE = "REQUEST_DEVICE";
+export const RECEIVE_DEVICE = "RECEIVE_DEVICE";
 export const REQUEST_RESOURCE = "REQUEST_RESOURCE";
 export const RECEIVE_RESOURCE = "RECEIVE_RESOURCE";
 export const REMOVE_RESOURCES = "REMOVE_RESOURCES";
 export const RESTART_LIVE_RESOURCE = "RESTART_LIVE_RESOURCE";
-export const ENABLE_REFRESH = "ENABLE_REFRESH";
-export const DISABLE_REFRESH = "DISABLE_REFRESH";
 export const NAVIGATE = "Navigation/NAVIGATE";
 export const GO_BACK = "Navigation/BACK";
 
@@ -84,6 +84,20 @@ export function removeItems() {
   };
 }
 
+export function requestDevice(jti) {
+  return {
+    type: REQUEST_DEVICE,
+    jti
+  };
+}
+
+export function receiveDevice(jti) {
+  return {
+    type: RECEIVE_DEVICE,
+    jti
+  };
+}
+
 export function requestResource(id) {
   return {
     type: REQUEST_RESOURCE,
@@ -108,18 +122,6 @@ export function removeResources() {
 export function restartLiveResource() {
   return {
     type: RESTART_LIVE_RESOURCE
-  };
-}
-
-export function enableRefresh() {
-  return {
-    type: ENABLE_REFRESH
-  };
-}
-
-export function disableRefresh() {
-  return {
-    type: DISABLE_REFRESH
   };
 }
 
@@ -178,8 +180,9 @@ export function getResourceFromApi(device, key) {
 }
 
 export function getResourcesFromApi(device) {
-  return dispatch =>
-    fetch(
+  return dispatch => {
+    dispatch(requestDevice(device.jti));
+    return fetch(
       `https://api.thinger.io/v2/users/${device.usr}/devices/${device.dev}/api`,
       generateGETHeader(device.jwt)
     )
@@ -207,7 +210,9 @@ export function getResourcesFromApi(device) {
         }
         return Promise.all(promises);
       })
+      .then(() => dispatch(receiveDevice(device.jti)))
       .catch(error => {});
+  };
 }
 
 export function postResource(device, id, value) {

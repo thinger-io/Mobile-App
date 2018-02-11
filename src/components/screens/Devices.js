@@ -3,9 +3,7 @@ import {
   selectDevice,
   navigate,
   removeResources,
-  getResourcesFromApi,
-  disableRefresh,
-  enableRefresh
+  getResourcesFromApi
 } from "../../actions/actions";
 import { FlatList, Button, View } from "react-native";
 import Device from "../devices/Device";
@@ -70,8 +68,7 @@ const mapDispatchToProps = dispatch => {
     onDeviceClick: device => {
       dispatch(removeResources());
       dispatch(selectDevice(device.jti));
-      dispatch(enableRefresh());
-      dispatch(getResourcesFromApi(device)).then(dispatch(disableRefresh()));
+      dispatch(getResourcesFromApi(device));
       dispatch(navigate("Device", device.dev));
     }
   };

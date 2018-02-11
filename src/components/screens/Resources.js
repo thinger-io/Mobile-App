@@ -2,15 +2,19 @@ import { connect } from "react-redux";
 import {
   getResourcesFromApi,
   postResource,
-  enableRefresh,
-  disableRefresh,
   getResourceFromApi,
   navigate,
   selectResource,
   restartLiveResource,
   runResource
 } from "../../actions/actions";
-import { FlatList, KeyboardAvoidingView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  KeyboardAvoidingView,
+  Text,
+  View
+} from "react-native";
 import React from "react";
 import Resource from "../resources/Resource";
 import ErrorMessage from "../ErrorMessage";
@@ -22,8 +26,7 @@ class ResourcesScreen extends React.Component {
   }
 
   onRefresh() {
-    const { onGetResources, device, enableRefresh } = this.props;
-    enableRefresh();
+    const { onGetResources, device } = this.props;
     onGetResources(device);
   }
 
@@ -44,21 +47,24 @@ class ResourcesScreen extends React.Component {
         onUpdateClick={onUpdateClick}
         onPostClick={onPostClick}
         onChartClick={() => onChartClick(item)}
-        onRun={onRun}/>
+        onRun={onRun}
+      />
     );
   };
 
   renderItemList() {
-    const { resources, refreshing } = this.props;
+    const { resources, device } = this.props;
 
-    return (
+    return device.isFetching ? (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="#ffffff" />
+      </View>
+    ) : (
       <KeyboardAvoidingView behavior="padding">
         <FlatList
           data={Object.keys(resources)}
           renderItem={this.renderItem}
           keyExtractor={item => item}
-          refreshing={refreshing}
-          onRefresh={this.onRefresh}
         />
         <View style={{ height: 65 }} />
       </KeyboardAvoidingView>
@@ -85,8 +91,7 @@ const mapStateToProps = state => {
 
   return {
     device: state.devices[jti],
-    resources: state.resources,
-    refreshing: state.refreshing
+    resources: state.resources
   };
 };
 
@@ -104,10 +109,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(navigate("Chart"));
     },
     onGetResources: device => {
-      dispatch(getResourcesFromApi(device)).then(dispatch(disableRefresh()));
-    },
-    enableRefresh: () => {
-      dispatch(enableRefresh());
+      dispatch(getResourcesFromApi(device));
     }
   };
 };

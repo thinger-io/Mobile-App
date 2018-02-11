@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import DeviceInfo from "../screens/DeviceInfo";
 import Resources from "../screens/Resources";
 import { connect } from "react-redux";
-import { BLUE } from "../../styles/ThingerColors";
+import {BLUE, DARK_BLUE} from "../../styles/ThingerColors";
 import GradientContainer from "../GradientContainer";
 
 const Routes = TabNavigator(
@@ -33,7 +33,7 @@ const Routes = TabNavigator(
     swipeEnabled: true,
     backBehavior: "none",
     tabBarOptions: {
-      activeTintColor: BLUE
+      activeTintColor: DARK_BLUE
     }
   }
 );

@@ -74,7 +74,7 @@ class Resource extends React.Component {
       );
       return (
         <View>
-          <Text style={styles.h1}>{id}</Text>
+          <Text ellipsizeMode="tail" numberOfLines={1} style={styles.h1}>{id}</Text>
           <FlatList
             data={mappedData}
             renderItem={({ item }) => (

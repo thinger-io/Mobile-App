@@ -9,7 +9,7 @@ import {
   removeItems,
   selectAttribute
 } from "../../actions/actions";
-import { BLUE } from "../../styles/ThingerColors";
+import {BLUE, DARK_BLUE} from "../../styles/ThingerColors";
 import GradientContainer from "../GradientContainer";
 
 export const LINES = "LINES";
@@ -52,7 +52,7 @@ const Routes = TabNavigator(
     swipeEnabled: true,
     backBehavior: "none",
     tabBarOptions: {
-      activeTintColor: BLUE
+      activeTintColor: DARK_BLUE
     }
   }
 );

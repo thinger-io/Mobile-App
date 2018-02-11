@@ -40,7 +40,11 @@ export default class Attribute extends React.Component {
           flexDirection: "row"
         }}
       >
-        <Text style={[isSimple ? styles.h1 : styles.h2, { flex: 1 }]}>
+        <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
+          style={[isSimple ? styles.h1 : styles.h2, { flex: 1 }]}
+        >
           {id}
         </Text>
         {this.renderValue()}

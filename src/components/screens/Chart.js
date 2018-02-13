@@ -10,7 +10,6 @@ import Label from "../Label";
 import Pie from "../charts/Pie";
 import Bars from "../charts/Bars";
 import { BARS, LINES, PIE } from "../navigators/Charts";
-import GradientContainer from "../GradientContainer";
 
 class ChartScreen extends React.Component {
   constructor(props) {

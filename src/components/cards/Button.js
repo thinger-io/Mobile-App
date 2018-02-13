@@ -10,15 +10,15 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class CardButton extends React.Component {
   render() {
-    const { onClick, isLoading, text, icon } = this.props;
+    const { onClick, isLoading, text, icon, color } = this.props;
 
     return isLoading ? (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: color }]}>
         <ActivityIndicator size="small" color="#000000" />
       </View>
     ) : (
       <TouchableOpacity
-        style={styles.container}
+        style={[styles.container, { backgroundColor: color }]}
         onPress={onClick}
         activeOpacity={isLoading === undefined ? 0.2 : 1}
       >

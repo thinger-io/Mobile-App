@@ -8,7 +8,6 @@ import {
 import { FlatList, Button, View } from "react-native";
 import Device from "../devices/Device";
 import React from "react";
-import GradientContainer from "../GradientContainer";
 
 class DevicesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -39,20 +38,18 @@ class DevicesScreen extends React.Component {
   render() {
     const { devices, onDeviceClick } = this.props;
     return (
-      <GradientContainer>
-        <FlatList
-          data={Object.values(devices)}
-          keyExtractor={item => item.jti}
-          renderItem={({ item }) => (
-            <Device
-              name={item.dev}
-              user={item.usr}
-              onClick={() => onDeviceClick(item)}
-            />
-          )}
-          ItemSeparatorComponent={this.renderSeparator}
-        />
-      </GradientContainer>
+      <FlatList
+        data={Object.values(devices)}
+        keyExtractor={item => item.jti}
+        renderItem={({ item }) => (
+          <Device
+            name={item.dev}
+            user={item.usr}
+            onClick={() => onDeviceClick(item)}
+          />
+        )}
+        ItemSeparatorComponent={this.renderSeparator}
+      />
     );
   }
 }

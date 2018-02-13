@@ -18,6 +18,7 @@ import {
 import React from "react";
 import Resource from "../resources/Resource";
 import ErrorMessage from "../ErrorMessage";
+import { DARK_BLUE } from "../../styles/ThingerColors";
 
 class ResourcesScreen extends React.Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class ResourcesScreen extends React.Component {
 
     return device.isFetching ? (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size="large" color="#ffffff" />
+        <ActivityIndicator size="large" color={DARK_BLUE} />
       </View>
     ) : (
       <KeyboardAvoidingView behavior="padding">

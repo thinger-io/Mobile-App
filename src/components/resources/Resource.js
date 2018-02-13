@@ -6,6 +6,11 @@ import Attribute, { RUN } from "./Attribute";
 import update from "update-immutable";
 import * as PropTypes from "prop-types";
 import Button from "../cards/Button";
+import {
+  LIGHT_BLUE,
+  LIGHT_GREEN,
+  LIGHT_PINK
+} from "../../styles/ThingerColors";
 
 class Resource extends React.Component {
   constructor(props) {
@@ -74,7 +79,9 @@ class Resource extends React.Component {
       );
       return (
         <View>
-          <Text ellipsizeMode="tail" numberOfLines={1} style={styles.h1}>{id}</Text>
+          <Text ellipsizeMode="tail" numberOfLines={1} style={styles.h1}>
+            {id}
+          </Text>
           <FlatList
             data={mappedData}
             renderItem={({ item }) => (
@@ -99,19 +106,19 @@ class Resource extends React.Component {
       buttons.push(
         <Button
           text={"Update"}
-          icon="spinner"
+          color={LIGHT_BLUE}
           isLoading={isFetching}
           onClick={this.handleOnUpdateClick}
         />
       );
       buttons.push(
-        <Button text={"Charts"} icon="line-chart" onClick={onChartClick} />
+        <Button text={"Charts"} color={LIGHT_PINK} onClick={onChartClick} />
       );
     }
     if (data.hasOwnProperty("in") && typeof data.in !== "boolean")
       buttons.push(
         <Button
-          text={"Post"}
+          color={LIGHT_GREEN}
           icon="paper-plane"
           isLoading={isFetching}
           onClick={this.handleOnPostClick}

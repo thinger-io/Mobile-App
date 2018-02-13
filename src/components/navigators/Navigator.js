@@ -5,11 +5,11 @@ import DevicesScreen from "../screens/Devices";
 import QRScannerScreen from "../screens/QRScanner";
 import ChartsTabNavigator from "./Charts";
 import DeviceTabNavigator from "./Device";
-import { BLUE } from "../../styles/ThingerColors";
+import { BLUE, DARK_BLUE } from "../../styles/ThingerColors";
 
 const navigationOptions = {
   headerStyle: {
-    backgroundColor: BLUE
+    backgroundColor: DARK_BLUE
   },
   headerTintColor: "white"
 };

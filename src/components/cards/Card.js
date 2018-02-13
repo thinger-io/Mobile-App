@@ -12,19 +12,7 @@ export default class Card extends React.Component {
           {children}
           {body}
         </View>
-        <View style={{ alignItems: "center" }}>
-          {footer &&
-            footer.length > 0 && (
-              <View
-                style={{
-                  height: 1,
-                  width: "90%",
-                  backgroundColor: "#CED0CE"
-                }}
-              />
-            )}
-          <View style={styles.footer}>{footer}</View>
-        </View>
+        <View style={styles.footer}>{footer}</View>
       </View>
     );
   }
@@ -46,7 +34,10 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    borderBottomLeftRadius: BORDER_RADIUS,
+    borderBottomRightRadius: BORDER_RADIUS,
+    overflow: "hidden"
   }
 });
 

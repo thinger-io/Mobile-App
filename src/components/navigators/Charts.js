@@ -9,8 +9,7 @@ import {
   removeItems,
   selectAttribute
 } from "../../actions/actions";
-import {BLUE, DARK_BLUE} from "../../styles/ThingerColors";
-import GradientContainer from "../GradientContainer";
+import { BLUE } from "../../styles/ThingerColors";
 
 export const LINES = "LINES";
 export const PIE = "PIE";
@@ -52,7 +51,7 @@ const Routes = TabNavigator(
     swipeEnabled: true,
     backBehavior: "none",
     tabBarOptions: {
-      activeTintColor: DARK_BLUE
+      activeTintColor: BLUE
     }
   }
 );
@@ -78,11 +77,7 @@ class ChartsNavigator extends React.Component {
   }
 
   render() {
-    return (
-      <GradientContainer>
-        <Routes />
-      </GradientContainer>
-    );
+    return <Routes />;
   }
 }
 

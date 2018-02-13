@@ -16,8 +16,9 @@ function parseJWT(jwt) {
     return {
       [json.jti]: {
         isFetching: false,
-        online: false,
-        authorized: false,
+        online: true,
+        authorized: true,
+        server: "https://api.thinger.io",
         dev: json.dev,
         iat: json.iat,
         jti: json.jti,

@@ -23,31 +23,31 @@ function generatePOSTHeader(jwt, body) {
   };
 }
 
-export default class ThingerAPI {
-  static getResources(user, device, jwt) {
+export default class API {
+  static getResources(server, user, device, jwt) {
     return fetch(
-      `https://api.thinger.io/v2/users/${user}/devices/${device}/api`,
+      `${server}/v2/users/${user}/devices/${device}/api`,
       generateGETHeader(jwt)
     );
   }
 
-  static getResource(user, device, key, jwt) {
+  static getResource(server, user, device, key, jwt) {
     return fetch(
-      `https://api.thinger.io/v2/users/${user}/devices/${device}/${key}/api`,
+      `${server}/v2/users/${user}/devices/${device}/${key}/api`,
       generateGETHeader(jwt)
     );
   }
 
-  static post(user, device, key, value, jwt) {
+  static post(server, user, device, key, value, jwt) {
     return fetch(
-      `https://api.thinger.io/v2/users/${user}/devices/${device}/${key}`,
+      `${server}/v2/users/${user}/devices/${device}/${key}`,
       generatePOSTHeader(jwt, { in: value })
     );
   }
 
-  static run(user, device, key, jwt) {
+  static run(server, user, device, key, jwt) {
     return fetch(
-      `https://api.thinger.io/v2/users/${user}/devices/${device}/${key}`,
+      `${server}/v2/users/${user}/devices/${device}/${key}`,
       generateGETHeader(jwt)
     );
   }

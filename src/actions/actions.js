@@ -1,10 +1,11 @@
-import ThingerAPI from "../API/Thinger";
+import API from "../API/API";
 
 export const ADD_DEVICE = "ADD_DEVICE";
 export const REMOVE_DEVICE = "REMOVE_DEVICE";
 export const SELECT_DEVICE = "SELECT_DEVICE";
 export const SET_DEVICE_STATE = "SET_DEVICE_STATE";
 export const SET_DEVICE_AUTHORIZATION = "SET_DEVICE_AUTHORIZATION";
+export const SET_DEVICE_SERVER = "SET_DEVICE_SERVER";
 export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
 export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
@@ -52,6 +53,14 @@ export function setDeviceAuthorization(device, authorization) {
     type: SET_DEVICE_AUTHORIZATION,
     device,
     authorization
+  };
+}
+
+export function setDeviceServer(device, server) {
+  return {
+    type: SET_DEVICE_SERVER,
+    device,
+    server
   };
 }
 
@@ -142,11 +151,11 @@ export function goBack() {
 export function getResourceFromApi(device, key) {
   return dispatch => {
     dispatch(requestResource(key));
-    return ThingerAPI.getResource(device.usr, device.dev, key, device.jwt)
+    return API.getResource(device.server, device.usr, device.dev, key, device.jwt)
       .then(response => response.json())
       .then(json => dispatch(receiveResource(key, json)))
       .catch(error => {
-        console.error(error);
+        console.log(error);
       });
   };
 }
@@ -154,7 +163,7 @@ export function getResourceFromApi(device, key) {
 export function getResourcesFromApi(device) {
   return dispatch => {
     dispatch(requestDevice(device.jti));
-    return ThingerAPI.getResources(device.usr, device.dev, device.jwt)
+    return API.getResources(device.server, device.usr, device.dev, device.jwt)
       .then(response => {
         switch (response.status) {
           case 200:
@@ -166,7 +175,6 @@ export function getResourcesFromApi(device) {
             break;
           case 404:
             dispatch(setDeviceState(device.jti, false));
-            dispatch(setDeviceAuthorization(device.jti, true));
             break;
         }
         return response.json();
@@ -180,26 +188,28 @@ export function getResourcesFromApi(device) {
         return Promise.all(promises);
       })
       .then(() => dispatch(receiveDevice(device.jti)))
-      .catch(error => {});
+      .catch(error => {
+        console.log(error);
+      });
   };
 }
 
 export function postResource(device, id, value) {
   return dispatch => {
     dispatch(requestResource(id));
-    return ThingerAPI.post(device.usr, device.dev, id, value, device.jwt)
+    return API.post(device.server, device.usr, device.dev, id, value, device.jwt)
       .then(response => response.json())
       .then(json =>
         dispatch(receiveResource(id, Object.assign({}, { in: value }, json)))
       )
       .catch(error => {
-        console.error(error);
+        console.log(error);
       });
   };
 }
 
 export function runResource(device, id) {
-  return ThingerAPI.run(device.usr, device.dev, id, device.jwt).catch(error => {
-    console.error(error);
+  return API.run(device.server, device.usr, device.dev, id, device.jwt).catch(error => {
+    console.log(error);
   });
 }

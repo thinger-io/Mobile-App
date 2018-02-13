@@ -15,7 +15,7 @@ import {
   SET_DEVICE_AUTHORIZATION,
   REQUEST_RESOURCE,
   RECEIVE_DEVICE,
-  REQUEST_DEVICE
+  REQUEST_DEVICE, SET_DEVICE_SERVER
 } from "../actions/actions";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
@@ -35,6 +35,10 @@ function devices(state = {}, action) {
     case SET_DEVICE_AUTHORIZATION:
       return update(state, {
         [action.device]: { authorized: { $set: action.authorization } }
+      });
+    case SET_DEVICE_SERVER:
+      return update(state, {
+        [action.device]: { server: { $set: action.server } }
       });
     case REQUEST_DEVICE:
       return update(state, { [action.jti]: { isFetching: { $set: true } } });

@@ -46,7 +46,7 @@ export default class ThingerAPI {
   }
 
   static run(user, device, key, jwt) {
-    fetch(
+    return fetch(
       `https://api.thinger.io/v2/users/${user}/devices/${device}/${key}`,
       generateGETHeader(jwt)
     );

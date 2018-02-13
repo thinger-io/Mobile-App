@@ -42,7 +42,8 @@ function devices(state = {}, action) {
       return update(state, { [action.jti]: { isFetching: { $set: false } } });
     case REMOVE_DEVICE:
       const newState = Object.assign({}, state);
-      return delete newState[action.jti];
+      delete newState[action.jti];
+      return newState;
     default:
       return state;
   }

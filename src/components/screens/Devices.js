@@ -5,9 +5,11 @@ import {
   removeResources,
   getResourcesFromApi
 } from "../../actions/actions";
-import { FlatList, Button, View } from "react-native";
+import { FlatList, Button, View, Image, Text } from "react-native";
 import Device from "../devices/Device";
 import React from "react";
+import { MARGIN } from "../../styles/ThingerStyles";
+import ThingerStyles from "../../styles/ThingerStyles";
 
 class DevicesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -37,7 +39,7 @@ class DevicesScreen extends React.Component {
 
   render() {
     const { devices, onDeviceClick } = this.props;
-    return (
+    return Object.keys(devices).length ? (
       <FlatList
         data={Object.values(devices)}
         keyExtractor={item => item.jti}
@@ -50,6 +52,15 @@ class DevicesScreen extends React.Component {
         )}
         ItemSeparatorComponent={this.renderSeparator}
       />
+    ) : (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Image
+          source={require("../../assets/no_devices.png")}
+          style={{ height: 100, width: 100, margin: MARGIN * 2 }}
+        />
+        <Text style={ThingerStyles.h1}>Ooops!</Text>
+        <Text style={ThingerStyles.h2}>You could add a device...</Text>
+      </View>
     );
   }
 }

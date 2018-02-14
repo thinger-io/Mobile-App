@@ -19,13 +19,13 @@ export default class Label extends React.Component {
           name={!locked ? (selected ? "check-circle" : "circle-o") : "ban"}
           size={25}
           style={{
-            color: color
+            color: locked ? "gray" : color
           }}
         />
 
         <View style={{ paddingLeft: 20 }}>
-          <Text style={{ fontSize: 20 }}>{id}</Text>
-          <Text style={{ fontSize: 12 }}>{value.toString()}</Text>
+          <Text style={{ fontSize: 20, color: locked ? "gray" : color }}>{id}</Text>
+          <Text style={{ fontSize: 12, color: locked ? "gray" : color }}>{value.toString()}</Text>
         </View>
       </View>
     );

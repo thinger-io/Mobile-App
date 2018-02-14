@@ -10,14 +10,12 @@ export default class extends React.PureComponent {
   }
 
   render() {
-    const { enabledItems, data } = this.props;
+    const { chartedAttributes, data } = this.props;
 
     const contentInset = { top: 20, bottom: 20 };
     const dataPoints = [].concat.apply(
       [],
-      Object.entries(enabledItems).map(
-        ([key, value]) => (value ? data[key] : [])
-      )
+      chartedAttributes.map(([key, value]) => (value ? data[key] : []))
     );
 
     const min = Math.min(...dataPoints);
@@ -31,7 +29,7 @@ export default class extends React.PureComponent {
           contentInset={contentInset}
         />
         <View style={{ flex: 1 }}>
-          {Object.entries(enabledItems).map(([key, value], index) => {
+          {chartedAttributes.map(([key, value], index) => {
             if (value === true)
               return (
                 <LineChart

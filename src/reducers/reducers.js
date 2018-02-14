@@ -18,7 +18,9 @@ import {
   SET_DEVICE_SERVER,
   AUTHORIZE_DEVICE,
   DEAUTHORIZE_DEVICE,
-  SET_DEVICE_SERVER_STATUS
+  SET_DEVICE_SERVER_STATUS,
+  LOCK_ATTRIBUTE,
+  UNLOCK_ATTRIBUTE
 } from "../actions/actions";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
@@ -101,16 +103,16 @@ function resources(state = {}, action) {
 function liveResource(state = {}, action) {
   switch (action.type) {
     case RECEIVE_RESOURCE:
-      const input = action.value["out"];
-      if (typeof input === "object") {
-        const keys = Object.keys(input);
+      const output = action.value["out"];
+      if (typeof output === "object") {
+        const keys = Object.keys(output);
         let newState = state;
         for (const key of keys) {
-          newState = update(newState, { [key]: { $push: [input[key]] } });
+          newState = update(newState, { [key]: { $push: [output[key]] } });
         }
         return newState;
       } else {
-        return update(state, { [action.key]: { $push: [input] } });
+        return update(state, { [action.key]: { $push: [output] } });
       }
     case RESTART_LIVE_RESOURCE:
       return {};
@@ -119,7 +121,7 @@ function liveResource(state = {}, action) {
   }
 }
 
-defaultState = { [LINES]: {}, [PIE]: {}, [BARS]: {} };
+const defaultState = { [LINES]: {}, [PIE]: {}, [BARS]: {} };
 function selectedAttributes(state = defaultState, action) {
   switch (action.type) {
     case SELECT_ATTRIBUTE:
@@ -127,6 +129,23 @@ function selectedAttributes(state = defaultState, action) {
         [action.chart]: { [action.attribute]: { $set: true } }
       });
     case DESELECT_ATTRIBUTE:
+      return update(state, {
+        [action.chart]: { [action.attribute]: { $set: false } }
+      });
+    case REMOVE_ITEMS:
+      return defaultState;
+    default:
+      return state;
+  }
+}
+
+function lockedAttributes(state = defaultState, action) {
+  switch (action.type) {
+    case LOCK_ATTRIBUTE:
+      return update(state, {
+        [action.chart]: { [action.attribute]: { $set: true } }
+      });
+    case UNLOCK_ATTRIBUTE:
       return update(state, {
         [action.chart]: { [action.attribute]: { $set: false } }
       });
@@ -160,6 +179,7 @@ export default {
   selectedDevice,
   selectedResource,
   selectedAttributes,
+  lockedAttributes,
   resources,
   liveResource,
   nav

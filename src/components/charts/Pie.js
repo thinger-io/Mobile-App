@@ -9,18 +9,24 @@ export default class extends React.PureComponent {
   }
 
   render() {
-    const { enabledItems, data, deselectAttribute } = this.props;
+    const {
+      chartedAttributes,
+      data,
+      lockAttribute,
+      unlockAttribute
+    } = this.props;
 
-    const pieData = Object.entries(enabledItems)
+    const pieData = chartedAttributes
       .map(([key, value], index) => ({
         value: data[key].slice(-1)[0],
         color: getColorByIndex(index * 2),
         key,
-        enabled: value
+        charted: value
       }))
-      .filter(({ value, key, enabled }) => {
-        if (value < 0) deselectAttribute(key, PIE);
-        return enabled && value > 0;
+      .filter(({ value, key, charted }) => {
+        if (value < 0) lockAttribute(key, PIE);
+        else if (typeof value === "number") unlockAttribute(key, PIE);
+        return charted && value > 0;
       });
 
     return <PieChart style={{ flex: 1, margin: 15 }} data={pieData} />;

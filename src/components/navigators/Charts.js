@@ -6,8 +6,10 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import ChartScreen from "../screens/Chart";
 import {
   getResourceFromApi,
+  lockAttribute,
   removeItems,
-  selectAttribute
+  selectAttribute,
+  unlockAttribute
 } from "../../actions/actions";
 import { BLUE } from "../../styles/ThingerColors";
 
@@ -94,12 +96,25 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onRefresh: (device, resource) => {
-      dispatch(getResourceFromApi(device, resource));
+      dispatch(getResourceFromApi(device, resource)).then(({ value }) => {
+        Object.keys(value.out).forEach(key =>
+          types.forEach(chart => {
+            return typeof value.out[key] === "number"
+              ? dispatch(unlockAttribute(key, chart))
+              : dispatch(lockAttribute(key, chart));
+          })
+        );
+      });
     },
     onInit: (device, resource) => {
       dispatch(getResourceFromApi(device, resource)).then(({ value }) => {
         Object.keys(value.out).forEach(key =>
-          types.forEach(chart => dispatch(selectAttribute(key, chart)))
+          types.forEach(chart => {
+            dispatch(selectAttribute(key, chart));
+            return typeof value.out[key] === "number"
+              ? dispatch(unlockAttribute(key, chart))
+              : dispatch(lockAttribute(key, chart));
+          })
         );
       });
     },

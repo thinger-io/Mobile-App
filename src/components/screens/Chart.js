@@ -1,7 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import Line from "../charts/Line";
-import { selectAttribute, deselectAttribute } from "../../actions/actions";
+import {
+  selectAttribute,
+  deselectAttribute,
+  lockAttribute,
+  unlockAttribute
+} from "../../actions/actions";
 import styles from "../../styles/ThingerStyles";
 import { getColorByIndex } from "../../utils/colors";
 import { FlatList, ScrollView, Text, View } from "react-native";
@@ -19,45 +24,61 @@ class ChartScreen extends React.Component {
 
   handleOnLabelClick(key) {
     const {
-      enabledItems,
+      selectedAttributes,
       type,
       onDeselectAttribute,
       onSelectAttribute
     } = this.props;
-    enabledItems[key]
+    selectedAttributes[key]
       ? onDeselectAttribute(key, type)
       : onSelectAttribute(key, type);
   }
 
+  parseChartedAttributes() {
+    const { selectedAttributes, lockedAttributes } = this.props;
+    return Object.keys(selectedAttributes).map(key => [
+      key,
+      selectedAttributes[key] && !lockedAttributes[key]
+    ]);
+  }
+
   render() {
     const {
-      enabledItems,
+      selectedAttributes,
+      lockedAttributes,
       data,
       resource,
       type,
-      onDeselectAttribute
+      onLockAttribute,
+      onUnlockAttribute
     } = this.props;
     if (Object.keys(data).length === 0) return null;
+    const chartedAttributes = this.parseChartedAttributes();
 
     return (
       <ScrollView style={{ flex: 1 }}>
         <Card>
           <View style={{ height: 250 }}>
             <Text style={styles.h1}>{resource}</Text>
-            {type === LINES && <Line enabledItems={enabledItems} data={data} />}
-            {type === BARS && <Bars enabledItems={enabledItems} data={data} />}
+            {type === LINES && (
+              <Line chartedAttributes={chartedAttributes} data={data} />
+            )}
+            {type === BARS && (
+              <Bars chartedAttributes={chartedAttributes} data={data} />
+            )}
             {type === PIE && (
               <Pie
-                enabledItems={enabledItems}
+                chartedAttributes={chartedAttributes}
                 data={data}
-                deselectAttribute={onDeselectAttribute}
+                lockAttribute={onLockAttribute}
+                unlockAttribute={onUnlockAttribute}
               />
             )}
           </View>
         </Card>
 
         <FlatList
-          data={Object.keys(enabledItems)}
+          data={Object.keys(selectedAttributes)}
           keyExtractor={item => item}
           renderItem={({ item, index }) => {
             return (
@@ -65,7 +86,8 @@ class ChartScreen extends React.Component {
                 id={item}
                 value={data[item].slice(-1)[0]}
                 color={getColorByIndex(index * 2)}
-                enabled={enabledItems[item]}
+                selected={selectedAttributes[item]}
+                locked={lockedAttributes[item]}
                 onClick={this.handleOnLabelClick}
               />
             );
@@ -82,19 +104,19 @@ const mapStateToProps = (state, ownProps) => {
   return {
     resource: state.selectedResource,
     data: state.liveResource,
-    enabledItems: state.selectedAttributes[type],
+    selectedAttributes: state.selectedAttributes[type],
+    lockedAttributes: state.lockedAttributes[type],
     type
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSelectAttribute: (key, chart) => {
-      dispatch(selectAttribute(key, chart));
-    },
-    onDeselectAttribute: (key, chart) => {
-      dispatch(deselectAttribute(key, chart));
-    }
+    onSelectAttribute: (key, chart) => dispatch(selectAttribute(key, chart)),
+    onDeselectAttribute: (key, chart) =>
+      dispatch(deselectAttribute(key, chart)),
+    onLockAttribute: (key, chart) => dispatch(lockAttribute(key, chart)),
+    onUnlockAttribute: (key, chart) => dispatch(unlockAttribute(key, chart))
   };
 };
 

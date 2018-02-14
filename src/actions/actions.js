@@ -11,6 +11,8 @@ export const SET_DEVICE_SERVER_STATUS = "SET_DEVICE_SERVER_STATUS";
 export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
 export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
+export const LOCK_ATTRIBUTE = "LOCK_ATTRIBUTE";
+export const UNLOCK_ATTRIBUTE = "UNLOCK_ATTRIBUTE";
 export const REMOVE_ITEMS = "REMOVE_ITEMS";
 export const REQUEST_DEVICE = "REQUEST_DEVICE";
 export const RECEIVE_DEVICE = "RECEIVE_DEVICE";
@@ -98,6 +100,22 @@ export function selectAttribute(attribute, chart) {
 export function deselectAttribute(attribute, chart) {
   return {
     type: DESELECT_ATTRIBUTE,
+    attribute,
+    chart
+  };
+}
+
+export function lockAttribute(attribute, chart) {
+  return {
+    type: LOCK_ATTRIBUTE,
+    attribute,
+    chart
+  };
+}
+
+export function unlockAttribute(attribute, chart) {
+  return {
+    type: UNLOCK_ATTRIBUTE,
     attribute,
     chart
   };

@@ -10,12 +10,12 @@ export default class extends React.PureComponent {
   }
 
   render() {
-    const { enabledItems, data } = this.props;
+    const { chartedAttributes, data } = this.props;
 
-    const barData = Object.entries(enabledItems)
+    const barData = chartedAttributes
       .map(([key, value], index) => [key, value, index])
-      .filter(([key, value, index]) => value)
-      .map(([key, value, index]) => ({
+      .filter(([key, value]) => value)
+      .map(([key, , index]) => ({
         values: [data[key].slice(-1)[0]],
         positive: {
           fill: getColorByIndex(index * 2)

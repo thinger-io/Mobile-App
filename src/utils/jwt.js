@@ -13,10 +13,10 @@ export function parseJWT(jwt) {
         usr: json.usr,
         jwt,
         isFetching: false,
-        isOnline: true,
-        isAuthorized: true,
+        isOnline: false,
+        isAuthorized: false,
         server: "https://api.thinger.io",
-        hasServerConnection: true
+        hasServerConnection: false
       }
     };
   } catch (error) {

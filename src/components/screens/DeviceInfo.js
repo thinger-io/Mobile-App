@@ -39,9 +39,9 @@ class DeviceInfo extends React.Component {
                 textAlign: "center",
                 borderWidth: 1,
                 borderColor: DARK_BLUE,
-                backgroundColor: 'white',
+                backgroundColor: "white",
                 padding: 5,
-                marginVertical: 5,
+                marginVertical: 5
               }
             ]}
             value={this.state.server}

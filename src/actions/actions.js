@@ -59,7 +59,7 @@ export function authorizeDevice(device) {
 
 export function deauthorizeDevice(device) {
   return {
-    type: AUTHORIZE_DEVICE,
+    type: DEAUTHORIZE_DEVICE,
     device
   };
 }

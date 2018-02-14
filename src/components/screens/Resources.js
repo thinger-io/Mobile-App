@@ -74,22 +74,29 @@ class ResourcesScreen extends React.Component {
 
   render() {
     const { device } = this.props;
-
-    return (
-      device &&
-      (!device.hasServerConnection ? (
+    return device ? (
+      !device.hasServerConnection ? (
         <ErrorMessage
           message={"Couldn't connect to\n" + device.server}
           icon="plug"
+          onPressButton={this.onRefresh}
         />
-      ) : !device.authorized ? (
-        <ErrorMessage message={device.usr + " isn't authorized"} icon="lock" />
-      ) : !device.online ? (
-        <ErrorMessage message={device.dev + " is offline"} icon="plug" />
+      ) : !device.isAuthorized ? (
+        <ErrorMessage
+          message={device.usr + " isn't authorized"}
+          icon="lock"
+          onPressButton={this.onRefresh}
+        />
+      ) : !device.isOnline ? (
+        <ErrorMessage
+          message={device.dev + " is offline"}
+          icon="plug"
+          onPressButton={this.onRefresh}
+        />
       ) : (
         this.renderItemList()
-      ))
-    );
+      )
+    ) : null;
   }
 }
 

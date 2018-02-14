@@ -4,32 +4,9 @@ import { Camera, Permissions } from "expo";
 import { connect } from "react-redux";
 import { addDevice } from "../../actions/actions";
 import { goBack } from "../../actions/actions";
-import base64 from "base-64";
 import DropdownAlert from "react-native-dropdownalert";
 import TIOStyles, { PADDING } from "../../styles/ThingerStyles";
-
-function parseJWT(jwt) {
-  try {
-    const data = jwt.split(".")[1];
-    const payload = base64.decode(data);
-    const json = JSON.parse(payload);
-    return {
-      [json.jti]: {
-        isFetching: false,
-        online: true,
-        authorized: true,
-        server: "https://api.thinger.io",
-        dev: json.dev,
-        iat: json.iat,
-        jti: json.jti,
-        usr: json.usr,
-        jwt
-      }
-    };
-  } catch (e) {
-    throw e;
-  }
-}
+import { parseJWT } from "../../utils/jwt";
 
 class QRScanner extends React.Component {
   static navigationOptions = {

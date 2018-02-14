@@ -11,11 +11,14 @@ import {
   GO_BACK,
   SELECT_ATTRIBUTE,
   DESELECT_ATTRIBUTE,
-  SET_DEVICE_STATE,
-  SET_DEVICE_AUTHORIZATION,
+  SET_DEVICE_STATUS,
   REQUEST_RESOURCE,
   RECEIVE_DEVICE,
-  REQUEST_DEVICE, SET_DEVICE_SERVER
+  REQUEST_DEVICE,
+  SET_DEVICE_SERVER,
+  AUTHORIZE_DEVICE,
+  DEAUTHORIZE_DEVICE,
+  SET_DEVICE_SERVER_STATUS
 } from "../actions/actions";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
@@ -28,17 +31,25 @@ function devices(state = {}, action) {
   switch (action.type) {
     case ADD_DEVICE:
       return Object.assign({}, state, action.device);
-    case SET_DEVICE_STATE:
+    case SET_DEVICE_STATUS:
       return update(state, {
-        [action.device]: { online: { $set: action.online } }
+        [action.device]: { isOnline: { $set: action.online } }
       });
-    case SET_DEVICE_AUTHORIZATION:
+    case AUTHORIZE_DEVICE:
       return update(state, {
-        [action.device]: { authorized: { $set: action.authorization } }
+        [action.device]: { isAuthorized: { $set: true } }
+      });
+    case DEAUTHORIZE_DEVICE:
+      return update(state, {
+        [action.device]: { isAuthorized: { $set: false } }
       });
     case SET_DEVICE_SERVER:
       return update(state, {
         [action.device]: { server: { $set: action.server } }
+      });
+    case SET_DEVICE_SERVER_STATUS:
+      return update(state, {
+        [action.device]: { hasServerConnection: { $set: action.hasConnection } }
       });
     case REQUEST_DEVICE:
       return update(state, { [action.jti]: { isFetching: { $set: true } } });

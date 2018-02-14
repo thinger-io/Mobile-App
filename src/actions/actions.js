@@ -3,9 +3,11 @@ import API from "../API/API";
 export const ADD_DEVICE = "ADD_DEVICE";
 export const REMOVE_DEVICE = "REMOVE_DEVICE";
 export const SELECT_DEVICE = "SELECT_DEVICE";
-export const SET_DEVICE_STATE = "SET_DEVICE_STATE";
-export const SET_DEVICE_AUTHORIZATION = "SET_DEVICE_AUTHORIZATION";
+export const SET_DEVICE_STATUS = "SET_DEVICE_STATUS";
+export const AUTHORIZE_DEVICE = "AUTHORIZE_DEVICE";
+export const DEAUTHORIZE_DEVICE = "DEAUTHORIZE_DEVICE";
 export const SET_DEVICE_SERVER = "SET_DEVICE_SERVER";
+export const SET_DEVICE_SERVER_STATUS = "SET_DEVICE_SERVER_STATUS";
 export const SELECT_RESOURCE = "SELECT_RESOURCE";
 export const SELECT_ATTRIBUTE = "SELECT_ATTRIBUTE";
 export const DESELECT_ATTRIBUTE = "DESELECT_ATTRIBUTE";
@@ -42,17 +44,23 @@ export function selectDevice(jti) {
 
 export function setDeviceState(device, online) {
   return {
-    type: SET_DEVICE_STATE,
+    type: SET_DEVICE_STATUS,
     device,
     online
   };
 }
 
-export function setDeviceAuthorization(device, authorization) {
+export function authorizeDevice(device) {
   return {
-    type: SET_DEVICE_AUTHORIZATION,
-    device,
-    authorization
+    type: AUTHORIZE_DEVICE,
+    device
+  };
+}
+
+export function deauthorizeDevice(device) {
+  return {
+    type: AUTHORIZE_DEVICE,
+    device
   };
 }
 
@@ -61,6 +69,14 @@ export function setDeviceServer(device, server) {
     type: SET_DEVICE_SERVER,
     device,
     server
+  };
+}
+
+export function setDeviceServerStatus(device, hasConnection) {
+  return {
+    type: SET_DEVICE_SERVER_STATUS,
+    device,
+    hasConnection
   };
 }
 
@@ -151,11 +167,17 @@ export function goBack() {
 export function getResourceFromApi(device, key) {
   return dispatch => {
     dispatch(requestResource(key));
-    return API.getResource(device.server, device.usr, device.dev, key, device.jwt)
+    return API.getResource(
+      device.server,
+      device.usr,
+      device.dev,
+      key,
+      device.jwt
+    )
       .then(response => response.json())
       .then(json => dispatch(receiveResource(key, json)))
       .catch(error => {
-        console.log(error);
+        throw error;
       });
   };
 }
@@ -165,13 +187,14 @@ export function getResourcesFromApi(device) {
     dispatch(requestDevice(device.jti));
     return API.getResources(device.server, device.usr, device.dev, device.jwt)
       .then(response => {
+        dispatch(setDeviceServerStatus(device.jti, true));
         switch (response.status) {
           case 200:
+            dispatch(authorizeDevice(device.jti));
             dispatch(setDeviceState(device.jti, true));
-            dispatch(setDeviceAuthorization(device.jti, true));
             break;
           case 401:
-            dispatch(setDeviceAuthorization(device.jti, false));
+            dispatch(deauthorizeDevice(device.jti));
             break;
           case 404:
             dispatch(setDeviceState(device.jti, false));
@@ -189,7 +212,8 @@ export function getResourcesFromApi(device) {
       })
       .then(() => dispatch(receiveDevice(device.jti)))
       .catch(error => {
-        console.log(error);
+        if (error instanceof TypeError)
+          dispatch(setDeviceServerStatus(device.jti, false));
       });
   };
 }
@@ -197,7 +221,14 @@ export function getResourcesFromApi(device) {
 export function postResource(device, id, value) {
   return dispatch => {
     dispatch(requestResource(id));
-    return API.post(device.server, device.usr, device.dev, id, value, device.jwt)
+    return API.post(
+      device.server,
+      device.usr,
+      device.dev,
+      id,
+      value,
+      device.jwt
+    )
       .then(response => response.json())
       .then(json =>
         dispatch(receiveResource(id, Object.assign({}, { in: value }, json)))
@@ -209,7 +240,9 @@ export function postResource(device, id, value) {
 }
 
 export function runResource(device, id) {
-  return API.run(device.server, device.usr, device.dev, id, device.jwt).catch(error => {
-    console.log(error);
-  });
+  return API.run(device.server, device.usr, device.dev, id, device.jwt).catch(
+    error => {
+      console.log(error);
+    }
+  );
 }

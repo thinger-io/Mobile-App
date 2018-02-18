@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
-import { BORDER_RADIUS, MARGIN, PADDING } from "../../styles/ThingerStyles";
+import { BORDER_RADIUS, MARGIN, PADDING } from "../../constants/ThingerStyles";
 import * as PropTypes from "prop-types";
 
 export default class Card extends React.Component {

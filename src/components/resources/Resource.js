@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/ThingerStyles";
+import styles from "../../constants/ThingerStyles";
 import Card from "../cards/Card";
 import { FlatList, Text, View } from "react-native";
 import Attribute, { RUN } from "./Attribute";
@@ -10,7 +10,7 @@ import {
   LIGHT_BLUE,
   LIGHT_GREEN,
   LIGHT_PINK
-} from "../../styles/ThingerColors";
+} from "../../constants/ThingerColors";
 
 class Resource extends React.Component {
   constructor(props) {

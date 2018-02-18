@@ -1,9 +1,10 @@
 import React from "react";
-import * as PropTypes from "prop-types";
-import ThingerStyles, { MARGIN } from "../styles/ThingerStyles";
+import PropTypes from "prop-types";
+import ThingerStyles, { MARGIN } from "../constants/ThingerStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { View, Text, Button } from "react-native";
-import { DARK_BLUE } from "../styles/ThingerColors";
+import { View, Text } from "react-native";
+import { DARK_BLUE } from "../constants/ThingerColors";
+import RoundedButton from "./buttons/RoundedButton";
 
 export default class ErrorMessage extends React.Component {
   propsType = {
@@ -26,18 +27,11 @@ export default class ErrorMessage extends React.Component {
           {this.props.message}
         </Text>
         {this.props.onPressButton && (
-          <View
-            style={{
-              borderRadius: 5,
-              backgroundColor: DARK_BLUE
-            }}
-          >
-            <Button
-              onPress={() => this.props.onPressButton()}
-              title="Reload"
-              color="white"
-            />
-          </View>
+          <RoundedButton
+            color={DARK_BLUE}
+            text="Reload"
+            onPress={() => this.props.onPressButton()}
+          />
         )}
       </View>
     );

@@ -11,7 +11,7 @@ import {
   selectAttribute,
   unlockAttribute
 } from "../../actions/actions";
-import { BLUE } from "../../styles/ThingerColors";
+import { BLUE, DARK_BLUE } from "../../constants/ThingerColors";
 
 export const LINES = "LINES";
 export const PIE = "PIE";
@@ -53,7 +53,14 @@ const Routes = TabNavigator(
     swipeEnabled: true,
     backBehavior: "none",
     tabBarOptions: {
-      activeTintColor: BLUE
+      activeTintColor: DARK_BLUE,
+      inactiveTintColor: "gray",
+      style: {
+        backgroundColor: "white"
+      },
+      indicatorStyle: {
+        backgroundColor: DARK_BLUE
+      }
     }
   }
 );

@@ -1,6 +1,6 @@
 import React from "react";
-import { SEPARATOR_PADDING } from "../../styles/ThingerStyles";
-import styles from "../../styles/ThingerStyles";
+import { SEPARATOR_PADDING } from "../../constants/ThingerStyles";
+import styles from "../../constants/ThingerStyles";
 import { Text, View } from "react-native";
 import { Output } from "./values/Output";
 import { Input } from "./values/Input";

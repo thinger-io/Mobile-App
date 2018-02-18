@@ -18,7 +18,7 @@ import {
 import React from "react";
 import Resource from "../resources/Resource";
 import ErrorMessage from "../ErrorMessage";
-import { DARK_BLUE } from "../../styles/ThingerColors";
+import { DARK_BLUE } from "../../constants/ThingerColors";
 
 class ResourcesScreen extends React.Component {
   constructor(props) {

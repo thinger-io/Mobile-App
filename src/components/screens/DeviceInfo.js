@@ -1,72 +1,61 @@
 import { connect } from "react-redux";
-import {
-  Button,
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  TextInput,
-  View
-} from "react-native";
 import React from "react";
-import QRCode from "react-native-qrcode-svg/src/index";
-import styles from "../../styles/ThingerStyles";
-import { removeDevice, goBack, setDeviceServer } from "../../actions/actions";
-import { DARK_BLUE } from "../../styles/ThingerColors";
+import { MARGIN } from "../../constants/ThingerStyles";
+import {
+  removeDevice,
+  goBack,
+  setDeviceServer,
+  navigate
+} from "../../actions/actions";
+import RoundedButton from "../buttons/RoundedButton";
+import CenterView from "../containers/CenterView";
+import ThingerConstants from "../../constants/ThingerConstants";
+import MainContainer from "../containers/MainContainer";
+import List from "../lists/List";
+import OutputItem from "../lists/OutputItem";
+import TextInputItem from "../lists/TextInputItem";
+import EnterItem from "../lists/EnterItem";
 
 class DeviceInfo extends React.Component {
   constructor(props) {
     super(props);
+    this.handleOnChangeText = this.handleOnChangeText.bind(this);
     this.state = {
       server: this.props.device.server
     };
   }
 
+  handleOnChangeText(text) {
+    const { device, changeServer } = this.props;
+    this.setState({ server: text });
+    changeServer(device.jti, text);
+  }
+
   render() {
-    const { device, removeDevice, changeServer } = this.props;
+    const { device, removeDevice, onShowQR } = this.props;
 
     return device ? (
-      <KeyboardAvoidingView behavior={"position"}>
-        <ScrollView style={{ alignItems: "center" }}>
-          <View style={{ marginVertical: 50 }}>
-            <QRCode value={device.jwt} size={300} />
-          </View>
-          <Text style={[styles.h1, { textAlign: "center" }]}>{device.dev}</Text>
-          <Text style={[styles.h2, { textAlign: "center" }]}>{device.usr}</Text>
-          <TextInput
-            style={[
-              styles.h2,
-              {
-                textAlign: "center",
-                borderWidth: 1,
-                borderColor: DARK_BLUE,
-                backgroundColor: "white",
-                padding: 5,
-                marginVertical: 5
-              }
-            ]}
+      <MainContainer>
+        <List>
+          <OutputItem id={"Device"} value={device.dev} />
+          <OutputItem id={"User"} value={device.usr} />
+          <TextInputItem
+            id={"Server"}
             value={this.state.server}
-            placeholder={"https://api.thinger.io"}
-            onChangeText={text => {
-              this.setState({ server: text });
-              changeServer(device.jti, text);
-            }}
+            placeholder={ThingerConstants.server}
+            onChangeText={this.handleOnChangeText}
           />
-          <View
-            style={{
-              marginTop: 20,
-              borderRadius: 5,
-              backgroundColor: "red"
-            }}
-          >
-            <Button
-              onPress={() => removeDevice(device.jti)}
-              title="Remove"
-              color="white"
-            />
-          </View>
-          <View style={{ height: 80 }} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+          <EnterItem id={"Show QR"} onPress={() => onShowQR()} />
+        </List>
+
+        <CenterView style={{ margin: MARGIN }}>
+          <RoundedButton
+            color={"red"}
+            text="Remove"
+            onPress={() => removeDevice(device.jti)}
+          />
+        </CenterView>
+      </MainContainer>
     ) : null;
   }
 }
@@ -85,7 +74,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(removeDevice(jti));
       dispatch(goBack());
     },
-    changeServer: (device, server) => dispatch(setDeviceServer(device, server))
+    changeServer: (device, server) => dispatch(setDeviceServer(device, server)),
+    onShowQR: () => dispatch(navigate("ShowQR"))
   };
 };
 

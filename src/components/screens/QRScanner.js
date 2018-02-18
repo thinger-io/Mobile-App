@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { addDevice } from "../../actions/actions";
 import { goBack } from "../../actions/actions";
 import DropdownAlert from "react-native-dropdownalert";
-import TIOStyles, { PADDING } from "../../styles/ThingerStyles";
+import TIOStyles, { PADDING } from "../../constants/ThingerStyles";
 import { parseJWT } from "../../utils/jwt";
 
 class QRScanner extends React.Component {

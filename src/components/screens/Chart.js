@@ -7,7 +7,7 @@ import {
   lockAttribute,
   unlockAttribute
 } from "../../actions/actions";
-import styles from "../../styles/ThingerStyles";
+import styles from "../../constants/ThingerStyles";
 import { getColorByIndex } from "../../utils/colors";
 import { FlatList, ScrollView, Text, View } from "react-native";
 import Card from "../cards/Card";

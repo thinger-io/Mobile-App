@@ -2,10 +2,11 @@ import { addNavigationHelpers, StackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import React from "react";
 import DevicesScreen from "../screens/Devices";
+import ShowQRScreen from "../screens/ShowQR";
 import QRScannerScreen from "../screens/QRScanner";
 import ChartsTabNavigator from "./Charts";
 import DeviceTabNavigator from "./Device";
-import { DARK_BLUE } from "../../styles/ThingerColors";
+import { DARK_BLUE } from "../../constants/ThingerColors";
 
 const navigationOptions = {
   headerStyle: {
@@ -18,7 +19,8 @@ export const Routes = StackNavigator({
   Main: { screen: DevicesScreen, navigationOptions },
   Scanner: { screen: QRScannerScreen, navigationOptions },
   Device: { screen: DeviceTabNavigator, navigationOptions },
-  Chart: { screen: ChartsTabNavigator, navigationOptions }
+  Chart: { screen: ChartsTabNavigator, navigationOptions },
+  ShowQR: { screen: ShowQRScreen, navigationOptions }
 });
 
 class Navigator extends React.Component {

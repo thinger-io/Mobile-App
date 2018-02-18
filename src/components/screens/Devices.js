@@ -5,22 +5,30 @@ import {
   removeResources,
   getResourcesFromApi
 } from "../../actions/actions";
-import { FlatList, Button, View, Image, Text } from "react-native";
+import {
+  FlatList,
+  View,
+  Image,
+  Text,
+  TouchableWithoutFeedback
+} from "react-native";
 import Device from "../devices/Device";
 import React from "react";
-import { MARGIN } from "../../styles/ThingerStyles";
-import ThingerStyles from "../../styles/ThingerStyles";
+import { MARGIN, PADDING } from "../../constants/ThingerStyles";
+import ThingerStyles from "../../constants/ThingerStyles";
 
 class DevicesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "thingerio",
       headerRight: (
-        <Button
-          title="Add"
-          color="white"
+        <TouchableWithoutFeedback
           onPress={() => navigation.dispatch(navigate("Scanner"))}
-        />
+        >
+          <View style={{ padding: PADDING }}>
+            <Text style={{ color: "white" }}>Add</Text>
+          </View>
+        </TouchableWithoutFeedback>
       )
     };
   };

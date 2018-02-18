@@ -7,12 +7,9 @@ import { goBack } from "../../actions/actions";
 import DropdownAlert from "react-native-dropdownalert";
 import TIOStyles, { PADDING } from "../../constants/ThingerStyles";
 import { parseJWT } from "../../utils/jwt";
+import Screen from "../containers/Screen";
 
 class QRScanner extends React.Component {
-  static navigationOptions = {
-    title: "Scanner"
-  };
-
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
@@ -66,7 +63,7 @@ class QRScanner extends React.Component {
       return <Text>No access to camera</Text>;
     } else {
       return (
-        <View style={{ flex: 1 }}>
+        <Screen navigationBar={{ title: "QR Scanner" }}>
           {this.renderCamera()}
           <View
             style={{
@@ -86,7 +83,7 @@ class QRScanner extends React.Component {
               flexDirection: "row"
             }}
           />
-        </View>
+        </Screen>
       );
     }
   }

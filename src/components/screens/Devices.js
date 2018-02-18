@@ -16,23 +16,9 @@ import Device from "../devices/Device";
 import React from "react";
 import { MARGIN, PADDING } from "../../constants/ThingerStyles";
 import ThingerStyles from "../../constants/ThingerStyles";
+import Screen from "../containers/Screen";
 
 class DevicesScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: "thingerio",
-      headerRight: (
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(navigate("Scanner"))}
-        >
-          <View style={{ padding: PADDING }}>
-            <Text style={{ color: "white" }}>Add</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      )
-    };
-  };
-
   renderSeparator = () => {
     return (
       <View
@@ -45,7 +31,7 @@ class DevicesScreen extends React.Component {
     );
   };
 
-  render() {
+  renderContent() {
     const { devices, onDeviceClick } = this.props;
     return Object.keys(devices).length ? (
       <FlatList
@@ -71,6 +57,20 @@ class DevicesScreen extends React.Component {
       </View>
     );
   }
+
+  render() {
+    return (
+      <Screen
+        navigationBar={{
+          title: "Devices",
+          rightIcon: "qrcode",
+          onPress: this.props.onAddDevicePress
+        }}
+      >
+        {this.renderContent()}
+      </Screen>
+    );
+  }
 }
 
 const mapStateToProps = state => {
@@ -86,6 +86,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(selectDevice(device.jti));
       dispatch(getResourcesFromApi(device));
       dispatch(navigate("Device", device.dev));
+    },
+    onAddDevicePress: () => {
+      dispatch(navigate("Scanner"));
     }
   };
 };

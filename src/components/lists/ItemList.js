@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PropTypes from "prop-types";
-import { PADDING } from "../../constants/ThingerStyles";
+import { FONT_SIZE_P, PADDING } from "../../constants/ThingerStyles";
+import { DARK_BLUE } from "../../constants/ThingerColors";
 
 export default class ItemList extends React.Component {
   propsType = {
@@ -44,8 +45,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#e1e1e1"
   },
   id: {
-    fontSize: 20,
-    color: "#444"
+    fontSize: FONT_SIZE_P,
+    color: DARK_BLUE
   },
   valueContainer: {
     flex: 1,

@@ -168,11 +168,10 @@ export function restartLiveResource() {
   };
 }
 
-export function navigate(screen, title) {
+export function navigate(screen) {
   return {
     type: NAVIGATE,
-    routeName: screen,
-    title
+    routeName: screen
   };
 }
 

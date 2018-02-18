@@ -2,6 +2,8 @@ import React from "react";
 import PairView from "./ItemList";
 import { StyleSheet, TextInput } from "react-native";
 import PropTypes from "prop-types";
+import { FONT_SIZE_P } from "../../constants/ThingerStyles";
+import { INPUT_COLOR } from "../../constants/ThingerColors";
 
 export default class TextInputItem extends React.Component {
   propsType = {
@@ -33,7 +35,7 @@ export default class TextInputItem extends React.Component {
 const styles = StyleSheet.create({
   value: {
     flex: 1,
-    fontSize: 20,
-    color: "#888"
+    fontSize: FONT_SIZE_P,
+    color: INPUT_COLOR
   }
 });

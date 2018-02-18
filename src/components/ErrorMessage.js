@@ -1,8 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ThingerStyles, { MARGIN } from "../constants/ThingerStyles";
+import ThingerStyles, {
+  FONT_SIZE_P,
+  MARGIN,
+  PADDING
+} from "../constants/ThingerStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { DARK_BLUE } from "../constants/ThingerColors";
 import RoundedButton from "./buttons/RoundedButton";
 
@@ -19,13 +23,11 @@ export default class ErrorMessage extends React.Component {
         {this.props.icon && (
           <Icon
             name={this.props.icon}
-            size={30}
-            style={{ color: "black", margin: MARGIN }}
+            size={40}
+            style={{ color: DARK_BLUE, margin: MARGIN }}
           />
         )}
-        <Text style={[ThingerStyles.h2, { margin: MARGIN }]}>
-          {this.props.message}
-        </Text>
+        <Text style={styles.message}>{this.props.message}</Text>
         {this.props.onPressButton && (
           <RoundedButton
             color={DARK_BLUE}
@@ -37,3 +39,11 @@ export default class ErrorMessage extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  message: {
+    margin: MARGIN,
+    fontSize: FONT_SIZE_P,
+    color: DARK_BLUE
+  }
+});

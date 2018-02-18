@@ -164,8 +164,7 @@ function nav(state = initScreen, action) {
     case NAVIGATE:
       return getStateForAction(
         NavigationActions.navigate({
-          routeName: action.routeName,
-          params: { title: action.title }
+          routeName: action.routeName
         }),
         state
       );

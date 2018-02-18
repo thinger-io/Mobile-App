@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { PADDING } from "../../constants/ThingerStyles";
+import { FONT_SIZE_H1, PADDING } from "../../constants/ThingerStyles";
 import PropTypes from "prop-types";
 
 export default class List extends React.Component {
@@ -22,10 +22,10 @@ export default class List extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: PADDING
+    padding: PADDING
   },
   title: {
-    fontSize: 26,
+    fontSize: FONT_SIZE_H1,
     paddingVertical: PADDING,
     fontWeight: "800"
   }

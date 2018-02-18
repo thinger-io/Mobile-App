@@ -15,6 +15,12 @@ import Label from "../Label";
 import Pie from "../charts/Pie";
 import Bars from "../charts/Bars";
 import { BARS, LINES, PIE } from "../navigators/Charts";
+import Screen from "../containers/Screen";
+import {
+  DARK_BLUE,
+  DIVIDER_COLOR,
+  LIGHT_BLUE
+} from "../../constants/ThingerColors";
 
 class ChartScreen extends React.Component {
   constructor(props) {
@@ -56,26 +62,27 @@ class ChartScreen extends React.Component {
     const chartedAttributes = this.parseChartedAttributes();
 
     return (
-      <ScrollView style={{ flex: 1 }}>
-        <Card>
-          <View style={{ height: 250 }}>
-            <Text style={styles.h1}>{resource}</Text>
-            {type === LINES && (
-              <Line chartedAttributes={chartedAttributes} data={data} />
-            )}
-            {type === BARS && (
-              <Bars chartedAttributes={chartedAttributes} data={data} />
-            )}
-            {type === PIE && (
-              <Pie
-                chartedAttributes={chartedAttributes}
-                data={data}
-                lockAttribute={onLockAttribute}
-                unlockAttribute={onUnlockAttribute}
-              />
-            )}
-          </View>
-        </Card>
+      <Screen
+        navigationBar={{
+          title: resource
+        }}
+      >
+        <View style={{ height: 250, backgroundColor: DIVIDER_COLOR }}>
+          {type === LINES && (
+            <Line chartedAttributes={chartedAttributes} data={data} />
+          )}
+          {type === BARS && (
+            <Bars chartedAttributes={chartedAttributes} data={data} />
+          )}
+          {type === PIE && (
+            <Pie
+              chartedAttributes={chartedAttributes}
+              data={data}
+              lockAttribute={onLockAttribute}
+              unlockAttribute={onUnlockAttribute}
+            />
+          )}
+        </View>
 
         <FlatList
           data={Object.keys(selectedAttributes)}
@@ -93,7 +100,7 @@ class ChartScreen extends React.Component {
             );
           }}
         />
-      </ScrollView>
+      </Screen>
     );
   }
 }

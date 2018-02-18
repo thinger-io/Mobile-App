@@ -5,23 +5,22 @@ import DevicesScreen from "../screens/Devices";
 import ShowQRScreen from "../screens/ShowQR";
 import QRScannerScreen from "../screens/QRScanner";
 import ChartsTabNavigator from "./Charts";
-import DeviceTabNavigator from "./Device";
-import { DARK_BLUE } from "../../constants/ThingerColors";
+import DeviceInfo from "../screens/DeviceInfo";
+import Resources from "../screens/Resources";
 
-const navigationOptions = {
-  headerStyle: {
-    backgroundColor: DARK_BLUE
+export const Routes = StackNavigator(
+  {
+    Main: { screen: DevicesScreen },
+    Scanner: { screen: QRScannerScreen },
+    Device: { screen: Resources },
+    Info: { screen: DeviceInfo },
+    Chart: { screen: ChartsTabNavigator },
+    ShowQR: { screen: ShowQRScreen }
   },
-  headerTintColor: "white"
-};
-
-export const Routes = StackNavigator({
-  Main: { screen: DevicesScreen, navigationOptions },
-  Scanner: { screen: QRScannerScreen, navigationOptions },
-  Device: { screen: DeviceTabNavigator, navigationOptions },
-  Chart: { screen: ChartsTabNavigator, navigationOptions },
-  ShowQR: { screen: ShowQRScreen, navigationOptions }
-});
+  {
+    headerMode: "none"
+  }
+);
 
 class Navigator extends React.Component {
   render() {

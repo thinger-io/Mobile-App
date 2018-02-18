@@ -2,6 +2,8 @@ import React from "react";
 import ItemList from "./ItemList";
 import { StyleSheet, Text } from "react-native";
 import PropTypes from "prop-types";
+import { DARK_BLUE } from "../../constants/ThingerColors";
+import { FONT_SIZE_P } from "../../constants/ThingerStyles";
 
 export default class OutputItem extends React.Component {
   propsType = {
@@ -22,7 +24,7 @@ export default class OutputItem extends React.Component {
 
 const styles = StyleSheet.create({
   value: {
-    color: "#444",
-    fontSize: 20
+    color: DARK_BLUE,
+    fontSize: FONT_SIZE_P
   }
 });

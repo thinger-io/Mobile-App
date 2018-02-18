@@ -4,3 +4,6 @@ export const LIGHT_BLUE = "#90CAF9";
 export const LIGHT_RED = "#E57373";
 export const LIGHT_GREEN = "#AED581";
 export const LIGHT_PINK = "#F48FB1";
+
+export const INPUT_COLOR = "#888";
+export const DIVIDER_COLOR = "#e1e1e1";

@@ -1,4 +1,4 @@
-import { PADDING } from "../../constants/ThingerStyles";
+import { FONT_SIZE_P, PADDING } from "../../constants/ThingerStyles";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import PropTypes from "prop-types";
@@ -17,7 +17,7 @@ export default class RoundedButton extends React.Component {
     return (
       <TouchableOpacity onPress={onPress}>
         <View style={[{ backgroundColor: color }, styles.container]}>
-          <Text style={[styles.text, ThingerStyles.h2]}>{text}</Text>
+          <Text style={styles.text}>{text}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    textAlign: "center"
+    textAlign: "center",
+    fontSize: FONT_SIZE_P
   }
 });

@@ -19,6 +19,8 @@ import React from "react";
 import Resource from "../resources/Resource";
 import ErrorMessage from "../ErrorMessage";
 import { DARK_BLUE } from "../../constants/ThingerColors";
+import NavigationBar from "../navigation/NavigationBar";
+import MainContainer from "../containers/Screen";
 
 class ResourcesScreen extends React.Component {
   constructor(props) {
@@ -73,30 +75,42 @@ class ResourcesScreen extends React.Component {
   }
 
   render() {
-    const { device } = this.props;
-    return device ? (
-      !device.hasServerConnection ? (
-        <ErrorMessage
-          message={"Couldn't connect to\n" + device.server}
-          icon="plug"
-          onPressButton={this.onRefresh}
-        />
-      ) : !device.isAuthorized ? (
-        <ErrorMessage
-          message={device.usr + " isn't authorized"}
-          icon="lock"
-          onPressButton={this.onRefresh}
-        />
-      ) : !device.isOnline ? (
-        <ErrorMessage
-          message={device.dev + " is offline"}
-          icon="plug"
-          onPressButton={this.onRefresh}
-        />
-      ) : (
-        this.renderItemList()
-      )
-    ) : null;
+    const { device, onSettingsClick } = this.props;
+
+    return (
+      <MainContainer
+        scroll
+        navigationBar={{
+          title: device.dev,
+          rightIcon: "cog",
+          onPress: onSettingsClick
+        }}
+      >
+        {device ? (
+          !device.hasServerConnection ? (
+            <ErrorMessage
+              message={"Couldn't connect to\n" + device.server}
+              icon="plug"
+              onPressButton={this.onRefresh}
+            />
+          ) : !device.isAuthorized ? (
+            <ErrorMessage
+              message={device.usr + " isn't authorized"}
+              icon="lock"
+              onPressButton={this.onRefresh}
+            />
+          ) : !device.isOnline ? (
+            <ErrorMessage
+              message={device.dev + " is offline"}
+              icon="plug"
+              onPressButton={this.onRefresh}
+            />
+          ) : (
+            this.renderItemList()
+          )
+        ) : null}
+      </MainContainer>
+    );
   }
 }
 
@@ -124,7 +138,8 @@ const mapDispatchToProps = dispatch => {
     },
     onGetResources: device => {
       dispatch(getResourcesFromApi(device));
-    }
+    },
+    onSettingsClick: () => dispatch(navigate("Info"))
   };
 };
 

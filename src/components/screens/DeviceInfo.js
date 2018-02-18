@@ -10,11 +10,12 @@ import {
 import RoundedButton from "../buttons/RoundedButton";
 import CenterView from "../containers/CenterView";
 import ThingerConstants from "../../constants/ThingerConstants";
-import MainContainer from "../containers/MainContainer";
+import Screen from "../containers/Screen";
 import List from "../lists/List";
 import OutputItem from "../lists/OutputItem";
 import TextInputItem from "../lists/TextInputItem";
 import EnterItem from "../lists/EnterItem";
+import { ScrollView } from "react-native";
 
 class DeviceInfo extends React.Component {
   constructor(props) {
@@ -35,27 +36,29 @@ class DeviceInfo extends React.Component {
     const { device, removeDevice, onShowQR } = this.props;
 
     return device ? (
-      <MainContainer>
-        <List>
-          <OutputItem id={"Device"} value={device.dev} />
-          <OutputItem id={"User"} value={device.usr} />
-          <TextInputItem
-            id={"Server"}
-            value={this.state.server}
-            placeholder={ThingerConstants.server}
-            onChangeText={this.handleOnChangeText}
-          />
-          <EnterItem id={"Show QR"} onPress={() => onShowQR()} />
-        </List>
+      <Screen scroll={true} navigationBar={{ title: "Settings" }}>
+        <ScrollView>
+          <List>
+            <OutputItem id={"Device"} value={device.dev} />
+            <OutputItem id={"User"} value={device.usr} />
+            <TextInputItem
+              id={"Server"}
+              value={this.state.server}
+              placeholder={ThingerConstants.server}
+              onChangeText={this.handleOnChangeText}
+            />
+            <EnterItem id={"Show QR"} onPress={() => onShowQR()} />
+          </List>
 
-        <CenterView style={{ margin: MARGIN }}>
-          <RoundedButton
-            color={"red"}
-            text="Remove"
-            onPress={() => removeDevice(device.jti)}
-          />
-        </CenterView>
-      </MainContainer>
+          <CenterView style={{ margin: MARGIN }}>
+            <RoundedButton
+              color={"red"}
+              text="Remove"
+              onPress={() => removeDevice(device.jti)}
+            />
+          </CenterView>
+        </ScrollView>
+      </Screen>
     ) : null;
   }
 }

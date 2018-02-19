@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PropTypes from "prop-types";
 import { FONT_SIZE_P, PADDING } from "../../constants/ThingerStyles";
-import { DARK_BLUE } from "../../constants/ThingerColors";
+import {DARK_BLUE, DIVIDER_COLOR} from "../../constants/ThingerColors";
 
 export default class ItemList extends React.Component {
   propsType = {
@@ -26,23 +26,29 @@ export default class ItemList extends React.Component {
   render() {
     const { onPress } = this.props;
 
-    return onPress ? (
-      <TouchableOpacity onPress={onPress}>
-        {this.renderContent()}
-      </TouchableOpacity>
-    ) : (
-      this.renderContent()
+    return (
+      <View style={styles.border}>
+        {onPress ? (
+          <TouchableOpacity onPress={onPress}>
+            {this.renderContent()}
+          </TouchableOpacity>
+        ) : (
+          this.renderContent()
+        )}
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  border: {
+    borderBottomWidth: 1,
+    borderBottomColor: DIVIDER_COLOR,
+  },
   container: {
     flex: 1,
     flexDirection: "row",
-    paddingVertical: PADDING,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e1e1e1"
+    paddingVertical: PADDING
   },
   id: {
     fontSize: FONT_SIZE_P,

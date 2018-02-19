@@ -222,6 +222,7 @@ export function getResourcesFromApi(device) {
             dispatch(deauthorizeDevice(device.jti));
             break;
           case 404:
+            dispatch(authorizeDevice(device.jti));
             dispatch(setDeviceState(device.jti, false));
             break;
         }

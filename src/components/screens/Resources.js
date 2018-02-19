@@ -56,13 +56,9 @@ class ResourcesScreen extends React.Component {
   };
 
   renderItemList() {
-    const { resources, device } = this.props;
+    const { resources } = this.props;
 
-    return device.isFetching ? (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size="large" color={DARK_BLUE} />
-      </View>
-    ) : (
+    return (
       <KeyboardAvoidingView behavior="padding">
         <FlatList
           data={Object.keys(resources)}
@@ -86,8 +82,18 @@ class ResourcesScreen extends React.Component {
           onPress: onSettingsClick
         }}
       >
-        {device ? (
-          !device.hasServerConnection ? (
+        {device &&
+          (device.isFetching ? (
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <ActivityIndicator size="large" color={DARK_BLUE} />
+            </View>
+          ) : !device.hasServerConnection ? (
             <ErrorMessage
               message={"Couldn't connect to\n" + device.server}
               icon="plug"
@@ -107,8 +113,7 @@ class ResourcesScreen extends React.Component {
             />
           ) : (
             this.renderItemList()
-          )
-        ) : null}
+          ))}
       </MainContainer>
     );
   }

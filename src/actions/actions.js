@@ -245,10 +245,9 @@ export function getResourcesFromApi(device) {
       } else {
         resources = device.res;
       }
-      let promises = [];
-      for (const key of resources) {
-        promises.push(dispatch(getResourceFromApi(device, key)));
-      }
+      const promises = resources.map(key =>
+        dispatch(getResourceFromApi(device, key))
+      );
       await Promise.all(promises);
       dispatch(receiveDevice(device.jti));
     } catch (error) {
@@ -260,30 +259,21 @@ export function getResourcesFromApi(device) {
 }
 
 export function postResource(device, id, value) {
-  return dispatch => {
+  return async dispatch => {
     dispatch(requestResource(id));
-    return API.post(
+    const response = await API.post(
       device.server,
       device.usr,
       device.dev,
       id,
       value,
       device.jwt
-    )
-      .then(response => response.json())
-      .then(json =>
-        dispatch(receiveResource(id, Object.assign({}, { in: value }, json)))
-      )
-      .catch(error => {
-        console.log(error);
-      });
+    );
+    const json = response.json();
+    dispatch(receiveResource(id, Object.assign({}, { in: value }, json)));
   };
 }
 
 export function runResource(device, id) {
-  return API.run(device.server, device.usr, device.dev, id, device.jwt).catch(
-    error => {
-      console.log(error);
-    }
-  );
+  return API.run(device.server, device.usr, device.dev, id, device.jwt);
 }

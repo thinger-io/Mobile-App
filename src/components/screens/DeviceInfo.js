@@ -3,10 +3,8 @@ import React from "react";
 import { MARGIN } from "../../constants/ThingerStyles";
 import {
   removeDevice,
-  goBack,
   setDeviceServer,
   navigate,
-  goBackToMain,
   goToMain
 } from "../../actions/actions";
 import RoundedButton from "../buttons/RoundedButton";
@@ -18,6 +16,7 @@ import OutputItem from "../lists/OutputItem";
 import TextInputItem from "../lists/TextInputItem";
 import EnterItem from "../lists/EnterItem";
 import { ScrollView } from "react-native";
+import { timestampToString } from "../../utils/dates";
 
 class DeviceInfo extends React.Component {
   constructor(props) {
@@ -49,7 +48,15 @@ class DeviceInfo extends React.Component {
                 placeholder={ThingerConstants.server}
                 onChangeText={this.handleOnChangeText}
               />
-              <EnterItem id={"Show QR"} onPress={() => onShowQR()} />
+              <EnterItem id={"Token QR"} onPress={() => onShowQR()} />
+              <OutputItem
+                id={"Token creation date"}
+                value={timestampToString(device.iat)}
+              />
+              <OutputItem
+                id={"Token expiration date"}
+                value={device.exp ? timestampToString(device.exp) : "Never"}
+              />
             </List>
 
             <CenterView style={{ margin: MARGIN }}>

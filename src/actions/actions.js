@@ -189,58 +189,73 @@ export function goToMain() {
   };
 }
 
+function handleResponseStatus(device, status, dispatch) {
+  switch (status) {
+    case 200:
+      dispatch(authorizeDevice(device.jti));
+      dispatch(setDeviceState(device.jti, true));
+      break;
+    case 401:
+      dispatch(deauthorizeDevice(device.jti));
+      break;
+    case 404:
+      dispatch(authorizeDevice(device.jti));
+      dispatch(setDeviceState(device.jti, false));
+      break;
+  }
+}
+
 export function getResourceFromApi(device, key) {
-  return dispatch => {
-    dispatch(requestResource(key));
-    return API.getResource(
-      device.server,
-      device.usr,
-      device.dev,
-      key,
-      device.jwt
-    )
-      .then(response => response.json())
-      .then(json => dispatch(receiveResource(key, json)))
-      .catch(error => {
-        throw error;
-      });
+  return async dispatch => {
+    try {
+      dispatch(requestResource(key));
+      const response = await API.getResource(
+        device.server,
+        device.usr,
+        device.dev,
+        key,
+        device.jwt
+      );
+      dispatch(setDeviceServerStatus(device.jti, true));
+      await handleResponseStatus(device, response.status, dispatch);
+      const json = await response.json();
+      dispatch(receiveResource(key, json));
+    } catch (error) {
+      throw error;
+    }
   };
 }
 
 export function getResourcesFromApi(device) {
-  return dispatch => {
-    dispatch(requestDevice(device.jti));
-    return API.getResources(device.server, device.usr, device.dev, device.jwt)
-      .then(response => {
+  return async dispatch => {
+    try {
+      dispatch(requestDevice(device.jti));
+      let resources;
+      if (!device.res) {
+        const response = await API.getResources(
+          device.server,
+          device.usr,
+          device.dev,
+          device.jwt
+        );
         dispatch(setDeviceServerStatus(device.jti, true));
-        switch (response.status) {
-          case 200:
-            dispatch(authorizeDevice(device.jti));
-            dispatch(setDeviceState(device.jti, true));
-            break;
-          case 401:
-            dispatch(deauthorizeDevice(device.jti));
-            break;
-          case 404:
-            dispatch(authorizeDevice(device.jti));
-            dispatch(setDeviceState(device.jti, false));
-            break;
-        }
-        return response.json();
-      })
-      .then(json => {
-        const keys = Object.keys(json);
-        let promises = [];
-        for (const key of keys) {
-          promises.push(dispatch(getResourceFromApi(device, key)));
-        }
-        return Promise.all(promises);
-      })
-      .then(() => dispatch(receiveDevice(device.jti)))
-      .catch(error => {
-        if (error instanceof TypeError)
-          dispatch(setDeviceServerStatus(device.jti, false));
-      });
+        await handleResponseStatus(device, response.status, dispatch);
+        const json = await response.json();
+        resources = Object.keys(json);
+      } else {
+        resources = device.res;
+      }
+      let promises = [];
+      for (const key of resources) {
+        promises.push(dispatch(getResourceFromApi(device, key)));
+      }
+      await Promise.all(promises);
+      dispatch(receiveDevice(device.jti));
+    } catch (error) {
+      dispatch(receiveDevice(device.jti));
+      if (error instanceof TypeError)
+        dispatch(setDeviceServerStatus(device.jti, false));
+    }
   };
 }
 

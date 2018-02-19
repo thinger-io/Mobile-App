@@ -11,6 +11,8 @@ export function parseJWT(jwt) {
         iat: json.iat,
         jti: json.jti,
         usr: json.usr,
+        exp: json.exp,
+        res: json.res,
         jwt,
         isFetching: false,
         isOnline: false,

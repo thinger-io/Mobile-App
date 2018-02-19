@@ -81,7 +81,7 @@ class ResourcesScreen extends React.Component {
       <MainContainer
         scroll
         navigationBar={{
-          title: device.dev,
+          title: device ? device.dev : "Device",
           rightIcon: "cog",
           onPress: onSettingsClick
         }}

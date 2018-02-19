@@ -22,6 +22,7 @@ export const REMOVE_RESOURCES = "REMOVE_RESOURCES";
 export const RESTART_LIVE_RESOURCE = "RESTART_LIVE_RESOURCE";
 export const NAVIGATE = "Navigation/NAVIGATE";
 export const GO_BACK = "Navigation/BACK";
+export const GO_TO_MAIN = "Navigation/MAIN";
 
 export function addDevice(device) {
   return {
@@ -175,9 +176,16 @@ export function navigate(screen) {
   };
 }
 
-export function goBack() {
+export function goBack(screen) {
   return {
-    type: GO_BACK
+    type: GO_BACK,
+    key: screen
+  };
+}
+
+export function goToMain() {
+  return {
+    type: GO_TO_MAIN
   };
 }
 

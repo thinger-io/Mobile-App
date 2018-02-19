@@ -10,7 +10,7 @@ import Resources from "../screens/Resources";
 
 export const Routes = StackNavigator(
   {
-    Main: { screen: DevicesScreen },
+    Main: { screen: DevicesScreen, key: "Main" },
     Scanner: { screen: QRScannerScreen },
     Device: { screen: Resources },
     Info: { screen: DeviceInfo },

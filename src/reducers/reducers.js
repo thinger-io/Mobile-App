@@ -20,7 +20,8 @@ import {
   DEAUTHORIZE_DEVICE,
   SET_DEVICE_SERVER_STATUS,
   LOCK_ATTRIBUTE,
-  UNLOCK_ATTRIBUTE
+  UNLOCK_ATTRIBUTE,
+  GO_TO_MAIN
 } from "../actions/actions";
 import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
@@ -159,13 +160,24 @@ function lockedAttributes(state = defaultState, action) {
 const initScreen = getStateForAction(getActionForPathAndParams("Main"));
 function nav(state = initScreen, action) {
   switch (action.type) {
+    case GO_TO_MAIN:
+      return getStateForAction(
+        NavigationActions.reset({
+          key: null,
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: "Main" })]
+        }),
+        state
+      );
     case GO_BACK:
-      return getStateForAction(NavigationActions.back(), state);
+      console.log(state);
+      return getStateForAction(
+        NavigationActions.back({ key: action.key }),
+        state
+      );
     case NAVIGATE:
       return getStateForAction(
-        NavigationActions.navigate({
-          routeName: action.routeName
-        }),
+        NavigationActions.navigate({ routeName: action.routeName }),
         state
       );
     default:

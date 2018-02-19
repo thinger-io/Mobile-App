@@ -5,7 +5,9 @@ import {
   removeDevice,
   goBack,
   setDeviceServer,
-  navigate
+  navigate,
+  goBackToMain,
+  goToMain
 } from "../../actions/actions";
 import RoundedButton from "../buttons/RoundedButton";
 import CenterView from "../containers/CenterView";
@@ -34,32 +36,33 @@ class DeviceInfo extends React.Component {
 
   render() {
     const { device, removeDevice, onShowQR } = this.props;
-
-    return device ? (
+    return (
       <Screen scroll={true} navigationBar={{ title: "Settings" }}>
-        <ScrollView>
-          <List>
-            <OutputItem id={"Device"} value={device.dev} />
-            <OutputItem id={"User"} value={device.usr} />
-            <TextInputItem
-              id={"Server"}
-              value={this.state.server}
-              placeholder={ThingerConstants.server}
-              onChangeText={this.handleOnChangeText}
-            />
-            <EnterItem id={"Show QR"} onPress={() => onShowQR()} />
-          </List>
+        {device && (
+          <ScrollView>
+            <List>
+              <OutputItem id={"Device"} value={device.dev} />
+              <OutputItem id={"User"} value={device.usr} />
+              <TextInputItem
+                id={"Server"}
+                value={this.state.server}
+                placeholder={ThingerConstants.server}
+                onChangeText={this.handleOnChangeText}
+              />
+              <EnterItem id={"Show QR"} onPress={() => onShowQR()} />
+            </List>
 
-          <CenterView style={{ margin: MARGIN }}>
-            <RoundedButton
-              color={"red"}
-              text="Remove"
-              onPress={() => removeDevice(device.jti)}
-            />
-          </CenterView>
-        </ScrollView>
+            <CenterView style={{ margin: MARGIN }}>
+              <RoundedButton
+                color={"red"}
+                text="Remove"
+                onPress={() => removeDevice(device.jti)}
+              />
+            </CenterView>
+          </ScrollView>
+        )}
       </Screen>
-    ) : null;
+    );
   }
 }
 
@@ -75,7 +78,7 @@ const mapDispatchToProps = dispatch => {
   return {
     removeDevice: jti => {
       dispatch(removeDevice(jti));
-      dispatch(goBack());
+      dispatch(goToMain());
     },
     changeServer: (device, server) => dispatch(setDeviceServer(device, server)),
     onShowQR: () => dispatch(navigate("ShowQR"))

@@ -219,9 +219,10 @@ export function getResourceFromApi(device, key) {
       dispatch(setDeviceServerStatus(device.jti, true));
       await handleResponseStatus(device, response.status, dispatch);
       const json = await response.json();
-      dispatch(receiveResource(key, json));
+      return dispatch(receiveResource(key, json));
     } catch (error) {
-      throw error;
+      if (error instanceof TypeError)
+        dispatch(setDeviceServerStatus(device.jti, false));
     }
   };
 }
@@ -249,7 +250,7 @@ export function getResourcesFromApi(device) {
         dispatch(getResourceFromApi(device, key))
       );
       await Promise.all(promises);
-      dispatch(receiveDevice(device.jti));
+      return dispatch(receiveDevice(device.jti));
     } catch (error) {
       dispatch(receiveDevice(device.jti));
       if (error instanceof TypeError)
@@ -270,7 +271,7 @@ export function postResource(device, id, value) {
       device.jwt
     );
     const json = response.json();
-    dispatch(receiveResource(id, Object.assign({}, { in: value }, json)));
+    return dispatch(receiveResource(id, Object.assign({}, { in: value }, json)));
   };
 }
 

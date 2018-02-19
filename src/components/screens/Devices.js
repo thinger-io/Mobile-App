@@ -64,7 +64,8 @@ class DevicesScreen extends React.Component {
         navigationBar={{
           title: "Devices",
           rightIcon: "qrcode",
-          onPress: this.props.onAddDevicePress
+          onPress: this.props.onAddDevicePress,
+          isMain: false
         }}
       >
         {this.renderContent()}

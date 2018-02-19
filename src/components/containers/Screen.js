@@ -8,7 +8,8 @@ export default class Screen extends React.Component {
     navigationBar: PropTypes.shape({
       title: PropTypes.string.isRequired,
       rightIcon: PropTypes.string,
-      onPress: PropTypes.func
+      onPress: PropTypes.func,
+      isMain: PropTypes.bool
     })
   };
 
@@ -21,6 +22,7 @@ export default class Screen extends React.Component {
             title={navigationBar.title}
             rightIcon={navigationBar.rightIcon}
             onPress={navigationBar.onPress}
+            isMain={navigationBar.isMain}
           />
         )}
         <View style={styles.container}>{this.props.children}</View>

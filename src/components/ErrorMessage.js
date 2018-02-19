@@ -23,7 +23,7 @@ export default class ErrorMessage extends React.Component {
         {this.props.icon && (
           <Icon
             name={this.props.icon}
-            size={40}
+            size={30}
             style={{ color: DARK_BLUE, margin: MARGIN }}
           />
         )}

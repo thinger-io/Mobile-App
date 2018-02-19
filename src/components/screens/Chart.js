@@ -58,7 +58,6 @@ class ChartScreen extends React.Component {
       onLockAttribute,
       onUnlockAttribute
     } = this.props;
-    if (Object.keys(data).length === 0) return null;
     const chartedAttributes = this.parseChartedAttributes();
 
     return (
@@ -67,7 +66,7 @@ class ChartScreen extends React.Component {
           title: resource
         }}
       >
-        <View style={{ height: 250, backgroundColor: DIVIDER_COLOR }}>
+        <View style={{ height: 250, backgroundColor: DARK_BLUE }}>
           {type === LINES && (
             <Line chartedAttributes={chartedAttributes} data={data} />
           )}

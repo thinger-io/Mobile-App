@@ -11,25 +11,30 @@ class NavigationBar extends React.Component {
   propsType = {
     title: PropTypes.string.isRequired,
     rightIcon: PropTypes.string,
-    onPress: PropTypes.func
+    onPress: PropTypes.func,
+    isMain: PropTypes.bool
   };
 
   render() {
-    const { title, dispatch, rightIcon, onPress } = this.props;
+    const { title, dispatch, rightIcon, onPress, isMain = true } = this.props;
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => dispatch(goBack())}>
-          <Icon name="times" size={FONT_SIZE_H1} style={styles.icon} />
-        </TouchableOpacity>
+        <View>
+          {isMain && (
+            <TouchableOpacity onPress={() => dispatch(goBack())}>
+              <Icon name="arrow-left" size={FONT_SIZE_H1} style={styles.icon} />
+            </TouchableOpacity>
+          )}
+        </View>
         <Text style={styles.title}>{title}</Text>
-        {rightIcon && (
-          <View style={styles.right}>
-            <TouchableOpacity onPress={onPress} style={styles.button}>
+        <View>
+          {rightIcon && (
+            <TouchableOpacity onPress={onPress}>
               <Icon name={rightIcon} size={FONT_SIZE_H1} style={styles.icon} />
             </TouchableOpacity>
-          </View>
-        )}
+          )}
+        </View>
       </View>
     );
   }
@@ -40,24 +45,17 @@ export default connect()(NavigationBar);
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    justifyContent: "space-between",
     padding: PADDING,
     paddingTop: PADDING + 10,
     alignItems: "center",
     backgroundColor: DARK_BLUE
   },
   icon: {
-    color: "white",
-    paddingEnd: PADDING
+    color: "white"
   },
   title: {
     fontSize: FONT_SIZE_H1,
-    color: "white"
-  },
-  right: {
-    flex: 1,
-    alignItems: "flex-end"
-  },
-  button: {
     color: "white"
   }
 });

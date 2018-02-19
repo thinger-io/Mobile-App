@@ -170,7 +170,6 @@ function nav(state = initScreen, action) {
         state
       );
     case GO_BACK:
-      console.log(state);
       return getStateForAction(
         NavigationActions.back({ key: action.key }),
         state

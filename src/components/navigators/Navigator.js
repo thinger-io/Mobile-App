@@ -7,6 +7,7 @@ import QRScannerScreen from "../screens/QRScanner";
 import ChartsTabNavigator from "./Charts";
 import DeviceInfo from "../screens/DeviceInfo";
 import Resources from "../screens/Resources";
+import {createReduxBoundAddListener} from "react-navigation-redux-helpers";
 
 export const Routes = StackNavigator(
   {
@@ -25,8 +26,15 @@ export const Routes = StackNavigator(
 class Navigator extends React.Component {
   render() {
     const { dispatch, nav } = this.props;
+    const addListener = createReduxBoundAddListener("root");
     return (
-      <Routes navigation={addNavigationHelpers({ dispatch, state: nav })} />
+      <Routes
+        navigation={addNavigationHelpers({
+          dispatch,
+          state: nav,
+          addListener
+        })}
+      />
     );
   }
 }

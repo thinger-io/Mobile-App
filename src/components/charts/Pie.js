@@ -18,7 +18,7 @@ export default class extends React.PureComponent {
 
     const pieData = chartedAttributes
       .map(([key, value], index) => ({
-        value: data[key].slice(-1)[0],
+        value: Object.values(data[key]).slice(-1)[0],
         color: getColorByIndex(index * 2),
         key,
         charted: value

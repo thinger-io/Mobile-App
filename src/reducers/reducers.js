@@ -27,6 +27,7 @@ import { Routes } from "../components/navigators/Navigator";
 import { NavigationActions } from "react-navigation";
 import update from "update-immutable";
 import { BARS, LINES, PIE } from "../components/navigators/Charts";
+import { sliceObject } from "../utils/objects";
 
 const { getActionForPathAndParams, getStateForAction } = Routes.router;
 
@@ -104,16 +105,24 @@ function resources(state = {}, action) {
 function liveResource(state = {}, action) {
   switch (action.type) {
     case RECEIVE_RESOURCE:
+      const timestamp = Date.now();
       const output = action.value["out"];
       if (typeof output === "object") {
         const keys = Object.keys(output);
-        let newState = state;
+        let newState;
         for (const key of keys) {
-          newState = update(newState, { [key]: { $push: [output[key]] } });
+          newState = update(newState ? newState : state, {
+            [key]: { $merge: { [timestamp]: output[key] } }
+          });
+          newState = update(newState, {
+            [key]: { $set: sliceObject(newState[key], -10) }
+          })
         }
         return newState;
       } else {
-        return update(state, { [action.key]: { $push: [output] } });
+        return update(state, {
+          [action.key]: { $merge: { [timestamp]: output } }
+        });
       }
     case RESTART_LIVE_RESOURCE:
       return {};

@@ -83,6 +83,14 @@ class ChartScreen extends React.Component {
           )}
         </View>
 
+        <View style={{ flexDirection: "row" }}>
+
+        </View>
+
+        <View style={{ flexDirection: "row" }}>
+
+        </View>
+
         <FlatList
           data={Object.keys(selectedAttributes)}
           keyExtractor={item => item}
@@ -90,7 +98,7 @@ class ChartScreen extends React.Component {
             return (
               <Label
                 id={item}
-                value={data[item].slice(-1)[0]}
+                value={Object.values(data[item]).slice(-1)[0]}
                 color={getColorByIndex(index * 2)}
                 selected={selectedAttributes[item]}
                 locked={lockedAttributes[item]}

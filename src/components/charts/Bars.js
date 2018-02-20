@@ -16,7 +16,7 @@ export default class extends React.PureComponent {
       .map(([key, value], index) => [key, value, index])
       .filter(([key, value]) => value)
       .map(([key, , index]) => ({
-        values: [data[key].slice(-1)[0]],
+        values: [Object.values(data[key]).slice(-1)[0]],
         positive: {
           fill: getColorByIndex(index * 2)
         },

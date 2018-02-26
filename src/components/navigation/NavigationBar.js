@@ -21,19 +21,19 @@ type Props = {
 
 class NavigationBar extends React.Component<Props> {
   render() {
-    const { title, button, main = true, dispatch } = this.props;
+    const { title, button, main = false, dispatch } = this.props;
 
     return (
       <View style={styles.container}>
-        <View>
-          {main && (
+        <View style={{flex: 1}}>
+          {!main && (
             <TouchableOpacity onPress={() => dispatch(goBack())}>
-              <Icon name="arrow-left" size={FONT_SIZE_H1} style={styles.icon} />
+              <Icon name="chevron-left" size={FONT_SIZE_H1} style={styles.icon} />
             </TouchableOpacity>
           )}
         </View>
         <Text style={styles.title}>{title}</Text>
-        <View>
+        <View style={{flex: 1, alignItems: "flex-end"}}>
           {button && (
             <TouchableOpacity onPress={button.onPress}>
               <Icon
@@ -65,6 +65,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: FONT_SIZE_H1,
-    color: "white"
+    color: "white",
+    flex: 1,
+    textAlign: "center"
   }
 });

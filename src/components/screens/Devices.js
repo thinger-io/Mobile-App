@@ -67,7 +67,7 @@ class DevicesScreen extends React.Component<Props> {
         navigationBar={
           <NavigationBar
             title={"Devices"}
-            isMain={false}
+            main={true}
             button={{
               icon: "qrcode",
               onPress: this.props.onAddDevicePress

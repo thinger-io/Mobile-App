@@ -20,26 +20,26 @@ export default class CardButton extends React.Component<Props> {
   render() {
     const { onClick, isLoading, text, color } = this.props;
 
-    return isLoading ? (
-      <View style={[styles.container, { backgroundColor: color }]}>
-        <ActivityIndicator size="small" color="#000000" />
-      </View>
-    ) : (
+    return (
       <TouchableOpacity
         style={[styles.container, { backgroundColor: color }]}
         onPress={onClick}
-        activeOpacity={isLoading === undefined ? 0.2 : 1}
+        activeOpacity={0.6}
       >
-        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-          <Text
-            style={{
-              marginLeft: 5,
-              fontSize: 18
-            }}
-          >
-            {text}
-          </Text>
-        </View>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#000000" />
+        ) : (
+          <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{
+                marginLeft: 5,
+                fontSize: 18
+              }}
+            >
+              {text}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
     );
   }
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    height: 38,
     alignItems: "center"
   }
 });

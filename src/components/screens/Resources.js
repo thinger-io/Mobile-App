@@ -8,7 +8,7 @@ import {
   View
 } from "react-native";
 import React from "react";
-import Resource from "../resources/ResourceComponent";
+import Resource from "../resources/Resource";
 import ErrorMessage from "../ErrorMessage";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 import NavigationBar from "../navigation/NavigationBar";

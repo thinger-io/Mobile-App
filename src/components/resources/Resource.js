@@ -4,7 +4,7 @@ import React from "react";
 import styles from "../../constants/ThingerStyles";
 import Card from "../cards/Card";
 import { FlatList, Text, View } from "react-native";
-import AttributeComponent from "./AttributeComponent";
+import AttributeComponent from "./Attribute";
 import update from "update-immutable";
 import Button from "../cards/Button";
 import {
@@ -80,7 +80,7 @@ class ResourceComponent extends React.Component<Props, State> {
       );
     }
 
-    // Input ResourceComponent
+    // Input Resource
     if (
       data.hasOwnProperty("in") &&
       (typeof data.in === "string" ||
@@ -99,7 +99,7 @@ class ResourceComponent extends React.Component<Props, State> {
       );
     }
 
-    // Output ResourceComponent
+    // Output Resource
     if (
       data.hasOwnProperty("out") &&
       (typeof data.out === "string" ||
@@ -111,7 +111,7 @@ class ResourceComponent extends React.Component<Props, State> {
       );
     }
 
-    // Multiple ResourceComponent
+    // Multiple Resource
     if (
       (data.hasOwnProperty("in") && typeof data.in === "object") ||
       (data.hasOwnProperty("out") && typeof data.out === "object")
@@ -169,9 +169,11 @@ class ResourceComponent extends React.Component<Props, State> {
           onClick={this.handleOnUpdateClick}
         />
       );
-      buttons.push(
-        <Button text={"Charts"} color={LIGHT_PINK} onClick={onChartClick} />
-      );
+      if (typeof data.out === "object" || typeof data.out === "number") {
+        buttons.push(
+          <Button text={"Charts"} color={LIGHT_PINK} onClick={onChartClick} />
+        );
+      }
     }
     if (data.hasOwnProperty("in") && typeof data.in !== "boolean")
       buttons.push(

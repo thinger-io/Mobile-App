@@ -3,7 +3,7 @@
 import update from "update-immutable";
 import type { ResourceAction } from "../actions/resource";
 import { sliceObject } from "../utils/objects";
-import type {StreamingState} from "../types/State";
+import type { StreamingState } from "../types/State";
 
 const initialState: StreamingState = {};
 

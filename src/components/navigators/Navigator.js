@@ -29,7 +29,7 @@ export const Routes = StackNavigator(
 type Props = {
   dispatch: Dispatch,
   nav: any
-}
+};
 
 class Navigator extends React.Component<Props> {
   render() {

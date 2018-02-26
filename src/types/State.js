@@ -3,7 +3,7 @@
 import type { Device } from "./Device";
 import type { Resource } from "./Resource";
 import type { Chart } from "./Chart";
-import type {Attribute} from "./Attribute";
+import type { Attribute } from "./Attribute";
 
 export type State = {
   devices: DevicesState,
@@ -43,9 +43,9 @@ export type LockedAttributesState = {
 };
 
 export type StreamingState = {
-  [attribute: string] : {
+  [attribute: string]: {
     [timestamp: number]: number
   }
-}
+};
 
 export type NavState = any;

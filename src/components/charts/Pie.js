@@ -12,7 +12,6 @@ type Props = {
 };
 
 export default class extends React.PureComponent<Props> {
-
   render() {
     const { chartedAttributes, data, lockAttribute } = this.props;
 
@@ -29,7 +28,7 @@ export default class extends React.PureComponent<Props> {
         return charted && numberValue > 0;
       });
 
-    console.log(pieData)
+    console.log(pieData);
 
     return <PieChart style={{ flex: 1, margin: 15 }} data={pieData} />;
   }

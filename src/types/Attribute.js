@@ -7,4 +7,3 @@ export type Attribute =
   | {
       [attribute: string]: string | number | boolean
     };
-

@@ -6,7 +6,7 @@ import * as shape from "d3-shape";
 import { View, StyleSheet } from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 import { dateToSeconds } from "../../utils/dates";
-import type {StreamingState} from "../../types/State";
+import type { StreamingState } from "../../types/State";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
@@ -14,22 +14,8 @@ type Props = {
 };
 
 export default class extends React.Component<Props> {
-
   render() {
     const { chartedAttributes, data } = this.props;
-
-    /*let xData = [];
-    if (data && Object.values(data).length > 0) xData = Object.values(data)[0];
-    xData = Object.keys(xData);
-
-    <XAxis
-            values={xData}
-            chartType={XAxis.Type.LINE}
-            labelStyle={{ color: "white" }}
-            formatLabel={value => dateToSeconds(Number(value))}
-          />
-
-    */
 
     const dataPoints = [].concat.apply(
       [],

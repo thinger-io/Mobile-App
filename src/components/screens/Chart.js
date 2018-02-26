@@ -23,7 +23,9 @@ import type { Chart } from "../../types/Chart";
 import { getResourceFromApi } from "../../actions/fetch";
 import type { Device } from "../../types/Device";
 import type { Attribute } from "../../types/Attribute";
-import type {StreamingState} from "../../types/State";
+import type { StreamingState } from "../../types/State";
+import TabBar from "../navigation/TabBar";
+import update from "update-immutable";
 
 const types: Array<Chart> = ["Lines", "Pie", "Bars"];
 
@@ -33,9 +35,8 @@ type Props = {
   data: Attribute,
   streaming: StreamingState,
   isFetching: boolean,
-  type: Chart,
-  selectedAttributes: { [attribute: string]: boolean },
-  lockedAttributes: { [attribute: string]: boolean },
+  selectedAttributes: { [chart: Chart]: { [attribute: string]: boolean } },
+  lockedAttributes: { [chart: Chart]: { [attribute: string]: boolean } },
   onSelectAttribute: (key: string, chart: string) => Dispatch,
   onDeselectAttribute: (key: string, chart: string) => Dispatch,
   onLockAttribute: (key: string, chart: string) => Dispatch,
@@ -46,10 +47,16 @@ type Props = {
 };
 
 type State = {
-  refreshInterval: number
+  type: Chart,
+  refreshInterval: ?number
 };
 
 class ChartScreen extends React.Component<Props, State> {
+  state = {
+    type: "Lines",
+    refreshInterval: null
+  };
+
   constructor(props) {
     super(props);
     (this: any).handleOnLabelClick = this.handleOnLabelClick.bind(this);
@@ -65,26 +72,27 @@ class ChartScreen extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.props.onFinish(this.state.refreshInterval);
+    if (this.state.refreshInterval)
+      this.props.onFinish(this.state.refreshInterval);
   }
 
   handleOnLabelClick(key) {
     const {
       selectedAttributes,
-      type,
       onDeselectAttribute,
       onSelectAttribute
     } = this.props;
-    selectedAttributes[key]
-      ? onDeselectAttribute(key, type)
-      : onSelectAttribute(key, type);
+    selectedAttributes[this.state.type][key]
+      ? onDeselectAttribute(key, this.state.type)
+      : onSelectAttribute(key, this.state.type);
   }
 
   parseChartedAttributes() {
     const { selectedAttributes, lockedAttributes } = this.props;
-    return Object.keys(selectedAttributes).map(key => [
+    const type = this.state.type;
+    return Object.keys(selectedAttributes[type]).map(key => [
       key,
-      selectedAttributes[key] && !lockedAttributes[key]
+      selectedAttributes[type][key] && !lockedAttributes[type][key]
     ]);
   }
 
@@ -95,18 +103,47 @@ class ChartScreen extends React.Component<Props, State> {
       data,
       streaming,
       resource,
-      type,
       onLockAttribute,
       onUnlockAttribute
     } = this.props;
+    const type = this.state.type;
     const chartedAttributes = this.parseChartedAttributes();
 
     return (
-      <Screen navigationBar={<NavigationBar title={resource} />}>
+      <Screen
+        navigationBar={<NavigationBar title={resource} />}
+        tabBar={
+          <TabBar
+            tabs={[
+              {
+                title: "Lines",
+                icon: "line-chart",
+                active: type === "Lines",
+                onPress: () =>
+                  this.setState(update(this.state, { type: { $set: "Lines" } }))
+              },
+              {
+                title: "Pie",
+                icon: "pie-chart",
+                active: type === "Pie",
+                onPress: () =>
+                  this.setState(update(this.state, { type: { $set: "Pie" } }))
+              },
+              {
+                title: "Bars",
+                icon: "bar-chart",
+                active: type === "Bars",
+                onPress: () =>
+                  this.setState(update(this.state, { type: { $set: "Bars" } }))
+              }
+            ]}
+          />
+        }
+      >
         <View style={{ height: 250, backgroundColor: DARK_BLUE }}>
           {type === "Lines" && (
-              <Line chartedAttributes={chartedAttributes} data={streaming} />
-            )}
+            <Line chartedAttributes={chartedAttributes} data={streaming} />
+          )}
           {type === "Bars" &&
             typeof data === "object" && (
               <Bars chartedAttributes={chartedAttributes} data={data} />
@@ -124,7 +161,7 @@ class ChartScreen extends React.Component<Props, State> {
 
         {typeof data === "object" && (
           <FlatList
-            data={Object.keys(selectedAttributes)}
+            data={Object.keys(selectedAttributes[type])}
             keyExtractor={item => item}
             renderItem={({ item, index }) => {
               return (
@@ -132,8 +169,8 @@ class ChartScreen extends React.Component<Props, State> {
                   id={item}
                   value={data[item]}
                   color={getColorByIndex(index * 2)}
-                  selected={selectedAttributes[item]}
-                  locked={lockedAttributes[item]}
+                  selected={selectedAttributes[type][item]}
+                  locked={lockedAttributes[type][item]}
                   onClick={this.handleOnLabelClick}
                 />
               );
@@ -148,16 +185,14 @@ class ChartScreen extends React.Component<Props, State> {
 const mapStateToProps = (state, ownProps) => {
   const jti = state.selectedDevice;
   const resource = state.selectedResource;
-  const type = "Lines";
   return {
     device: state.devices[jti],
     resource,
     data: state.resources[resource].data.out,
     streaming: state.streaming,
     isFetching: state.resources[resource].isFetching,
-    selectedAttributes: state.selectedAttributes[type],
-    lockedAttributes: state.lockedAttributes[type],
-    type
+    selectedAttributes: state.selectedAttributes,
+    lockedAttributes: state.lockedAttributes
   };
 };
 

@@ -7,3 +7,5 @@ export const LIGHT_PINK = "#F48FB1";
 
 export const INPUT_COLOR = "#888";
 export const DIVIDER_COLOR = "#e1e1e1";
+export const COLOR_ACTIVE = DARK_BLUE;
+export const COLOR_INACTIVE = "#b4b4b4";

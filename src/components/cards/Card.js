@@ -1,9 +1,17 @@
+//@flow
+
+import * as React from "react";
 import { View, StyleSheet } from "react-native";
-import React from "react";
 import { BORDER_RADIUS, MARGIN, PADDING } from "../../constants/ThingerStyles";
 import * as PropTypes from "prop-types";
 
-export default class Card extends React.Component {
+type Props = {
+  children?: React.Node,
+  body?: React.Node,
+  footer?: React.Node
+};
+
+export default class Card extends React.Component<Props> {
   render() {
     const { children, body, footer } = this.props;
     return (

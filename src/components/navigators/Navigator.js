@@ -1,13 +1,16 @@
+//@flow
+
 import { addNavigationHelpers, StackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import React from "react";
 import DevicesScreen from "../screens/Devices";
 import ShowQRScreen from "../screens/ShowQR";
 import QRScannerScreen from "../screens/QRScanner";
-import ChartsTabNavigator from "./Charts";
 import DeviceInfo from "../screens/DeviceInfo";
 import Resources from "../screens/Resources";
-import {createReduxBoundAddListener} from "react-navigation-redux-helpers";
+import { createReduxBoundAddListener } from "react-navigation-redux-helpers";
+import type { Dispatch } from "../../types/Dispatch";
+import Chart from "../screens/Chart";
 
 export const Routes = StackNavigator(
   {
@@ -15,7 +18,7 @@ export const Routes = StackNavigator(
     Scanner: { screen: QRScannerScreen },
     Device: { screen: Resources },
     Info: { screen: DeviceInfo },
-    Chart: { screen: ChartsTabNavigator },
+    Chart: { screen: Chart },
     ShowQR: { screen: ShowQRScreen }
   },
   {
@@ -23,7 +26,12 @@ export const Routes = StackNavigator(
   }
 );
 
-class Navigator extends React.Component {
+type Props = {
+  dispatch: Dispatch,
+  nav: any
+}
+
+class Navigator extends React.Component<Props> {
   render() {
     const { dispatch, nav } = this.props;
     const addListener = createReduxBoundAddListener("root");

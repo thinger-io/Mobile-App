@@ -1,6 +1,8 @@
+//@flow
+
 import fetch from "cross-fetch";
 
-function generateGETHeader(jwt) {
+function generateGETHeader(jwt: string) {
   return {
     method: "GET",
     headers: {
@@ -11,7 +13,7 @@ function generateGETHeader(jwt) {
   };
 }
 
-function generatePOSTHeader(jwt, body) {
+function generatePOSTHeader(jwt: string, body) {
   return {
     method: "POST",
     headers: {
@@ -23,31 +25,63 @@ function generatePOSTHeader(jwt, body) {
   };
 }
 
+type postValue =
+  | string
+  | number
+  | boolean
+  | {
+      [attribute: string]: string | number | boolean
+    };
+
 export default class API {
-  static getResources(server, user, device, jwt) {
+  static getResources(
+    server: string,
+    user: string,
+    device: string,
+    jwt: string
+  ) {
     return fetch(
       `${server}/v2/users/${user}/devices/${device}/api`,
       generateGETHeader(jwt)
     );
   }
 
-  static getResource(server, user, device, key, jwt) {
+  static getResource(
+    server: string,
+    user: string,
+    device: string,
+    resource: string,
+    jwt: string
+  ) {
     return fetch(
-      `${server}/v2/users/${user}/devices/${device}/${key}/api`,
+      `${server}/v2/users/${user}/devices/${device}/${resource}/api`,
       generateGETHeader(jwt)
     );
   }
 
-  static post(server, user, device, key, value, jwt) {
+  static post(
+    server: string,
+    user: string,
+    device: string,
+    resource: string,
+    value: postValue,
+    jwt: string
+  ) {
     return fetch(
-      `${server}/v2/users/${user}/devices/${device}/${key}`,
+      `${server}/v2/users/${user}/devices/${device}/${resource}`,
       generatePOSTHeader(jwt, { in: value })
     );
   }
 
-  static run(server, user, device, key, jwt) {
+  static run(
+    server: string,
+    user: string,
+    device: string,
+    resource: string,
+    jwt: string
+  ) {
     return fetch(
-      `${server}/v2/users/${user}/devices/${device}/${key}`,
+      `${server}/v2/users/${user}/devices/${device}/${resource}`,
       generateGETHeader(jwt)
     );
   }

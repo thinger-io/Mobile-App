@@ -1,3 +1,1 @@
-export default (ThingerConstants = {
-  server: "https://api.thinger.io"
-});
+export const THINGER_SERVER = "https://api.thinger.io";

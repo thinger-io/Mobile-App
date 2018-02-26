@@ -1,31 +1,46 @@
+//@flow
+
 import { connect } from "react-redux";
-import {
-  getResourcesFromApi,
-  postResource,
-  getResourceFromApi,
-  navigate,
-  selectResource,
-  restartLiveResource,
-  runResource
-} from "../../actions/actions";
 import {
   ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
-  Text,
   View
 } from "react-native";
 import React from "react";
-import Resource from "../resources/Resource";
+import Resource from "../resources/ResourceComponent";
 import ErrorMessage from "../ErrorMessage";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 import NavigationBar from "../navigation/NavigationBar";
-import MainContainer from "../containers/Screen";
+import Screen from "../containers/Screen";
+import {
+  getResourceFromApi,
+  getResourcesFromApi,
+  postResource,
+  runResource
+} from "../../actions/fetch";
+import { restartLiveResource, selectResource } from "../../actions/resource";
+import { navigate } from "../../actions/nav";
+import type { Device } from "../../types/Device";
+import type { Attribute } from "../../types/Attribute";
+import type { ResourcesState } from "../../types/State";
 
-class ResourcesScreen extends React.Component {
+type Props = {
+  device: Device,
+  resources: ResourcesState,
+  onUpdateClick: (device: Device, resource: string) => any,
+  onChartClick: (resource: string) => any,
+  onGetResources: (device: Device) => any,
+  onSettingsClick: () => any,
+  onUpdateClick: (resource: string) => any,
+  onPostClick: (id: string, value: Attribute) => any,
+  onRun: (id: string) => any
+};
+
+class ResourcesScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
-    this.onRefresh = this.onRefresh.bind(this);
+    (this: any).onRefresh = this.onRefresh.bind(this);
   }
 
   onRefresh() {
@@ -74,13 +89,16 @@ class ResourcesScreen extends React.Component {
     const { device, onSettingsClick } = this.props;
 
     return (
-      <MainContainer
-        scroll
-        navigationBar={{
-          title: device ? device.dev : "Device",
-          rightIcon: "cog",
-          onPress: onSettingsClick
-        }}
+      <Screen
+        navigationBar={
+          <NavigationBar
+            title={device ? device.dev : "Device"}
+            button={{
+              icon: "cog",
+              onPress: onSettingsClick
+            }}
+          />
+        }
       >
         {device &&
           (device.isFetching ? (
@@ -114,7 +132,7 @@ class ResourcesScreen extends React.Component {
           ) : (
             this.renderItemList()
           ))}
-      </MainContainer>
+      </Screen>
     );
   }
 }

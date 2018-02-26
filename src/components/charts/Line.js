@@ -1,19 +1,36 @@
+//@flow
+
 import React from "react";
-import { LineChart, XAxis, YAxis  } from "react-native-svg-charts";
+import { LineChart, XAxis, YAxis } from "react-native-svg-charts";
 import * as shape from "d3-shape";
 import { View, StyleSheet } from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 import { dateToSeconds } from "../../utils/dates";
+import type {StreamingState} from "../../types/State";
 
-export default class extends React.Component {
+type Props = {
+  chartedAttributes: Array<[string, boolean]>,
+  data: StreamingState
+};
+
+export default class extends React.Component<Props> {
+
   render() {
     const { chartedAttributes, data } = this.props;
 
-    let xData = [];
+    /*let xData = [];
     if (data && Object.values(data).length > 0) xData = Object.values(data)[0];
     xData = Object.keys(xData);
 
-    const contentInset = { top: 20, bottom: 20 };
+    <XAxis
+            values={xData}
+            chartType={XAxis.Type.LINE}
+            labelStyle={{ color: "white" }}
+            formatLabel={value => dateToSeconds(Number(value))}
+          />
+
+    */
+
     const dataPoints = [].concat.apply(
       [],
       chartedAttributes.map(
@@ -24,6 +41,11 @@ export default class extends React.Component {
     const min = Math.min(...dataPoints);
     const max = Math.max(...dataPoints);
 
+    let xData = [];
+    if (data && Object.values(data).length > 0) xData = Object.values(data)[0];
+    xData = Object.keys(xData);
+
+    const contentInset = { top: 20, bottom: 20 };
     return (
       <View style={{ flex: 1, flexDirection: "row", margin: 15 }}>
         <YAxis

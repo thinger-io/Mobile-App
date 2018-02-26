@@ -1,7 +1,13 @@
+//@flow
+
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 
-export class Output extends React.Component {
+type Props = {
+  value: string | number | boolean
+};
+
+export class Output extends React.Component<Props> {
   render() {
     const { value } = this.props;
     switch (typeof value) {

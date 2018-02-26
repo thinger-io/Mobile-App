@@ -1,17 +1,25 @@
+//@flow
+
 import React from "react";
 import { SEPARATOR_PADDING } from "../../constants/ThingerStyles";
 import styles from "../../constants/ThingerStyles";
 import { Text, View } from "react-native";
 import { Output } from "./values/Output";
 import { Input } from "./values/Input";
-import * as PropTypes from "prop-types";
 import { Run } from "./values/Run";
+import type { Attribute } from "../../types/Attribute";
 
-export const IN = "in";
-export const OUT = "out";
-export const RUN = "run";
+type Props = {
+  id: string,
+  type: "in" | "out" | "run",
+  value?: Attribute,
+  inputValue?: Attribute,
+  isSimple?: boolean,
+  onChange?: (id: string, value: Attribute) => any,
+  onRun?: () => any
+};
 
-export default class Attribute extends React.Component {
+export default class AttributeComponent extends React.Component<Props> {
   renderValue() {
     const { id, value, inputValue, type, onChange, onRun } = this.props;
     switch (type) {
@@ -22,7 +30,9 @@ export default class Attribute extends React.Component {
           <Input
             value={value}
             inputValue={inputValue}
-            onChange={value => onChange(id, value)}
+            onChange={value => {
+              onChange && onChange(id, value);
+            }}
           />
         );
       case "run":
@@ -52,13 +62,3 @@ export default class Attribute extends React.Component {
     );
   }
 }
-
-Attribute.propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.oneOf([IN, OUT, RUN]).isRequired,
-  value: PropTypes.any,
-  inputValue: PropTypes,
-  isSimple: PropTypes.bool,
-  onChange: PropTypes.func,
-  onRun: PropTypes.func
-};

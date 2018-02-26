@@ -1,22 +1,19 @@
+//@flow
+
 import React from "react";
-import PropTypes from "prop-types";
-import ThingerStyles, {
-  FONT_SIZE_P,
-  MARGIN,
-  PADDING
-} from "../constants/ThingerStyles";
+import { FONT_SIZE_P, MARGIN } from "../constants/ThingerStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { View, Text, StyleSheet } from "react-native";
 import { DARK_BLUE } from "../constants/ThingerColors";
 import RoundedButton from "./buttons/RoundedButton";
 
-export default class ErrorMessage extends React.Component {
-  propsType = {
-    message: PropTypes.string.isRequired,
-    icon: PropTypes.string,
-    onPressButton: PropTypes.func
-  };
+type Props = {
+  message: string,
+  icon?: string,
+  onPressButton?: () => any
+};
 
+export default class ErrorMessage extends React.Component<Props> {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -32,7 +29,7 @@ export default class ErrorMessage extends React.Component {
           <RoundedButton
             color={DARK_BLUE}
             text="Reload"
-            onPress={() => this.props.onPressButton()}
+            onPress={this.props.onPressButton}
           />
         )}
       </View>

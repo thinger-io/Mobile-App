@@ -1,24 +1,25 @@
+//@flow
+
 import React from "react";
-import PairView from "./ItemList";
+import ItemList from "./ItemList";
 import { StyleSheet, TextInput } from "react-native";
-import PropTypes from "prop-types";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
 import { INPUT_COLOR } from "../../constants/ThingerColors";
 
-export default class TextInputItem extends React.Component {
-  propsType = {
-    id: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    placeholder: PropTypes.string,
-    onChangeText: PropTypes.func
-  };
+type Props = {
+  name: string,
+  value: string,
+  placeholder?: string,
+  onChangeText?: (text: string) => any
+};
 
+export default class TextInputItem extends React.Component<Props> {
   render() {
-    const { id, value, placeholder, onChangeText } = this.props;
+    const { name, value, placeholder, onChangeText } = this.props;
 
     return (
-      <PairView
-        id={id}
+      <ItemList
+        name={name}
         value={
           <TextInput
             style={styles.value}

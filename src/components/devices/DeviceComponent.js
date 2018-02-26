@@ -1,15 +1,17 @@
+//@flow
+
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import {
-  FONT_SIZE_H1,
-  FONT_SIZE_H2,
-  FONT_SIZE_P,
-  MARGIN
-} from "../../constants/ThingerStyles";
-import * as PropTypes from "prop-types";
+import { FONT_SIZE_H2, FONT_SIZE_P } from "../../constants/ThingerStyles";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 
-export default class Device extends React.Component {
+type Props = {
+  name: string,
+  user: string,
+  onClick: () => any
+};
+
+export default class DeviceComponent extends React.Component<Props> {
   render() {
     const { name, user, onClick } = this.props;
 
@@ -23,12 +25,6 @@ export default class Device extends React.Component {
     );
   }
 }
-
-Device.propTypes = {
-  name: PropTypes.string.isRequired,
-  user: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
-};
 
 const styles = StyleSheet.create({
   device: {

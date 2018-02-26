@@ -1,14 +1,21 @@
+//@flow
+
 import { Platform, View } from "react-native";
 import React from "react";
 import QRCode from "react-native-qrcode-svg/src/index";
 import { connect } from "react-redux";
 import Screen from "../containers/Screen";
+import NavigationBar from "../navigation/NavigationBar";
 
-class ShowQRScreen extends React.Component {
+type Props = {
+  jwt: string
+};
+
+class ShowQRScreen extends React.Component<Props> {
   render() {
     // TODO: react-native-qrcode-svg not compatible with Android for svg library
     return (
-      <Screen navigationBar={{ title: "QR" }}>
+      <Screen navigationBar={<NavigationBar title="QR Scanner" />}>
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
@@ -21,7 +28,7 @@ class ShowQRScreen extends React.Component {
   }
 }
 
-mapStateToProps = state => {
+const mapStateToProps = state => {
   const jti = state.selectedDevice;
 
   return {

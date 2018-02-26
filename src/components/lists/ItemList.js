@@ -1,23 +1,24 @@
-import React from "react";
+//@flow
+
+import * as React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import PropTypes from "prop-types";
 import { FONT_SIZE_P, PADDING } from "../../constants/ThingerStyles";
-import {DARK_BLUE, DIVIDER_COLOR} from "../../constants/ThingerColors";
+import { DARK_BLUE, DIVIDER_COLOR } from "../../constants/ThingerColors";
 
-export default class ItemList extends React.Component {
-  propsType = {
-    key: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    style: PropTypes.object,
-    onPress: PropTypes.func
-  };
+type Props = {
+  name: string,
+  value: React.Node,
+  style?: { [string]: mixed },
+  onPress?: () => any
+};
 
+export default class ItemList extends React.Component<Props> {
   renderContent() {
-    const { style, id, value } = this.props;
+    const { style, name, value } = this.props;
 
     return (
       <View style={[styles.container, style]}>
-        <Text style={styles.id}>{id}</Text>
+        <Text style={styles.id}>{name}</Text>
         <View style={styles.valueContainer}>{value}</View>
       </View>
     );
@@ -43,7 +44,7 @@ export default class ItemList extends React.Component {
 const styles = StyleSheet.create({
   border: {
     borderBottomWidth: 1,
-    borderBottomColor: DIVIDER_COLOR,
+    borderBottomColor: DIVIDER_COLOR
   },
   container: {
     flex: 1,

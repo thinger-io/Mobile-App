@@ -1,15 +1,10 @@
+//@flow
+
 import { connect } from "react-redux";
 import React from "react";
 import { MARGIN } from "../../constants/ThingerStyles";
-import {
-  removeDevice,
-  setDeviceServer,
-  navigate,
-  goToMain
-} from "../../actions/actions";
 import RoundedButton from "../buttons/RoundedButton";
 import CenterView from "../containers/CenterView";
-import ThingerConstants from "../../constants/ThingerConstants";
 import Screen from "../containers/Screen";
 import List from "../lists/List";
 import OutputItem from "../lists/OutputItem";
@@ -17,17 +12,34 @@ import TextInputItem from "../lists/TextInputItem";
 import EnterItem from "../lists/EnterItem";
 import { ScrollView } from "react-native";
 import { timestampToString } from "../../utils/dates";
+import type { Device } from "../../types/Device";
+import type { Dispatch } from "../../types/Dispatch";
+import { setDeviceServer, removeDevice } from "../../actions/device";
+import { goToMain, navigate } from "../../actions/nav";
+import NavigationBar from "../navigation/NavigationBar";
+import { THINGER_SERVER } from "../../constants/ThingerConstants";
 
-class DeviceInfo extends React.Component {
+type Props = {
+  device: Device,
+  removeDevice: (jti: string) => Dispatch,
+  changeServer: (device: string, server: string) => Dispatch,
+  onShowQR: () => Dispatch
+};
+
+type State = {
+  server: string
+};
+
+class DeviceInfo extends React.Component<Props, State> {
   constructor(props) {
     super(props);
-    this.handleOnChangeText = this.handleOnChangeText.bind(this);
+    (this: any).handleOnChangeText = this.handleOnChangeText.bind(this);
     this.state = {
       server: this.props.device.server
     };
   }
 
-  handleOnChangeText(text) {
+  handleOnChangeText(text: string) {
     const { device, changeServer } = this.props;
     this.setState({ server: text });
     changeServer(device.jti, text);
@@ -36,25 +48,25 @@ class DeviceInfo extends React.Component {
   render() {
     const { device, removeDevice, onShowQR } = this.props;
     return (
-      <Screen scroll={true} navigationBar={{ title: "Settings" }}>
+      <Screen navigationBar={<NavigationBar title="Settings" />}>
         {device && (
           <ScrollView>
             <List>
-              <OutputItem id={"Device"} value={device.dev} />
-              <OutputItem id={"User"} value={device.usr} />
+              <OutputItem name={"Device"} value={device.dev} />
+              <OutputItem name={"User"} value={device.usr} />
               <TextInputItem
-                id={"Server"}
+                name={"Server"}
                 value={this.state.server}
-                placeholder={ThingerConstants.server}
+                placeholder={THINGER_SERVER}
                 onChangeText={this.handleOnChangeText}
               />
-              <EnterItem id={"Token QR"} onPress={() => onShowQR()} />
+              <EnterItem name={"Token QR"} onPress={() => onShowQR()} />
               <OutputItem
-                id={"Token creation date"}
+                name={"Token creation date"}
                 value={timestampToString(device.iat)}
               />
               <OutputItem
-                id={"Token expiration date"}
+                name={"Token expiration date"}
                 value={device.exp ? timestampToString(device.exp) : "Never"}
               />
             </List>
@@ -83,10 +95,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeDevice: jti => {
-      dispatch(removeDevice(jti));
-      dispatch(goToMain());
-    },
+    removeDevice: jti => dispatch(removeDevice(jti), goToMain()),
     changeServer: (device, server) => dispatch(setDeviceServer(device, server)),
     onShowQR: () => dispatch(navigate("ShowQR"))
   };

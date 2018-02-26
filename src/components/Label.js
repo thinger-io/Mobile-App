@@ -1,9 +1,19 @@
+//@flow
+
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import * as PropTypes from "prop-types";
 
-export default class Label extends React.Component {
+type Props = {
+  id: string,
+  value: string | number | boolean,
+  color: string,
+  selected: boolean,
+  locked: boolean,
+  onClick: (id: string) => any
+};
+
+export default class Label extends React.Component<Props> {
   renderView() {
     const { id, value, color, selected, locked } = this.props;
 
@@ -47,12 +57,3 @@ export default class Label extends React.Component {
     );
   }
 }
-
-Label.propTypes = {
-  id: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired,
-  color: PropTypes.string.isRequired,
-  selected: PropTypes.bool.isRequired,
-  locked: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired
-};

@@ -1,10 +1,15 @@
+//@flow
+
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
-import * as PropTypes from "prop-types";
+import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { DARK_BLUE } from "../../../constants/ThingerColors";
 
-export class Run extends React.Component {
+type Props = {
+  onPress: () => any
+};
+
+export class Run extends React.Component<Props> {
   render() {
     const { onPress } = this.props;
 
@@ -22,7 +27,3 @@ export class Run extends React.Component {
     );
   }
 }
-
-Run.propTypes = {
-  onPress: PropTypes.func.isRequired
-};

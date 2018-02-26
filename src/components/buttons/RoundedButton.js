@@ -1,16 +1,16 @@
+//@flow
+
 import { FONT_SIZE_P, PADDING } from "../../constants/ThingerStyles";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import PropTypes from "prop-types";
-import ThingerStyles from "../../constants/ThingerStyles";
 
-export default class RoundedButton extends React.Component {
-  propTypes = {
-    color: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    onPress: PropTypes.func.isRequired
-  };
+type Props = {
+  color: string,
+  text: string,
+  onPress: () => any
+};
 
+export default class RoundedButton extends React.Component<Props> {
   render() {
     const { color, text, onPress } = this.props;
 

@@ -1,30 +1,20 @@
-import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+//@flow
+
+import * as React from "react";
+import { StyleSheet, View } from "react-native";
 import NavigationBar from "../navigation/NavigationBar";
-import PropTypes from "prop-types";
 
-export default class Screen extends React.Component {
-  propsType = {
-    navigationBar: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      rightIcon: PropTypes.string,
-      onPress: PropTypes.func,
-      isMain: PropTypes.bool
-    })
-  };
+type Props = {
+  navigationBar: React.Element<typeof NavigationBar>,
+  children: React.Node
+};
 
+export default class Screen extends React.Component<Props> {
   render() {
     const { navigationBar } = this.props;
     return (
       <View style={{ flex: 1 }}>
-        {navigationBar && (
-          <NavigationBar
-            title={navigationBar.title}
-            rightIcon={navigationBar.rightIcon}
-            onPress={navigationBar.onPress}
-            isMain={navigationBar.isMain}
-          />
-        )}
+        {navigationBar}
         <View style={styles.container}>{this.props.children}</View>
       </View>
     );

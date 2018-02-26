@@ -1,14 +1,16 @@
+//@flow
+
 import React from "react";
-import { PieChart } from "react-native-svg-charts";
-import { getColorByIndex, getLightColorByIndex } from "../../utils/colors";
+import { getColorByIndex } from "../../utils/colors";
 import BarChart from "react-native-svg-charts/src/bar-chart";
 import { View } from "react-native";
 
-export default class extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
+type Props = {
+  chartedAttributes: Array<[string, boolean]>,
+  data: { [attribute: string]: string | boolean | number }
+};
 
+export default class extends React.PureComponent<Props> {
   render() {
     const { chartedAttributes, data } = this.props;
 
@@ -16,7 +18,7 @@ export default class extends React.PureComponent {
       .map(([key, value], index) => [key, value, index])
       .filter(([key, value]) => value)
       .map(([key, , index]) => ({
-        values: [Object.values(data[key]).slice(-1)[0]],
+        values: [data[key]],
         positive: {
           fill: getColorByIndex(index * 2)
         },
@@ -25,10 +27,7 @@ export default class extends React.PureComponent {
         }
       }));
 
-    const max = barData.reduce(
-      (acc, val) => Math.max(acc, Math.abs(val.values[0])),
-      0
-    );
+    // TODO: max
 
     return (
       <View
@@ -47,8 +46,6 @@ export default class extends React.PureComponent {
           }}
           data={barData}
           showGrid={false}
-          gridMin={-max}
-          gridMax={max}
         />
       </View>
     );

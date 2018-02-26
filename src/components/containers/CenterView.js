@@ -1,12 +1,14 @@
-import React from "react";
+//@flow
+
+import * as React from "react";
 import { View } from "react-native";
-import PropTypes from "prop-types";
 
-export default class CenterView extends React.Component {
-  propsType = {
-    style: PropTypes.object
-  };
+type Props = {
+  children: React.Node,
+  style?: { [string]: mixed }
+};
 
+export default class CenterView extends React.Component<Props> {
   render() {
     const { style } = this.props;
 

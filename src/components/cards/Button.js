@@ -1,3 +1,5 @@
+//@flow
+
 import {
   ActivityIndicator,
   Text,
@@ -6,11 +8,17 @@ import {
   StyleSheet
 } from "react-native";
 import React from "react";
-import Icon from "react-native-vector-icons/FontAwesome";
 
-export default class CardButton extends React.Component {
+type Props = {
+  onClick: () => any,
+  isLoading?: boolean,
+  text: string,
+  color: string
+};
+
+export default class CardButton extends React.Component<Props> {
   render() {
-    const { onClick, isLoading, text, icon, color } = this.props;
+    const { onClick, isLoading, text, color } = this.props;
 
     return isLoading ? (
       <View style={[styles.container, { backgroundColor: color }]}>
@@ -23,7 +31,6 @@ export default class CardButton extends React.Component {
         activeOpacity={isLoading === undefined ? 0.2 : 1}
       >
         <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-          <Icon name={icon} size={16} style={{ color: "black" }} />
           <Text
             style={{
               marginLeft: 5,

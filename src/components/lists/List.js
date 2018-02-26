@@ -1,13 +1,15 @@
-import React from "react";
+//@flow
+
+import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FONT_SIZE_H1, PADDING } from "../../constants/ThingerStyles";
-import PropTypes from "prop-types";
 
-export default class List extends React.Component {
-  propsType = {
-    title: PropTypes.string.isRequired
-  };
+type Props = {
+  title?: string,
+  children: React.Node
+};
 
+export default class List extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>

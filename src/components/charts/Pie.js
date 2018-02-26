@@ -1,33 +1,35 @@
+//@flow
+
 import React from "react";
 import { PieChart } from "react-native-svg-charts";
 import { getColorByIndex } from "../../utils/colors";
-import { PIE } from "../navigators/Charts";
+import type { Chart } from "../../types/Chart";
 
-export default class extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
+type Props = {
+  chartedAttributes: Array<[string, boolean]>,
+  data: { [attribute: string]: string | boolean | number },
+  lockAttribute: (attribute: string, chart: Chart) => any
+};
+
+export default class extends React.PureComponent<Props> {
 
   render() {
-    const {
-      chartedAttributes,
-      data,
-      lockAttribute,
-      unlockAttribute
-    } = this.props;
+    const { chartedAttributes, data, lockAttribute } = this.props;
 
     const pieData = chartedAttributes
       .map(([key, value], index) => ({
-        value: Object.values(data[key]).slice(-1)[0],
+        value: data[key],
         color: getColorByIndex(index * 2),
         key,
         charted: value
       }))
       .filter(({ value, key, charted }) => {
-        if (value < 0) lockAttribute(key, PIE);
-        else if (typeof value === "number") unlockAttribute(key, PIE);
-        return charted && value > 0;
+        const numberValue: number = (value: any);
+        if (numberValue < 0) lockAttribute(key, "Pie");
+        return charted && numberValue > 0;
       });
+
+    console.log(pieData)
 
     return <PieChart style={{ flex: 1, margin: 15 }} data={pieData} />;
   }

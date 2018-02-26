@@ -1,7 +1,15 @@
+//@flow
+
 import React from "react";
 import { StyleSheet, Switch, TextInput } from "react-native";
 
-export class Input extends React.Component {
+type Props = {
+  value?: string | number | boolean,
+  inputValue: string,
+  onChange: (text: string) => any
+};
+
+export class Input extends React.Component<Props> {
   render() {
     const { value, inputValue, onChange } = this.props;
     switch (typeof value) {

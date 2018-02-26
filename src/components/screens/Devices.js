@@ -1,24 +1,27 @@
+//@flow
+
 import { connect } from "react-redux";
-import {
-  selectDevice,
-  navigate,
-  removeResources,
-  getResourcesFromApi
-} from "../../actions/actions";
-import {
-  FlatList,
-  View,
-  Image,
-  Text,
-  TouchableWithoutFeedback
-} from "react-native";
-import Device from "../devices/Device";
+import { FlatList, View, Image, Text } from "react-native";
+import DeviceComponent from "../devices/DeviceComponent";
 import React from "react";
-import { MARGIN, PADDING } from "../../constants/ThingerStyles";
+import { MARGIN } from "../../constants/ThingerStyles";
 import ThingerStyles from "../../constants/ThingerStyles";
 import Screen from "../containers/Screen";
+import { navigate } from "../../actions/nav";
+import { getResourcesFromApi } from "../../actions/fetch";
+import { selectDevice } from "../../actions/device";
+import { removeAllResources } from "../../actions/resource";
+import type { Dispatch } from "../../types/Dispatch";
+import NavigationBar from "../navigation/NavigationBar";
+import type { Device } from "../../types/Device";
 
-class DevicesScreen extends React.Component {
+type Props = {
+  devices: Array<Device>,
+  onDeviceClick: (device: Device) => Dispatch,
+  onAddDevicePress: () => Dispatch
+};
+
+class DevicesScreen extends React.Component<Props> {
   renderSeparator = () => {
     return (
       <View
@@ -33,12 +36,12 @@ class DevicesScreen extends React.Component {
 
   renderContent() {
     const { devices, onDeviceClick } = this.props;
-    return Object.keys(devices).length ? (
+    return devices.length ? (
       <FlatList
-        data={Object.values(devices)}
+        data={devices}
         keyExtractor={item => item.jti}
         renderItem={({ item }) => (
-          <Device
+          <DeviceComponent
             name={item.dev}
             user={item.usr}
             onClick={() => onDeviceClick(item)}
@@ -61,12 +64,16 @@ class DevicesScreen extends React.Component {
   render() {
     return (
       <Screen
-        navigationBar={{
-          title: "Devices",
-          rightIcon: "qrcode",
-          onPress: this.props.onAddDevicePress,
-          isMain: false
-        }}
+        navigationBar={
+          <NavigationBar
+            title={"Devices"}
+            isMain={false}
+            button={{
+              icon: "qrcode",
+              onPress: this.props.onAddDevicePress
+            }}
+          />
+        }
       >
         {this.renderContent()}
       </Screen>
@@ -76,21 +83,19 @@ class DevicesScreen extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    devices: state.devices
+    devices: Object.values(state.devices)
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onDeviceClick: device => {
-      dispatch(removeResources());
+      dispatch(removeAllResources());
       dispatch(selectDevice(device.jti));
       dispatch(getResourcesFromApi(device));
-      dispatch(navigate("Device", device.dev));
+      dispatch(navigate("Device"));
     },
-    onAddDevicePress: () => {
-      dispatch(navigate("Scanner"));
-    }
+    onAddDevicePress: () => dispatch(navigate("Scanner"))
   };
 };
 

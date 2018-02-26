@@ -1,24 +1,26 @@
+//@flow
+
 import React from "react";
 import ItemList from "./ItemList";
-import PropTypes from "prop-types";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
+import { DARK_BLUE } from "../../constants/ThingerColors";
 
-export default class EnterItem extends React.Component {
-  propsType = {
-    id: PropTypes.string.isRequired,
-    onPress: PropTypes.func.isRequired
-  };
+type Props = {
+  name: string,
+  onPress: () => any
+};
 
+export default class EnterItem extends React.Component<Props> {
   render() {
     return (
       <ItemList
-        id={this.props.id}
+        name={this.props.name}
         value={
           <Icon
             name="arrow-right"
             size={FONT_SIZE_P}
-            style={{ color: "#444" }}
+            style={{ color: DARK_BLUE }}
           />
         }
         onPress={this.props.onPress}

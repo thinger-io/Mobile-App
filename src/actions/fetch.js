@@ -90,7 +90,7 @@ export function getResourcesFromApi(device: Device): ThunkAction {
 export function postResource(
   device: Device,
   resource: string,
-  value: Attribute
+  value: Attribute | { [attribute: string]: Attribute }
 ): ThunkAction {
   return async dispatch => {
     dispatch(requestResource(resource));

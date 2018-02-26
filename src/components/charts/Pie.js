@@ -28,8 +28,6 @@ export default class extends React.PureComponent<Props> {
         return charted && numberValue > 0;
       });
 
-    console.log(pieData);
-
     return <PieChart style={{ flex: 1, margin: 15 }} data={pieData} />;
   }
 }

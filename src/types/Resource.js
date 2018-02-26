@@ -3,21 +3,23 @@
 import type { Attribute } from "./Attribute";
 
 export type Resource = {
-  in?: Attribute,
-  out?: Attribute
+  in?: Attribute | { [attribute: string]: Attribute },
+  out?: Attribute | { [attribute: string]: Attribute }
 };
 
+export type SimpleResource = { [type: "in" | "out"]: Attribute };
+
 export type MultipleResource = {
-  in?: { [attribute: string]: string | boolean | number },
-  out?: { [attribute: string]: string | boolean | number }
+  in?: { [attribute: string]: Attribute },
+  out?: { [attribute: string]: Attribute }
 };
 
 export type OutputResource = {
-  out: Attribute
+  out: Attribute | { [attribute: string]: Attribute }
 };
 
 export type MultipleOutputResource = {
-  out: { [attribute: string]: string | boolean | number }
+  out: { [attribute: string]: Attribute }
 };
 
 export function isMultipleResource(resource: Resource): boolean {

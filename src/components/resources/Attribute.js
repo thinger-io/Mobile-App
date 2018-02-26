@@ -1,47 +1,19 @@
 //@flow
 
-import React from "react";
+import * as React from "react";
 import { SEPARATOR_PADDING } from "../../constants/ThingerStyles";
 import styles from "../../constants/ThingerStyles";
 import { Text, View } from "react-native";
-import { Output } from "./values/Output";
-import { Input } from "./values/Input";
-import { Run } from "./values/Run";
-import type { Attribute } from "../../types/Attribute";
 
 type Props = {
   id: string,
-  type: "in" | "out" | "run",
-  value?: Attribute,
-  inputValue?: Attribute,
   isSimple?: boolean,
-  onChange?: (id: string, value: Attribute) => any,
-  onRun?: () => any
+  children: React.Node
 };
 
-export default class AttributeComponent extends React.Component<Props> {
-  renderValue() {
-    const { id, value, inputValue, type, onChange, onRun } = this.props;
-    switch (type) {
-      case "out":
-        return <Output value={value} />;
-      case "in":
-        return (
-          <Input
-            value={value}
-            inputValue={inputValue}
-            onChange={value => {
-              onChange && onChange(id, value);
-            }}
-          />
-        );
-      case "run":
-        return <Run onPress={onRun} />;
-    }
-  }
-
+export default class AttributeView extends React.Component<Props> {
   render() {
-    const { id, isSimple } = this.props;
+    const { id, isSimple, children } = this.props;
 
     return (
       <View
@@ -57,7 +29,7 @@ export default class AttributeComponent extends React.Component<Props> {
         >
           {id}
         </Text>
-        {this.renderValue()}
+        {children}
       </View>
     );
   }

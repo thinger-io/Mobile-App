@@ -1,14 +1,18 @@
 //@flow
 
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import {StyleSheet, Switch, Text, TextInput} from "react-native";
+import AttributeView from "./Attribute";
+import type { Attribute } from "../../types/Attribute";
 
 type Props = {
-  value: string | number | boolean
+  id: string,
+  isSimple?: boolean,
+  value: Attribute,
 };
 
-export class Output extends React.Component<Props> {
-  render() {
+export default class OutputAttribute extends React.Component<Props> {
+  renderValue() {
     const { value } = this.props;
     switch (typeof value) {
       case "string":
@@ -20,6 +24,16 @@ export class Output extends React.Component<Props> {
       default:
         return null;
     }
+  }
+
+  render() {
+    const { id, isSimple } = this.props;
+
+    return (
+      <AttributeView id={id} isSimple={isSimple}>
+        {this.renderValue()}
+      </AttributeView>
+    );
   }
 }
 

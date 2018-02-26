@@ -8,7 +8,6 @@ import {
   View
 } from "react-native";
 import React from "react";
-import Resource from "../resources/Resource";
 import ErrorMessage from "../ErrorMessage";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 import NavigationBar from "../navigation/NavigationBar";
@@ -24,6 +23,10 @@ import { navigate } from "../../actions/nav";
 import type { Device } from "../../types/Device";
 import type { Attribute } from "../../types/Attribute";
 import type { ResourcesState } from "../../types/State";
+import {isMultipleResource} from "../../types/Resource";
+import MultipleResourceView from "../resources/MultipleResource";
+import type {MultipleResource, SimpleResource} from "../../types/Resource";
+import SimpleResourceView from "../resources/SimpleResource";
 
 type Props = {
   device: Device,
@@ -57,17 +60,32 @@ class ResourcesScreen extends React.Component<Props> {
       onRun
     } = this.props;
 
-    return (
-      <Resource
-        id={item}
-        data={resources[item].data || {}}
-        isFetching={resources[item].isFetching}
-        onUpdateClick={onUpdateClick}
-        onPostClick={onPostClick}
-        onChartClick={() => onChartClick(item)}
-        onRun={onRun}
-      />
-    );
+    if (isMultipleResource(resources[item].data)) {
+      const data: MultipleResource = (resources[item].data: any);
+      return (
+        <MultipleResourceView
+          id={item}
+          data={data || {}}
+          isFetching={resources[item].isFetching}
+          onUpdateClick={onUpdateClick}
+          onPostClick={onPostClick}
+          onChartClick={() => onChartClick(item)}
+        />
+      );
+    } else {
+      const data: SimpleResource = (resources[item].data: any);
+      return (
+        <SimpleResourceView
+          id={item}
+          data={data || {}}
+          isFetching={resources[item].isFetching}
+          onUpdateClick={onUpdateClick}
+          onPostClick={onPostClick}
+          onChartClick={() => onChartClick(item)}
+          onRun={onRun}
+        />
+      );
+    }
   };
 
   renderItemList() {

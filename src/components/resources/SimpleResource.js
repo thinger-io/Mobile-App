@@ -9,7 +9,7 @@ import OutputAttribute from "./OutputAttribute";
 import ResourceComponent from "./Resource";
 
 type Props = {
-  id: string,
+  resource: string,
   data: SimpleResource,
   isFetching: boolean,
   onPostClick: (id: string, data: Attribute) => any,
@@ -33,11 +33,11 @@ class SimpleResourceView extends React.Component<Props, State> {
   }
 
   handleOnPostClick() {
-    const { id, data, onPostClick } = this.props;
+    const { resource, data, onPostClick } = this.props;
     if (typeof data.in === "number" && typeof this.state.in === "string") {
-      onPostClick(id, Number(String(data.in).replace(",", ".")));
+      onPostClick(resource, Number(String(this.state.in).replace(",", ".")));
     } else {
-      onPostClick(id, data.in);
+      onPostClick(resource, data.in);
     }
   }
 
@@ -48,18 +48,18 @@ class SimpleResourceView extends React.Component<Props, State> {
   }
 
   renderAttributes() {
-    const { id, data, onRun } = this.props;
+    const { resource, data, onRun } = this.props;
 
     // Run resource
     if (typeof data === {}) {
-      return <RunAttribute id={id} isSimple onRun={() => onRun(id)} />;
+      return <RunAttribute id={resource} isSimple onRun={() => onRun(resource)} />;
     }
 
     // Input Resource
     if (data.hasOwnProperty("in")) {
       return (
         <InputAttribute
-          id={id}
+          id={resource}
           value={data.in}
           inputValue={this.state.in}
           isSimple
@@ -70,16 +70,16 @@ class SimpleResourceView extends React.Component<Props, State> {
 
     // Output Resource
     if (data.hasOwnProperty("out")) {
-      return <OutputAttribute id={id} value={data.out} isSimple />;
+      return <OutputAttribute id={resource} value={data.out} isSimple />;
     }
   }
 
   render() {
-    const { id, data, isFetching, onUpdateClick, onChartClick } = this.props;
+    const { resource, data, isFetching, onUpdateClick, onChartClick } = this.props;
     return (
       <ResourceComponent
         isFetching={isFetching}
-        onUpdateClick={data.hasOwnProperty("out") ? () => onUpdateClick(id) : undefined}
+        onUpdateClick={data.hasOwnProperty("out") ? () => onUpdateClick(resource) : undefined}
         onChartClick={data.hasOwnProperty("out") ? onChartClick : undefined}
         onPostClick={data.hasOwnProperty("in")? this.handleOnPostClick : undefined}
       >

@@ -11,11 +11,11 @@ import OutputAttribute from "./OutputAttribute";
 import ResourceComponent, {castStringToNumber} from "./Resource";
 
 type Props = {
-  id: string,
+  resource: string,
   data: MultipleResource,
   isFetching: boolean,
-  onPostClick: (id: string, data: Attribute) => any,
-  onUpdateClick: (id: string) => any,
+  onPostClick: (resource: string, data: Attribute) => any,
+  onUpdateClick: (resource: string) => any,
   onChartClick: () => any
 };
 
@@ -38,19 +38,19 @@ class MultipleResourceView extends React.Component<Props, State> {
   }
 
   handleOnPostClick() {
-    const { id, data, onPostClick } = this.props;
+    const { resource, data, onPostClick } = this.props;
     if (data.in) {
       const castedData = castInputData(this.state.in, data.in);
-      onPostClick(id, castedData);
+      onPostClick(resource, castedData);
     }
   }
 
-  handleOnChangeAttribute(id: string, value: Attribute) {
-    this.setState(update(this.state, { in: { [id]: { $set: value } } }));
+  handleOnChangeAttribute(attribute: string, value: Attribute) {
+    this.setState(update(this.state, { in: { [attribute]: { $set: value } } }));
   }
 
   renderAttributes() {
-    const { id, data } = this.props;
+    const { resource, data } = this.props;
 
     const inputs = data.in
       ? Object.keys(data.in).map(key => ({ type: "in", key }))
@@ -62,7 +62,7 @@ class MultipleResourceView extends React.Component<Props, State> {
     return (
       <View>
         <Text ellipsizeMode="tail" numberOfLines={1} style={styles.h1}>
-          {id}
+          {resource}
         </Text>
         <FlatList
           data={outputs.concat(inputs)}
@@ -84,13 +84,13 @@ class MultipleResourceView extends React.Component<Props, State> {
   }
 
   render() {
-    const { id, data, isFetching, onUpdateClick, onChartClick } = this.props;
+    const { resource, data, isFetching, onUpdateClick, onChartClick } = this.props;
     return (
       <ResourceComponent
         isFetching={isFetching}
-        onUpdateClick={data.out ? () => onUpdateClick(id) : undefined}
+        onUpdateClick={data.out ? () => onUpdateClick(resource) : undefined}
         onChartClick={data.out ? onChartClick : undefined}
-        onPostClick={data.in ? this.handleOnPostClick : undefined}
+        onPostClick={data.in ? () => this.handleOnPostClick() : undefined}
       >
         {this.renderAttributes()}
       </ResourceComponent>
@@ -102,9 +102,13 @@ function castInputData(
   editedData: { [attribute: string]: Attribute },
   data: { [attribute: string]: Attribute }
 ) {
-  const casted = Object.entries(editedData).map((key, value) => ({
-    [key]: castStringToNumber(value, typeof data[key])
-  }));
+  const casted = Object.entries(editedData).map(([key, value]) => {
+    if (typeof data[key] === "number" && typeof value === "string") {
+      return { [key]: Number(String(value).replace(",", ".")) }
+    } else {
+      return { [key]: value }
+    }
+  });
   return Object.assign.apply({}, casted);
 }
 

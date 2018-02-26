@@ -54,12 +54,8 @@ class ResourceComponent extends React.Component<Props> {
   }
 }
 
-export function castStringToNumber(value: string, type: string) {
-  switch (type) {
-    case "number":
-      return Number(String(value).replace(",", "."));
-  }
-  return value;
+export function castStringToNumber(value: string) {
+  return Number(String(value).replace(",", "."));
 }
 
 export default ResourceComponent;

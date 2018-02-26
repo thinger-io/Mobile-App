@@ -64,7 +64,7 @@ class ResourcesScreen extends React.Component<Props> {
       const data: MultipleResource = (resources[item].data: any);
       return (
         <MultipleResourceView
-          id={item}
+          resource={item}
           data={data || {}}
           isFetching={resources[item].isFetching}
           onUpdateClick={onUpdateClick}
@@ -76,7 +76,7 @@ class ResourcesScreen extends React.Component<Props> {
       const data: SimpleResource = (resources[item].data: any);
       return (
         <SimpleResourceView
-          id={item}
+          resource={item}
           data={data || {}}
           isFetching={resources[item].isFetching}
           onUpdateClick={onUpdateClick}

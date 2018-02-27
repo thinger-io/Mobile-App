@@ -25,15 +25,19 @@ class NavigationBar extends React.Component<Props> {
 
     return (
       <View style={styles.container}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           {!main && (
             <TouchableOpacity onPress={() => dispatch(goBack())}>
-              <Icon name="chevron-left" size={FONT_SIZE_H1} style={styles.icon} />
+              <Icon
+                name="chevron-left"
+                size={FONT_SIZE_H1}
+                style={styles.icon}
+              />
             </TouchableOpacity>
           )}
         </View>
         <Text style={styles.title}>{title}</Text>
-        <View style={{flex: 1, alignItems: "flex-end"}}>
+        <View style={{ flex: 1, alignItems: "flex-end" }}>
           {button && (
             <TouchableOpacity onPress={button.onPress}>
               <Icon

@@ -1,14 +1,14 @@
 //@flow
 
 import React from "react";
-import {StyleSheet, Switch, Text, TextInput} from "react-native";
+import { StyleSheet, Switch, Text, TextInput } from "react-native";
 import AttributeView from "./Attribute";
 import type { Attribute } from "../../types/Attribute";
 
 type Props = {
   id: string,
   isSimple?: boolean,
-  value: Attribute,
+  value: Attribute
 };
 
 export default class OutputAttribute extends React.Component<Props> {

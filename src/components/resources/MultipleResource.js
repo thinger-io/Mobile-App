@@ -14,7 +14,10 @@ type Props = {
   resource: string,
   data: MultipleResource,
   isFetching: boolean,
-  onPostClick: (resource: string, data: { [attribute: string]: Attribute }) => any,
+  onPostClick: (
+    resource: string,
+    data: { [attribute: string]: Attribute }
+  ) => any,
   onUpdateClick: (resource: string) => any,
   onChartClick: () => any
 };

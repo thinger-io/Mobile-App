@@ -7,7 +7,8 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import {
   COLOR_ACTIVE,
   COLOR_INACTIVE,
-  DARK_BLUE, DIVIDER_COLOR
+  DARK_BLUE,
+  DIVIDER_COLOR
 } from "../../constants/ThingerColors";
 import type { Chart } from "../../types/Chart";
 

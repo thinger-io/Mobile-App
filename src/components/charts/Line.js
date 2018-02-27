@@ -16,11 +16,8 @@ type Props = {
 };
 
 export default class extends React.Component<Props> {
-  render() {
+  renderChart() {
     const { chartedAttributes, streaming } = this.props;
-
-    if (!Object.keys(streaming).length) return null;
-
     const arrayOfValues = chartedAttributes.map(
       ([key, value]) => (value ? streaming.data[key] : [])
     );
@@ -29,7 +26,7 @@ export default class extends React.Component<Props> {
     const min = Math.min(...dataPoints);
     const max = Math.max(...dataPoints);
 
-    return Object.keys(streaming).length && streaming.timestamp.length > 1 ? (
+    return (
       <View style={{ flex: 1, flexDirection: "row", margin: 15 }}>
         <YAxis
           style={{ top: 0, bottom: 0 }}
@@ -65,6 +62,13 @@ export default class extends React.Component<Props> {
           />
         </View>
       </View>
+    );
+  }
+
+  render() {
+    const { streaming } = this.props;
+    return Object.keys(streaming).length && streaming.timestamp.length > 1 ? (
+      this.renderChart()
     ) : (
       <View
         style={{

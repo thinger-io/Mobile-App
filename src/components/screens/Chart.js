@@ -220,7 +220,7 @@ const mapDispatchToProps = dispatch => {
           types.forEach(chart => {
             dispatch(selectAttribute(resource, chart));
             dispatch(unlockAttribute(resource, chart));
-          })
+          });
         } else {
           Object.keys(value.out).forEach(key =>
             types.forEach(chart => {

@@ -15,12 +15,12 @@ export default function streaming(
 ) {
   switch (action.type) {
     case "RESOURCE_RECEIVE":
-      const timestamp = Date.now();
       if (action.value.hasOwnProperty("out")) {
+        const timestamp = Date.now();
         const output = action.value.out;
+        let newState;
         if (typeof output === "object") {
           const keys = Object.keys(output);
-          let newState;
           for (const key of keys) {
             newState = update(newState ? newState : state, {
               data: { [key]: { $push: [output[key]] } }
@@ -31,18 +31,25 @@ export default function streaming(
               }
             });
           }
-          newState = update(newState, {
-            timestamp: { $push: [timestamp] }
-          });
-          newState = update(newState, {
-            timestamp: { $set: newState.timestamp.slice(-10) }
-          });
-          return newState;
         } else {
-          return update(state, {
-            [action.resource]: { $merge: { [timestamp]: output } }
+          newState = update(newState ? newState : state, {
+            data: { [action.resource]: { $push: [output] } }
+          });
+          newState = update(newState, {
+            data: {
+              [action.resource]: {
+                $set: newState.data[action.resource].slice(-10)
+              }
+            }
           });
         }
+        newState = update(newState, {
+          timestamp: { $push: [timestamp] }
+        });
+        newState = update(newState, {
+          timestamp: { $set: newState.timestamp.slice(-10) }
+        });
+        return newState;
       } else return state;
     case "RESOURCE_RESTART_LIVE":
       return {};

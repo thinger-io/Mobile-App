@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import {
   COLOR_ACTIVE,
   COLOR_INACTIVE,
-  DARK_BLUE
+  DARK_BLUE, DIVIDER_COLOR
 } from "../../constants/ThingerColors";
 import type { Chart } from "../../types/Chart";
 
@@ -34,15 +34,15 @@ export default class TabBar extends React.Component<Props> {
                     <Icon
                       name={icon}
                       size={22}
-                      style={{ color: COLOR_ACTIVE }}
+                      style={{ color: COLOR_ACTIVE, paddingBottom: 3 }}
                     />,
                     <Text style={{ color: COLOR_ACTIVE }}>{title}</Text>
                   ]
                 : [
                     <Icon
                       name={icon}
-                      size={22}
-                      style={{ color: COLOR_INACTIVE }}
+                      size={20}
+                      style={{ color: COLOR_INACTIVE, paddingBottom: 3 }}
                     />,
                     <Text style={{ color: COLOR_INACTIVE }}>{title}</Text>
                   ]}
@@ -58,9 +58,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: PADDING,
+    padding: PADDING / 2,
     alignItems: "center",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    borderTopWidth: 1,
+    borderTopColor: DIVIDER_COLOR
   },
   button: {
     flex: 1,

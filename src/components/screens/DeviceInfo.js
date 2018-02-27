@@ -95,7 +95,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeDevice: jti => dispatch(removeDevice(jti), goToMain()),
+    removeDevice: jti => {
+      dispatch(removeDevice(jti));
+      dispatch(goToMain());
+    },
     changeServer: (device, server) => dispatch(setDeviceServer(device, server)),
     onShowQR: () => dispatch(navigate("ShowQR"))
   };

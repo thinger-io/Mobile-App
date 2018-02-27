@@ -102,7 +102,7 @@ export function postResource(
       value,
       device.jwt
     );
-    const json = response.json();
+    const json = await response.json();
     return dispatch(
       receiveResource(resource, Object.assign({}, { in: value }, json))
     );

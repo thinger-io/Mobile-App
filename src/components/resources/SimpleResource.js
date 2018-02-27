@@ -97,7 +97,7 @@ class SimpleResourceView extends React.Component<Props, State> {
         }
         onPostClick={
           data.hasOwnProperty("in") && typeof data.in !== "boolean"
-            ? this.handleOnPostClick
+            ? () => this.handleOnPostClick
             : undefined
         }
       >

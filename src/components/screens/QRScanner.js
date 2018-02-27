@@ -49,7 +49,8 @@ class QRScanner extends React.Component<Props, State> {
         this.alert.alertWithType("error", "Ups!", "This device already exists");
         return;
       }
-      dispatch([addDevice(device), goBack()]);
+      dispatch(addDevice(device));
+      dispatch(goBack());
     } catch (e) {
       if (this.alert)
         this.alert.alertWithType("error", "Ups!", "This QR isn't a device");

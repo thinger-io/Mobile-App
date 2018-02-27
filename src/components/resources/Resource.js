@@ -8,12 +8,11 @@ import {
   LIGHT_GREEN,
   LIGHT_PINK
 } from "../../constants/ThingerColors";
-import type { Attribute } from "../../types/Attribute";
 
 type Props = {
   children: React.Node,
   isFetching: boolean,
-  onPostClick?: (id: string, data: Attribute) => any,
+  onPostClick?: () => any,
   onUpdateClick?: (id: string) => any,
   onChartClick?: () => any
 };

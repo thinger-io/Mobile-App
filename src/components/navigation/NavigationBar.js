@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FONT_SIZE_H1,
     color: "white",
-    flex: 1,
+    flex: 4,
     textAlign: "center"
   }
 });

@@ -14,7 +14,7 @@ export default function streaming(
   switch (action.type) {
     case "RESOURCE_RECEIVE":
       const timestamp = Date.now();
-      if (action.value.out) {
+      if (action.value.hasOwnProperty("out")) {
         const output = action.value.out;
         if (typeof output === "object") {
           const keys = Object.keys(output);

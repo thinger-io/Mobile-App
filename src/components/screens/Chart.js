@@ -113,31 +113,39 @@ class ChartScreen extends React.Component<Props, State> {
       <Screen
         navigationBar={<NavigationBar title={resource} />}
         tabBar={
-          <TabBar
-            tabs={[
-              {
-                title: "Lines",
-                icon: "line-chart",
-                active: type === "Lines",
-                onPress: () =>
-                  this.setState(update(this.state, { type: { $set: "Lines" } }))
-              },
-              {
-                title: "Pie",
-                icon: "pie-chart",
-                active: type === "Pie",
-                onPress: () =>
-                  this.setState(update(this.state, { type: { $set: "Pie" } }))
-              },
-              {
-                title: "Bars",
-                icon: "bar-chart",
-                active: type === "Bars",
-                onPress: () =>
-                  this.setState(update(this.state, { type: { $set: "Bars" } }))
-              }
-            ]}
-          />
+          typeof data === "object" ? (
+            <TabBar
+              tabs={[
+                {
+                  title: "Lines",
+                  icon: "line-chart",
+                  active: type === "Lines",
+                  onPress: () =>
+                    this.setState(
+                      update(this.state, { type: { $set: "Lines" } })
+                    )
+                },
+                {
+                  title: "Pie",
+                  icon: "pie-chart",
+                  active: type === "Pie",
+                  onPress: () =>
+                    this.setState(update(this.state, { type: { $set: "Pie" } }))
+                },
+                {
+                  title: "Bars",
+                  icon: "bar-chart",
+                  active: type === "Bars",
+                  onPress: () =>
+                    this.setState(
+                      update(this.state, { type: { $set: "Bars" } })
+                    )
+                }
+              ]}
+            />
+          ) : (
+            undefined
+          )
         }
       >
         <View style={{ height: 250, backgroundColor: DARK_BLUE }}>
@@ -182,7 +190,7 @@ class ChartScreen extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
   const jti = state.selectedDevice;
   const resource = state.selectedResource;
   return {
@@ -197,33 +205,32 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => {
+  // noinspection JSUnusedGlobalSymbols
   return {
     onSelectAttribute: (key, chart) => dispatch(selectAttribute(key, chart)),
     onDeselectAttribute: (key, chart) =>
       dispatch(deselectAttribute(key, chart)),
     onLockAttribute: (key, chart) => dispatch(lockAttribute(key, chart)),
     onUnlockAttribute: (key, chart) => dispatch(unlockAttribute(key, chart)),
-    onRefresh: (device, resource) => {
-      dispatch(getResourceFromApi(device, resource)).then(({ value }) => {
-        Object.keys(value.out).forEach(key =>
-          types.forEach(chart => {
-            return typeof value.out[key] === "number"
-              ? dispatch(unlockAttribute(key, chart))
-              : dispatch(lockAttribute(key, chart));
-          })
-        );
-      });
-    },
+    onRefresh: (device, resource) =>
+      dispatch(getResourceFromApi(device, resource)),
     onInit: (device, resource) => {
       dispatch(getResourceFromApi(device, resource)).then(({ value }) => {
-        Object.keys(value.out).forEach(key =>
+        if (typeof value.out === "number") {
           types.forEach(chart => {
-            dispatch(selectAttribute(key, chart));
-            return typeof value.out[key] === "number"
-              ? dispatch(unlockAttribute(key, chart))
-              : dispatch(lockAttribute(key, chart));
+            dispatch(selectAttribute(resource, chart));
+            dispatch(unlockAttribute(resource, chart));
           })
-        );
+        } else {
+          Object.keys(value.out).forEach(key =>
+            types.forEach(chart => {
+              dispatch(selectAttribute(key, chart));
+              return typeof value.out[key] === "number"
+                ? dispatch(unlockAttribute(key, chart))
+                : dispatch(lockAttribute(key, chart));
+            })
+          );
+        }
       });
     },
     onFinish: refreshInterval => {

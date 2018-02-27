@@ -52,7 +52,9 @@ class SimpleResourceView extends React.Component<Props, State> {
 
     // Run resource
     if (typeof data === {}) {
-      return <RunAttribute id={resource} isSimple onRun={() => onRun(resource)} />;
+      return (
+        <RunAttribute id={resource} isSimple onRun={() => onRun(resource)} />
+      );
     }
 
     // Input Resource
@@ -75,13 +77,27 @@ class SimpleResourceView extends React.Component<Props, State> {
   }
 
   render() {
-    const { resource, data, isFetching, onUpdateClick, onChartClick } = this.props;
+    const {
+      resource,
+      data,
+      isFetching,
+      onUpdateClick,
+      onChartClick
+    } = this.props;
     return (
       <ResourceComponent
         isFetching={isFetching}
-        onUpdateClick={data.hasOwnProperty("out") ? () => onUpdateClick(resource) : undefined}
-        onChartClick={data.hasOwnProperty("out") ? onChartClick : undefined}
-        onPostClick={data.hasOwnProperty("in")? this.handleOnPostClick : undefined}
+        onUpdateClick={
+          data.hasOwnProperty("out") ? () => onUpdateClick(resource) : undefined
+        }
+        onChartClick={
+          data.hasOwnProperty("out") && typeof data.out === "number"
+            ? onChartClick
+            : undefined
+        }
+        onPostClick={
+          data.hasOwnProperty("in") ? this.handleOnPostClick : undefined
+        }
       >
         {this.renderAttributes()}
       </ResourceComponent>

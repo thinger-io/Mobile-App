@@ -150,7 +150,7 @@ class ChartScreen extends React.Component<Props, State> {
       >
         <View style={{ height: 250, backgroundColor: DARK_BLUE }}>
           {type === "Lines" && (
-            <Line chartedAttributes={chartedAttributes} data={streaming} />
+            <Line chartedAttributes={chartedAttributes} streaming={streaming} />
           )}
           {type === "Bars" &&
             typeof data === "object" && (

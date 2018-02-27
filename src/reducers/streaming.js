@@ -2,10 +2,12 @@
 
 import update from "update-immutable";
 import type { ResourceAction } from "../actions/resource";
-import { sliceObject } from "../utils/objects";
 import type { StreamingState } from "../types/State";
 
-const initialState: StreamingState = {};
+const initialState: StreamingState = {
+  data: {},
+  timestamp: []
+};
 
 export default function streaming(
   state: StreamingState = initialState,
@@ -21,12 +23,20 @@ export default function streaming(
           let newState;
           for (const key of keys) {
             newState = update(newState ? newState : state, {
-              [key]: { $merge: { [timestamp]: output[key] } }
+              data: { [key]: { $push: [output[key]] } }
             });
             newState = update(newState, {
-              [key]: { $set: sliceObject(newState[key], -10) }
+              data: {
+                [key]: { $set: newState.data[key].slice(-10) }
+              }
             });
           }
+          newState = update(newState, {
+            timestamp: { $push: [timestamp] }
+          });
+          newState = update(newState, {
+            timestamp: { $set: newState.timestamp.slice(-10) }
+          });
           return newState;
         } else {
           return update(state, {

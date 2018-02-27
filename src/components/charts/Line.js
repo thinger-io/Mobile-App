@@ -3,36 +3,33 @@
 import React from "react";
 import { LineChart, XAxis, YAxis } from "react-native-svg-charts";
 import * as shape from "d3-shape";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 import { dateToSeconds } from "../../utils/dates";
 import type { StreamingState } from "../../types/State";
 
+const contentInset = { top: 20, bottom: 20 };
+
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
-  data: StreamingState
+  streaming: StreamingState
 };
 
 export default class extends React.Component<Props> {
   render() {
-    const { chartedAttributes, data } = this.props;
+    const { chartedAttributes, streaming } = this.props;
 
-    const dataPoints = [].concat.apply(
-      [],
-      chartedAttributes.map(
-        ([key, value]) => (value ? Object.values(data[key]) : [])
-      )
+    if (!Object.keys(streaming).length) return null;
+
+    const arrayOfValues = chartedAttributes.map(
+      ([key, value]) => (value ? streaming.data[key] : [])
     );
+    const dataPoints = [].concat.apply([], arrayOfValues);
 
     const min = Math.min(...dataPoints);
     const max = Math.max(...dataPoints);
 
-    let xData = [];
-    if (data && Object.values(data).length > 0) xData = Object.values(data)[0];
-    xData = Object.keys(xData);
-
-    const contentInset = { top: 20, bottom: 20 };
-    return (
+    return Object.keys(streaming).length && streaming.timestamp.length > 1 ? (
       <View style={{ flex: 1, flexDirection: "row", margin: 15 }}>
         <YAxis
           style={{ top: 0, bottom: 0 }}
@@ -46,7 +43,7 @@ export default class extends React.Component<Props> {
               return (
                 <LineChart
                   style={[StyleSheet.absoluteFill, { marginBottom: 20 }]}
-                  dataPoints={Object.values(data[key])}
+                  dataPoints={streaming.data[key]}
                   contentInset={contentInset}
                   curve={shape.curveNatural}
                   showGrid={false}
@@ -61,12 +58,22 @@ export default class extends React.Component<Props> {
               );
           })}
           <XAxis
-            values={xData}
+            values={streaming.timestamp}
             chartType={XAxis.Type.LINE}
             labelStyle={{ color: "white" }}
             formatLabel={value => dateToSeconds(Number(value))}
           />
         </View>
+      </View>
+    ) : (
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <ActivityIndicator size="large" color={"white"} />
       </View>
     );
   }

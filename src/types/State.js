@@ -43,8 +43,9 @@ export type LockedAttributesState = {
 };
 
 export type StreamingState = {
-  [attribute: string]: {
-    [timestamp: number]: number
+  timestamp: Array<number>,
+  data: {
+    [attribute: string]: Array<number>,
   }
 };
 

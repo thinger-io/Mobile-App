@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import AttributeView from "./Attribute";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 import Icon from "react-native-vector-icons/FontAwesome";

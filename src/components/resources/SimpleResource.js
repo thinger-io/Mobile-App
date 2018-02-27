@@ -51,7 +51,7 @@ class SimpleResourceView extends React.Component<Props, State> {
     const { resource, data, onRun } = this.props;
 
     // Run resource
-    if (typeof data === {}) {
+    if (Object.keys(data).length === 0) {
       return (
         <RunAttribute id={resource} isSimple onRun={() => onRun(resource)} />
       );

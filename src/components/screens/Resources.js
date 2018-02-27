@@ -23,9 +23,9 @@ import { navigate } from "../../actions/nav";
 import type { Device } from "../../types/Device";
 import type { Attribute } from "../../types/Attribute";
 import type { ResourcesState } from "../../types/State";
-import {isMultipleResource} from "../../types/Resource";
+import { isMultipleResource } from "../../types/Resource";
 import MultipleResourceView from "../resources/MultipleResource";
-import type {MultipleResource, SimpleResource} from "../../types/Resource";
+import type { MultipleResource, SimpleResource } from "../../types/Resource";
 import SimpleResourceView from "../resources/SimpleResource";
 
 type Props = {
@@ -129,6 +129,12 @@ class ResourcesScreen extends React.Component<Props> {
             >
               <ActivityIndicator size="large" color={DARK_BLUE} />
             </View>
+          ) : !device.isOnline ? (
+            <ErrorMessage
+              message={device.dev + " is offline"}
+              icon="plug"
+              onPressButton={this.onRefresh}
+            />
           ) : !device.hasServerConnection ? (
             <ErrorMessage
               message={"Couldn't connect to\n" + device.server}
@@ -139,12 +145,6 @@ class ResourcesScreen extends React.Component<Props> {
             <ErrorMessage
               message={device.usr + " isn't authorized"}
               icon="lock"
-              onPressButton={this.onRefresh}
-            />
-          ) : !device.isOnline ? (
-            <ErrorMessage
-              message={device.dev + " is offline"}
-              icon="plug"
               onPressButton={this.onRefresh}
             />
           ) : (

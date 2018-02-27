@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
     margin: MARGIN,
     marginBottom: MARGIN / 2,
     borderRadius: BORDER_RADIUS,
-    shadowOffset: { width: 3, height: 3 },
+    shadowOffset: { width: 1, height: 2 },
     shadowColor: "black",
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.4,
     shadowRadius: 3
   },
   body: {

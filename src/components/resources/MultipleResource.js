@@ -8,13 +8,13 @@ import type { Attribute } from "../../types/Attribute";
 import type { MultipleResource } from "../../types/Resource";
 import InputAttribute from "./InputAttribute";
 import OutputAttribute from "./OutputAttribute";
-import ResourceComponent, {castStringToNumber} from "./Resource";
+import ResourceComponent from "./Resource";
 
 type Props = {
   resource: string,
   data: MultipleResource,
   isFetching: boolean,
-  onPostClick: (resource: string, data: Attribute) => any,
+  onPostClick: (resource: string, data: { [attribute: string]: Attribute }) => any,
   onUpdateClick: (resource: string) => any,
   onChartClick: () => any
 };
@@ -84,7 +84,13 @@ class MultipleResourceView extends React.Component<Props, State> {
   }
 
   render() {
-    const { resource, data, isFetching, onUpdateClick, onChartClick } = this.props;
+    const {
+      resource,
+      data,
+      isFetching,
+      onUpdateClick,
+      onChartClick
+    } = this.props;
     return (
       <ResourceComponent
         isFetching={isFetching}
@@ -101,15 +107,18 @@ class MultipleResourceView extends React.Component<Props, State> {
 function castInputData(
   editedData: { [attribute: string]: Attribute },
   data: { [attribute: string]: Attribute }
-) {
-  const casted = Object.entries(editedData).map(([key, value]) => {
+): { [attribute: string]: Attribute } {
+  let result = {};
+  Object.entries(editedData).forEach(([key, value]) => {
     if (typeof data[key] === "number" && typeof value === "string") {
-      return { [key]: Number(String(value).replace(",", ".")) }
+      result = Object.assign(result, {
+        [key]: Number(String(value).replace(",", "."))
+      });
     } else {
-      return { [key]: value }
+      result = Object.assign(result, { [key]: value });
     }
   });
-  return Object.assign.apply({}, casted);
+  return result;
 }
 
 export default MultipleResourceView;

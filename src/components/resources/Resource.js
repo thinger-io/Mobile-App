@@ -54,8 +54,4 @@ class ResourceComponent extends React.Component<Props> {
   }
 }
 
-export function castStringToNumber(value: string) {
-  return Number(String(value).replace(",", "."));
-}
-
 export default ResourceComponent;

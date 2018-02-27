@@ -36,7 +36,10 @@ type Props = {
   onGetResources: (device: Device) => any,
   onSettingsClick: () => any,
   onUpdateClick: (resource: string) => any,
-  onPostClick: (id: string, value: Attribute) => any,
+  onPostClick: (
+    id: string,
+    value: Attribute | { [attribute: string]: Attribute }
+  ) => any,
   onRun: (id: string) => any
 };
 
@@ -165,6 +168,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
+  // noinspection JSUnusedGlobalSymbols
   return {
     onUpdateClick: (device, resource) => {
       dispatch(getResourceFromApi(device, resource));

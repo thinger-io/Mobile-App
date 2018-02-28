@@ -18,7 +18,7 @@ import {
   postResource,
   runResource
 } from "../../actions/fetch";
-import { restartLiveResource, selectResource } from "../../actions/resource";
+import { restartStreaming, selectResource } from "../../actions/resource";
 import { navigate } from "../../actions/nav";
 import type { Device } from "../../types/Device";
 import type { Attribute } from "../../types/Attribute";
@@ -168,7 +168,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  // noinspection JSUnusedGlobalSymbols
   return {
     onUpdateClick: (device, resource) => {
       dispatch(getResourceFromApi(device, resource));
@@ -177,7 +176,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(postResource(device, id, value)),
     onRun: (device, id) => runResource(device, id),
     onChartClick: resource => {
-      dispatch(restartLiveResource());
+      dispatch(restartStreaming());
       dispatch(selectResource(resource));
       dispatch(navigate("Chart"));
     },

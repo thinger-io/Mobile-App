@@ -4,6 +4,7 @@ import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import NavigationBar from "../navigation/NavigationBar";
 import TabBar from "../navigation/TabBar";
+import { COLOR_BACKGROUND } from "../../constants/ThingerColors";
 
 type Props = {
   navigationBar?: React.Element<typeof NavigationBar>,
@@ -27,6 +28,6 @@ export default class Screen extends React.Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0"
+    backgroundColor: COLOR_BACKGROUND
   }
 });

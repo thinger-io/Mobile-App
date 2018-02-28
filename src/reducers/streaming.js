@@ -51,7 +51,7 @@ export default function streaming(
         });
         return newState;
       } else return state;
-    case "RESOURCE_RESTART_LIVE":
+    case "RESOURCE_RESTART_STREAMING":
       return {};
     default:
       return state;

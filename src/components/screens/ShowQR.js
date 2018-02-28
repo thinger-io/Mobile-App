@@ -1,11 +1,12 @@
 //@flow
 
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 import React from "react";
-import QRCode from "react-native-qrcode-svg/src/index";
 import { connect } from "react-redux";
 import Screen from "../containers/Screen";
 import NavigationBar from "../navigation/NavigationBar";
+import QRCode from "react-native-qrcode";
+import { COLOR_BACKGROUND } from "../../constants/ThingerColors";
 
 type Props = {
   jwt: string
@@ -13,15 +14,17 @@ type Props = {
 
 class ShowQRScreen extends React.Component<Props> {
   render() {
-    // TODO: react-native-qrcode-svg not compatible with Android for svg library
     return (
       <Screen navigationBar={<NavigationBar title="QR Scanner" />}>
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          {Platform.OS === "ios" && (
-            <QRCode value={this.props.jwt} size={300} />
-          )}
+          <QRCode
+            value={this.props.jwt}
+            size={300}
+            bgColor="black"
+            fgColor={COLOR_BACKGROUND}
+          />
         </View>
       </Screen>
     );

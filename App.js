@@ -9,7 +9,7 @@ import {StatusBar} from "react-native";
 
 const { store, persistor } = createStore();
 
-const ThingerioApp = () => (
+export default ThingerioApp = () => (
   <Provider store={store}>
     <PersistGate persistor={persistor}>
       <StatusBar barStyle="light-content"/>
@@ -17,5 +17,3 @@ const ThingerioApp = () => (
     </PersistGate>
   </Provider>
 );
-
-export default ThingerioApp;

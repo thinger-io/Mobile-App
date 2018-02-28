@@ -88,7 +88,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  // noinspection JSUnusedGlobalSymbols
   return {
     onDeviceClick: device => {
       dispatch(removeAllResources());

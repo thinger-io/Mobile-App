@@ -10,14 +10,14 @@ type RECEIVE = {
   value: Resource
 };
 type REMOVE_ALL = { type: "RESOURCE_REMOVE_ALL" };
-type RESTART_LIVE = { type: "RESOURCE_RESTART_LIVE" };
+type RESTART_STREAMING = { type: "RESOURCE_RESTART_STREAMING" };
 
 export type ResourceAction =
   | SELECT
   | REQUEST
   | RECEIVE
   | REMOVE_ALL
-  | RESTART_LIVE;
+  | RESTART_STREAMING;
 
 export function selectResource(resource: string): SELECT {
   return {
@@ -47,8 +47,8 @@ export function removeAllResources(): REMOVE_ALL {
   };
 }
 
-export function restartLiveResource(): RESTART_LIVE {
+export function restartStreaming(): RESTART_STREAMING {
   return {
-    type: "RESOURCE_RESTART_LIVE"
+    type: "RESOURCE_RESTART_STREAMING"
   };
 }

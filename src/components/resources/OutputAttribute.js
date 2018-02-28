@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { StyleSheet, Switch, Text, TextInput } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import AttributeView from "./Attribute";
 import type { Attribute } from "../../types/Attribute";
 

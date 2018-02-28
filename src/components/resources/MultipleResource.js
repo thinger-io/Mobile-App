@@ -36,8 +36,9 @@ class MultipleResourceView extends React.Component<Props, State> {
     );
   }
 
-  componentWillReceiveProps(props: Props) {
-    if (!props.isFetching && props.data.in) this.state.in = props.data.in;
+  componentWillReceiveProps(nextProps: Props) {
+    if (!nextProps.isFetching && nextProps.data.in)
+      this.state.in = nextProps.data.in;
   }
 
   handleOnPostClick() {

@@ -205,7 +205,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  // noinspection JSUnusedGlobalSymbols
   return {
     onSelectAttribute: (key, chart) => dispatch(selectAttribute(key, chart)),
     onDeselectAttribute: (key, chart) =>

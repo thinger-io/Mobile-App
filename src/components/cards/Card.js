@@ -3,7 +3,6 @@
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
 import { BORDER_RADIUS, MARGIN, PADDING } from "../../constants/ThingerStyles";
-import * as PropTypes from "prop-types";
 
 type Props = {
   children?: React.Node,
@@ -48,9 +47,3 @@ const styles = StyleSheet.create({
     overflow: "hidden"
   }
 });
-
-Card.propTypes = {
-  children: PropTypes.any,
-  body: PropTypes.any,
-  footer: PropTypes.any
-};

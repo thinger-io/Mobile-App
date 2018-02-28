@@ -3,7 +3,6 @@
 import type { Device } from "./Device";
 import type { Resource } from "./Resource";
 import type { Chart } from "./Chart";
-import type { Attribute } from "./Attribute";
 
 export type State = {
   devices: DevicesState,

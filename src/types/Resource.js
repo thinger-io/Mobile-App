@@ -14,21 +14,9 @@ export type MultipleResource = {
   out?: { [attribute: string]: Attribute }
 };
 
-export type OutputResource = {
-  out: Attribute | { [attribute: string]: Attribute }
-};
-
-export type MultipleOutputResource = {
-  out: { [attribute: string]: Attribute }
-};
-
 export function isMultipleResource(resource: Resource): boolean {
   return (
     (resource.hasOwnProperty("in") && typeof resource.in === "object") ||
     (resource.hasOwnProperty("out") && typeof resource.out === "object")
   );
-}
-
-export function isMultipleOutputResource(resource: Resource): boolean {
-  return resource.hasOwnProperty("out") && typeof resource.out === "object";
 }

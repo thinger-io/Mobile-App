@@ -1,9 +1,10 @@
 //@flow
 
 import React from "react";
-import { PieChart } from "react-native-svg-charts";
 import { getColorByIndex } from "../../utils/colors";
 import type { Chart } from "../../types/Chart";
+import { PADDING } from "../../constants/ThingerStyles";
+import { VictoryPie } from "victory-native";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
@@ -17,17 +18,37 @@ export default class extends React.PureComponent<Props> {
 
     const pieData = chartedAttributes
       .map(([key, value], index) => ({
-        value: data[key],
-        color: getColorByIndex(index * 2),
-        key,
+        x: key,
+        y: data[key],
+        fill: getColorByIndex(index * 2),
         charted: value
       }))
-      .filter(({ value, key, charted }) => {
-        const numberValue: number = (value: any);
-        if (numberValue < 0) lockAttribute(key, "Pie");
+      .filter(({ x, y, fill, charted }) => {
+        const numberValue: number = (y: any);
+        if (numberValue < 0) lockAttribute(x, "Pie");
         return charted && numberValue > 0;
       });
 
-    return <PieChart style={{ flex: 1, margin: 15 }} data={pieData} />;
+    return (
+      <VictoryPie
+        height={250}
+        domainPadding={{ x: 50, y: 20 }}
+        padding={{
+          top: PADDING,
+          bottom: PADDING
+        }}
+        data={pieData}
+        labels={() => null}
+        animate={{
+          duration: 1000,
+          onLoad: { duration: 1000 }
+        }}
+        style={{
+          labels: {
+            fill: "white"
+          }
+        }}
+      />
+    );
   }
 }

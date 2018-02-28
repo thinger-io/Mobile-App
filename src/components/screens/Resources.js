@@ -43,15 +43,25 @@ type Props = {
   onRun: (id: string) => any
 };
 
-class ResourcesScreen extends React.Component<Props> {
+type State = {
+  refresh: boolean
+};
+
+class ResourcesScreen extends React.Component<Props, State> {
+  state = {
+    refresh: false
+  };
+
   constructor(props) {
     super(props);
     (this: any).onRefresh = this.onRefresh.bind(this);
   }
 
-  onRefresh() {
+  async onRefresh() {
     const { onGetResources, device } = this.props;
-    onGetResources(device);
+    this.setState({ refresh: true });
+    await onGetResources(device);
+    this.setState({ refresh: false });
   }
 
   renderItem = ({ item }) => {
@@ -69,7 +79,7 @@ class ResourcesScreen extends React.Component<Props> {
         <MultipleResourceView
           resource={item}
           data={data || {}}
-          isFetching={resources[item].isFetching}
+          isFetching={resources[item].isFetching && !this.state.refresh}
           onUpdateClick={onUpdateClick}
           onPostClick={onPostClick}
           onChartClick={() => onChartClick(item)}
@@ -81,7 +91,7 @@ class ResourcesScreen extends React.Component<Props> {
         <SimpleResourceView
           resource={item}
           data={data || {}}
-          isFetching={resources[item].isFetching}
+          isFetching={resources[item].isFetching && !this.state.refresh}
           onUpdateClick={onUpdateClick}
           onPostClick={onPostClick}
           onChartClick={() => onChartClick(item)}
@@ -92,7 +102,7 @@ class ResourcesScreen extends React.Component<Props> {
   };
 
   renderItemList() {
-    const { resources } = this.props;
+    const { resources, device } = this.props;
 
     return (
       <KeyboardAvoidingView behavior="padding">
@@ -100,6 +110,8 @@ class ResourcesScreen extends React.Component<Props> {
           data={Object.keys(resources)}
           renderItem={this.renderItem}
           keyExtractor={item => item}
+          refreshing={device.isFetching}
+          onRefresh={this.onRefresh}
         />
         <View style={{ height: 65 }} />
       </KeyboardAvoidingView>
@@ -108,6 +120,8 @@ class ResourcesScreen extends React.Component<Props> {
 
   render() {
     const { device, onSettingsClick } = this.props;
+
+    if (device) console.log(device.isFetching, this.state.refresh);
 
     return (
       <Screen
@@ -122,7 +136,7 @@ class ResourcesScreen extends React.Component<Props> {
         }
       >
         {device &&
-          (device.isFetching ? (
+          (device.isFetching && !this.state.refresh ? (
             <View
               style={{
                 flex: 1,
@@ -180,9 +194,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(selectResource(resource));
       dispatch(navigate("Chart"));
     },
-    onGetResources: device => {
-      dispatch(getResourcesFromApi(device));
-    },
+    onGetResources: device => dispatch(getResourcesFromApi(device)),
     onSettingsClick: () => dispatch(navigate("Info"))
   };
 };

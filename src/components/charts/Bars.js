@@ -2,8 +2,8 @@
 
 import React from "react";
 import { getColorByIndex } from "../../utils/colors";
-import BarChart from "react-native-svg-charts/src/bar-chart";
-import { View } from "react-native";
+import { VictoryAxis, VictoryBar, VictoryChart } from "victory-native";
+import {PADDING} from "../../constants/ThingerStyles";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
@@ -17,37 +17,48 @@ export default class extends React.PureComponent<Props> {
     const barData = chartedAttributes
       .map(([key, value], index) => [key, value, index])
       .filter(([key, value]) => value)
-      .map(([key, , index]) => ({
-        values: [data[key]],
-        positive: {
-          fill: getColorByIndex(index * 2)
-        },
-        negative: {
-          fill: getColorByIndex(index * 2)
-        }
+      .map(([key, , color], x) => ({
+        x: x + 1,
+        y: data[key],
+        fill: getColorByIndex(color * 2)
       }));
 
-    // TODO: max
+    const values: Array<number> = (barData.map(o => o.y): any);
+    const max = Math.max(
+      Math.max.apply(Math, values),
+      Math.abs(Math.min.apply(Math, values))
+    );
 
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <BarChart
-          style={{
-            flex: 1,
-            width: Math.min(400, 25 * barData.length),
-            margin: 15
-          }}
-          data={barData}
-          showGrid={false}
-        />
-      </View>
+        <VictoryChart
+          height={250}
+          domain={{ y: [-max, max] }}
+          domainPadding={{ x: 50, y: 20 }}
+          padding={{ top: PADDING, bottom: PADDING, left: PADDING * 4, right: PADDING * 2 }}
+        >
+          <VictoryBar
+            data={barData}
+            animate={{
+              duration: 1000,
+              onLoad: { duration: 1000 }
+            }}
+          />
+          <VictoryAxis
+            style={{
+              axis: { stroke: "white" }
+            }}
+            tickFormat={() => null}
+          />
+          <VictoryAxis
+            dependentAxis
+            tickValues={[-max, max/2, 0, -max/2, max]}
+            style={{
+              axis: { stroke: "white" },
+              tickLabels: { fill: "white", padding: 5 },
+              ticks: { size: 10, stroke: "white" },
+            }}
+          />
+        </VictoryChart>
     );
   }
 }

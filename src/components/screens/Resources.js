@@ -121,8 +121,6 @@ class ResourcesScreen extends React.Component<Props, State> {
   render() {
     const { device, onSettingsClick } = this.props;
 
-    if (device) console.log(device.isFetching, this.state.refresh);
-
     return (
       <Screen
         navigationBar={

@@ -1748,6 +1748,10 @@ d3-color@1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.3.tgz#bc7643fca8e53a8347e2fbdaffa236796b58509b"
 
+d3-ease@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/d3-ease/-/d3-ease-1.0.3.tgz#68bfbc349338a380c44d8acc4fbc3304aa2d8c0e"
+
 d3-format@1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.2.2.tgz#1a39c479c8a57fe5051b2e67a3bee27061a74e7a"
@@ -1768,7 +1772,7 @@ d3-path@1:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-1.0.5.tgz#241eb1849bd9e9e8021c0d0a799f8a0e8e441764"
 
-d3-scale@^1.0.6:
+d3-scale@^1.0.0, d3-scale@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-1.0.7.tgz#fa90324b3ea8a776422bd0472afab0b252a0945d"
   dependencies:
@@ -1780,7 +1784,7 @@ d3-scale@^1.0.6:
     d3-time "1"
     d3-time-format "2"
 
-d3-shape@^1.0.6:
+d3-shape@^1.0.0, d3-shape@^1.0.6, d3-shape@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.2.0.tgz#45d01538f064bafd05ea3d6d2cb748fd8c41f777"
   dependencies:
@@ -1795,6 +1799,14 @@ d3-time-format@2:
 d3-time@1:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.8.tgz#dbd2d6007bf416fe67a76d17947b784bffea1e84"
+
+d3-timer@^1.0.0:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-1.0.7.tgz#df9650ca587f6c96607ff4e60cc38229e8dd8531"
+
+d3-voronoi@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/d3-voronoi/-/d3-voronoi-1.1.2.tgz#1687667e8f13a2d158c80c1480c5a29cb0d8973c"
 
 dashdash@^1.12.0:
   version "1.14.1"
@@ -5229,9 +5241,9 @@ react-native-svg-charts@^2.2.3:
     date-fns "^1.28.5"
     prop-types "^15.6.0"
 
-react-native-svg@^6.2.2:
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-6.2.2.tgz#5803cddce374a542b4468c38a2474fca32080685"
+react-native-svg@6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-6.1.0.tgz#0470c19bea4cc5dd6361d3f2874cf121e75e4156"
   dependencies:
     color "^2.0.1"
     lodash "^4.16.6"
@@ -6603,6 +6615,43 @@ very-fast-args@^1.1.0:
 vhost@~3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/vhost/-/vhost-3.0.2.tgz#2fb1decd4c466aa88b0f9341af33dc1aff2478d5"
+
+victory-chart@^25.1.0:
+  version "25.1.1"
+  resolved "https://registry.yarnpkg.com/victory-chart/-/victory-chart-25.1.1.tgz#5b5d9bde802eea774f1105af6fb723d478717532"
+  dependencies:
+    d3-voronoi "^1.1.2"
+    lodash "^4.17.4"
+    victory-core "^21.0.4"
+
+victory-core@^21.0.2, victory-core@^21.0.4:
+  version "21.0.4"
+  resolved "https://registry.yarnpkg.com/victory-core/-/victory-core-21.0.4.tgz#5ac6d495a43e5d95249c56973290b182ec607b4a"
+  dependencies:
+    d3-ease "^1.0.0"
+    d3-interpolate "^1.1.1"
+    d3-scale "^1.0.0"
+    d3-shape "^1.2.0"
+    d3-timer "^1.0.0"
+    lodash "^4.17.4"
+
+victory-native@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/victory-native/-/victory-native-0.17.1.tgz#094a4f6ed1f4de8588b8b91711d6dc247cda3fee"
+  dependencies:
+    lodash "^4.17.5"
+    prop-types "^15.5.10"
+    victory-chart "^25.1.0"
+    victory-core "^21.0.4"
+    victory-pie "^14.0.0"
+
+victory-pie@^14.0.0:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/victory-pie/-/victory-pie-14.0.1.tgz#53dff9e81696253c3da00f347d908d3ac1241c66"
+  dependencies:
+    d3-shape "^1.0.0"
+    lodash "^4.17.4"
+    victory-core "^21.0.2"
 
 vinyl@^0.5.0:
   version "0.5.3"

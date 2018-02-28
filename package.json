@@ -31,7 +31,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-dropdownalert": "^3.3.0",
     "react-native-qrcode": "^0.2.6",
-    "react-native-svg": "^6.2.2",
+    "react-native-svg": "^5.5.1",
     "react-native-svg-charts": "^2.2.3",
     "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.2.1",
@@ -40,6 +40,7 @@
     "redux": "^3.7.2",
     "redux-persist": "^5.9.1",
     "redux-thunk": "^2.2.0",
-    "update-immutable": "^1.4.0"
+    "update-immutable": "^1.4.0",
+    "victory-native": "0.15.0"
   }
 }

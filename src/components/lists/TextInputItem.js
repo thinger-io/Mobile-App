@@ -4,7 +4,7 @@ import React from "react";
 import ItemList from "./ItemList";
 import { StyleSheet, TextInput } from "react-native";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
-import { INPUT_COLOR } from "../../constants/ThingerColors";
+import { DARK_BLUE, INPUT_COLOR } from "../../constants/ThingerColors";
 
 type Props = {
   name: string,
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
   value: {
     flex: 1,
     fontSize: FONT_SIZE_P,
-    color: INPUT_COLOR
+    color: DARK_BLUE
   }
 });

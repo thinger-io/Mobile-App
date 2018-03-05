@@ -23,7 +23,7 @@ export default class OutputItem extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   value: {
-    color: DARK_BLUE,
+    color: "gray",
     fontSize: FONT_SIZE_P
   }
 });

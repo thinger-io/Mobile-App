@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, Text } from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 import type { StreamingState } from "../../types/State";
 import { PADDING } from "../../constants/ThingerStyles";
@@ -11,7 +11,7 @@ import {
   VictoryGroup,
   VictoryLine
 } from "victory-native";
-import {dateToString} from "../../utils/dates";
+import { dateToString } from "../../utils/dates";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
@@ -22,8 +22,10 @@ export default class extends React.Component<Props> {
   renderChart() {
     const { chartedAttributes, streaming } = this.props;
 
-    const data = chartedAttributes.map(([key, value], color) => {
-      if (value) {
+    const data = chartedAttributes
+      .map(([key, value], color) => [key, value, color])
+      .filter(([_, value,]) => value)
+      .map(([key, value, color]) => {
         return {
           data: streaming.data[key].map((y, index) => ({
             x: streaming.timestamp[index],
@@ -31,8 +33,16 @@ export default class extends React.Component<Props> {
           })),
           color: getColorByIndex(color * 2)
         };
-      }
-    });
+      });
+
+    if (!data.length)
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text style={{ color: "white" }}>Select at least one resource!</Text>
+        </View>
+      );
 
     return (
       <VictoryChart
@@ -47,21 +57,23 @@ export default class extends React.Component<Props> {
       >
         <VictoryGroup>
           {data.map(serie => {
-            return serie && (
-              <VictoryLine
-                interpolation="natural"
-                data={serie.data}
-                animate={{
-                  duration: 500,
-                  onLoad: { duration: 500 }
-                }}
-                style={{
-                  data: {
-                    stroke: serie.color,
-                    strokeWidth: 3
-                  }
-                }}
-              />
+            return (
+              serie && (
+                <VictoryLine
+                  interpolation="natural"
+                  data={serie.data}
+                  animate={{
+                    duration: 500,
+                    onLoad: { duration: 500 }
+                  }}
+                  style={{
+                    data: {
+                      stroke: serie.color,
+                      strokeWidth: 3
+                    }
+                  }}
+                />
+              )
             );
           })}
         </VictoryGroup>
@@ -76,7 +88,7 @@ export default class extends React.Component<Props> {
             tickLabels: { fill: "white", padding: 5, angle: 45 },
             ticks: { size: 10, stroke: "white" }
           }}
-          tickFormat={(timestamp) => dateToString(timestamp).slice(-5)}
+          tickFormat={timestamp => dateToString(timestamp).slice(-5)}
         />
         <VictoryAxis
           dependentAxis

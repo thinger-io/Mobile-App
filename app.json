@@ -2,11 +2,18 @@
   "expo": {
     "name": "thinger.io",
     "slug": "thingerio",
+    "version": "1.0.0",
     "sdkVersion": "25.0.0",
     "privacy": "unlisted",
     "githubUrl": "https://github.com/thinger-io/Mobile-App",
     "orientation": "portrait",
     "primaryColor": "#0088CC",
-    "icon": "icon.png"
+    "icon": "icon.png",
+    "ios": {
+      "bundleIdentifier": "io.thinger.app"
+    },
+    "android": {
+      "package": "io.thinger.app"
+    }
   }
 }

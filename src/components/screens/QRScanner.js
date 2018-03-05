@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Text, View } from "react-native";
-import { BarCodeScanner, Camera, Permissions } from "expo";
+import { Camera, Permissions } from "expo";
 import { connect } from "react-redux";
 import DropdownAlert from "react-native-dropdownalert";
 import TIOStyles, { PADDING } from "../../constants/ThingerStyles";
@@ -58,7 +58,7 @@ class QRScanner extends React.Component<Props, State> {
 
   renderCamera() {
     return (
-      <BarCodeScanner
+      <Camera
         style={{
           flex: 1,
           backgroundColor: "transparent"

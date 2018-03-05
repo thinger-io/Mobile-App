@@ -1,7 +1,12 @@
 //@flow
 
 import { connect } from "react-redux";
-import {ActivityIndicator, FlatList, KeyboardAvoidingView, View} from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  KeyboardAvoidingView,
+  View
+} from "react-native";
 import React from "react";
 import ErrorMessage from "../ErrorMessage";
 import { DARK_BLUE } from "../../constants/ThingerColors";
@@ -71,7 +76,10 @@ class ResourcesScreen extends React.Component<Props, State> {
     if (isMultipleResource(resources[item].data)) {
       const data: MultipleResource = (resources[item].data: any);
       return (
-        <KeyboardAvoidingView  keyboardVerticalOffset={100} behaviour={"padding"}>
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={100}
+          behaviour={"padding"}
+        >
           <MultipleResourceView
             resource={item}
             data={data || {}}

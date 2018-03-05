@@ -5,6 +5,7 @@ import { getColorByIndex } from "../../utils/colors";
 import type { Chart } from "../../types/Chart";
 import { PADDING } from "../../constants/ThingerStyles";
 import { VictoryPie } from "victory-native";
+import { View, Text } from "react-native";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
@@ -28,6 +29,15 @@ export default class extends React.PureComponent<Props> {
         if (numberValue < 0) lockAttribute(x, "Pie");
         return charted && numberValue > 0;
       });
+
+    if (pieData.length <= 1)
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text style={{ color: "white" }}>Select two or more resources!</Text>
+        </View>
+      );
 
     return (
       <VictoryPie

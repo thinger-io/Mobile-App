@@ -24,7 +24,7 @@ export default class extends React.Component<Props> {
 
     const data = chartedAttributes
       .map(([key, value], color) => [key, value, color])
-      .filter(([_, value,]) => value)
+      .filter(([_, value]) => value)
       .map(([key, value, color]) => {
         return {
           data: streaming.data[key].map((y, index) => ({

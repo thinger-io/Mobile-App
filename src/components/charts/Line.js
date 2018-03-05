@@ -98,7 +98,10 @@ export default class extends React.Component<Props> {
             tickLabels: { fill: "white", padding: 5, angle: 45 },
             ticks: { size: 10, stroke: "white" }
           }}
-          tickFormat={timestamp => dateToString(timestamp).slice(-5)}
+          tickFormat={timestamp => {
+            const hour = dateToString(timestamp);
+            return hour.slice(-5, -3) + "'" + hour.slice(-2) + '"';
+          }}
         />
         <VictoryAxis
           dependentAxis

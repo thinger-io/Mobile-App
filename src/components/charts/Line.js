@@ -12,6 +12,7 @@ import {
   VictoryLine
 } from "victory-native";
 import { dateToString } from "../../utils/dates";
+import { calculateDomain } from "../../utils/charts";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
@@ -44,9 +45,17 @@ export default class extends React.Component<Props> {
         </View>
       );
 
+    const series: Array<Array<number>> = data.map(serie =>
+      serie.data.map(point => point.y)
+    );
+
+    const allPoints: Array<number> = [].concat.apply([], series);
+    const { min, max } = calculateDomain(allPoints);
+
     return (
       <VictoryChart
         height={250}
+        domain={{ y: [min, max] }}
         domainPadding={{ y: 20 }}
         padding={{
           top: PADDING,
@@ -78,6 +87,7 @@ export default class extends React.Component<Props> {
           })}
         </VictoryGroup>
         <VictoryAxis
+          orientation={"bottom"}
           padding={{ left: 100 }}
           animate={{
             duration: 500,
@@ -92,6 +102,7 @@ export default class extends React.Component<Props> {
         />
         <VictoryAxis
           dependentAxis
+          orientation={"left"}
           animate={{
             duration: 500,
             onLoad: { duration: 500 }

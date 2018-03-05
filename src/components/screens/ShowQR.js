@@ -9,13 +9,14 @@ import QRCode from "react-native-qrcode";
 import { COLOR_BACKGROUND } from "../../constants/ThingerColors";
 
 type Props = {
+  name: string,
   jwt: string
 };
 
 class ShowQRScreen extends React.Component<Props> {
   render() {
     return (
-      <Screen navigationBar={<NavigationBar title="QR Scanner" />}>
+      <Screen navigationBar={<NavigationBar title={this.props.name} />}>
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
@@ -35,6 +36,7 @@ const mapStateToProps = state => {
   const jti = state.selectedDevice;
 
   return {
+    name: state.devices[jti].dev,
     jwt: state.devices[jti].jwt
   };
 };

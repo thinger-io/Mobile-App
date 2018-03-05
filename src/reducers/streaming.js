@@ -27,7 +27,7 @@ export default function streaming(
             });
             newState = update(newState, {
               data: {
-                [key]: { $set: newState.data[key].slice(-10) }
+                [key]: { $set: newState.data[key].slice(-30) }
               }
             });
           }
@@ -38,7 +38,7 @@ export default function streaming(
           newState = update(newState, {
             data: {
               [action.resource]: {
-                $set: newState.data[action.resource].slice(-10)
+                $set: newState.data[action.resource].slice(-30)
               }
             }
           });
@@ -47,7 +47,7 @@ export default function streaming(
           timestamp: { $push: [timestamp] }
         });
         newState = update(newState, {
-          timestamp: { $set: newState.timestamp.slice(-10) }
+          timestamp: { $set: newState.timestamp.slice(-30) }
         });
         return newState;
       } else return state;

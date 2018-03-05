@@ -4,6 +4,7 @@ import React from "react";
 import { getColorByIndex } from "../../utils/colors";
 import { VictoryAxis, VictoryBar, VictoryChart } from "victory-native";
 import { PADDING } from "../../constants/ThingerStyles";
+import { Text, View } from "react-native";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
@@ -29,6 +30,15 @@ export default class extends React.PureComponent<Props> {
       Math.abs(Math.min.apply(Math, values))
     );
 
+    if (barData.length <= 1)
+      return (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Text style={{ color: "white" }}>Select two or more resources!</Text>
+        </View>
+      );
+
     return (
       <VictoryChart
         height={250}
@@ -44,8 +54,8 @@ export default class extends React.PureComponent<Props> {
         <VictoryBar
           data={barData}
           animate={{
-            duration: 1000,
-            onLoad: { duration: 1000 }
+            duration: 500,
+            onLoad: { duration: 500 }
           }}
         />
         <VictoryAxis

@@ -49,10 +49,11 @@ export default class extends React.Component<Props> {
           {data.map(serie => {
             return serie && (
               <VictoryLine
+                interpolation="natural"
                 data={serie.data}
                 animate={{
-                  duration: 800,
-                  onLoad: { duration: 800 }
+                  duration: 500,
+                  onLoad: { duration: 500 }
                 }}
                 style={{
                   data: {
@@ -67,7 +68,8 @@ export default class extends React.Component<Props> {
         <VictoryAxis
           padding={{ left: 100 }}
           animate={{
-            onLoad: { duration: 800 }
+            duration: 500,
+            onLoad: { duration: 500 }
           }}
           style={{
             axis: { stroke: "white" },
@@ -79,7 +81,8 @@ export default class extends React.Component<Props> {
         <VictoryAxis
           dependentAxis
           animate={{
-            onLoad: { duration: 800 }
+            duration: 500,
+            onLoad: { duration: 500 }
           }}
           style={{
             axis: { stroke: "white" },

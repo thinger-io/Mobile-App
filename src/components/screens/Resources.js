@@ -1,12 +1,7 @@
 //@flow
 
 import { connect } from "react-redux";
-import {
-  ActivityIndicator,
-  FlatList,
-  KeyboardAvoidingView,
-  View
-} from "react-native";
+import {ActivityIndicator, FlatList, KeyboardAvoidingView, View} from "react-native";
 import React from "react";
 import ErrorMessage from "../ErrorMessage";
 import { DARK_BLUE } from "../../constants/ThingerColors";
@@ -76,14 +71,16 @@ class ResourcesScreen extends React.Component<Props, State> {
     if (isMultipleResource(resources[item].data)) {
       const data: MultipleResource = (resources[item].data: any);
       return (
-        <MultipleResourceView
-          resource={item}
-          data={data || {}}
-          isFetching={resources[item].isFetching && !this.state.refresh}
-          onUpdateClick={onUpdateClick}
-          onPostClick={onPostClick}
-          onChartClick={() => onChartClick(item)}
-        />
+        <KeyboardAvoidingView  keyboardVerticalOffset={100} behaviour={"padding"}>
+          <MultipleResourceView
+            resource={item}
+            data={data || {}}
+            isFetching={resources[item].isFetching && !this.state.refresh}
+            onUpdateClick={onUpdateClick}
+            onPostClick={onPostClick}
+            onChartClick={() => onChartClick(item)}
+          />
+        </KeyboardAvoidingView>
       );
     } else {
       const data: SimpleResource = (resources[item].data: any);
@@ -105,16 +102,13 @@ class ResourcesScreen extends React.Component<Props, State> {
     const { resources, device } = this.props;
 
     return (
-      <KeyboardAvoidingView behavior="padding">
-        <FlatList
-          data={Object.keys(resources)}
-          renderItem={this.renderItem}
-          keyExtractor={item => item}
-          refreshing={device.isFetching}
-          onRefresh={this.onRefresh}
-        />
-        <View style={{ height: 65 }} />
-      </KeyboardAvoidingView>
+      <FlatList
+        data={Object.keys(resources)}
+        renderItem={this.renderItem}
+        keyExtractor={item => item}
+        refreshing={device.isFetching}
+        onRefresh={(this.onRefresh: any)}
+      />
     );
   }
 

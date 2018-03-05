@@ -12,10 +12,9 @@ import type { Dispatch } from "../../types/Dispatch";
 import { addDevice } from "../../actions/device";
 import { goBack } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
-import type { DevicesState } from "../../types/State";
 
 type Props = {
-  devices: DevicesState,
+  devices: Array<string>,
   dispatch: Dispatch
 };
 
@@ -45,7 +44,7 @@ class QRScanner extends React.Component<Props, State> {
     try {
       const device = parseJWT(data.data);
       const id = Object.keys(device)[0];
-      if (devices.hasOwnProperty(id) && this.alert) {
+      if (devices.includes(id) && this.alert) {
         this.alert.alertWithType("error", "Ups!", "This device already exists");
         return;
       }

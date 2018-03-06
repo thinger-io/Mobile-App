@@ -3,4 +3,5 @@ node_modules/
 .idea/
 npm-debug.*
 .DS_Store
+GoogleAnalyticsTrackID.js
 

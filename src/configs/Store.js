@@ -11,6 +11,7 @@ import selectedAttributes from "../reducers/selectedAttributes";
 import lockedAttributes from "../reducers/lockedAttributes";
 import nav from "../reducers/nav";
 import streaming from "../reducers/streaming";
+import screenTracking from "../middlewares/screenTracking";
 
 const config = {
   key: "root",
@@ -34,7 +35,7 @@ function configureStore() {
     streaming,
     nav
   });
-  const middleware = [thunkMiddleware, navMiddleware];
+  const middleware = [thunkMiddleware, navMiddleware, screenTracking];
   const store = createStore(reducer, applyMiddleware(...middleware));
   const persistor = persistStore(store);
 

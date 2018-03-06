@@ -26,6 +26,7 @@
     "base-64": "^0.1.0",
     "cross-fetch": "^1.1.1",
     "expo": "^25.0.0",
+    "expo-analytics": "^1.0.7",
     "immutability-helper": "^2.6.5",
     "react": "16.2.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",

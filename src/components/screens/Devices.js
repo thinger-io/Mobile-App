@@ -14,6 +14,8 @@ import { removeAllResources } from "../../actions/resource";
 import type { Dispatch } from "../../types/Dispatch";
 import NavigationBar from "../navigation/NavigationBar";
 import type { Device } from "../../types/Device";
+import { Analytics, PageHit } from "expo-analytics";
+import ID from "../../../GoogleAnalyticsTrackID";
 
 type Props = {
   devices: Array<Device>,
@@ -22,6 +24,11 @@ type Props = {
 };
 
 class DevicesScreen extends React.Component<Props> {
+  constructor(props) {
+    super(props);
+    new Analytics(ID).hit(new PageHit("Main"));
+  }
+
   renderSeparator = () => {
     return (
       <View

@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Line from "../charts/Line";
 import { getColorByIndex } from "../../utils/colors";
-import { FlatList, View } from "react-native";
+import { FlatList, View, AppState } from "react-native";
 import Label from "../Label";
 import Pie from "../charts/Pie";
 import Bars from "../charts/Bars";
@@ -26,6 +26,7 @@ import type { Attribute } from "../../types/Attribute";
 import type { StreamingState } from "../../types/State";
 import TabBar from "../navigation/TabBar";
 import update from "update-immutable";
+import { restartStreaming } from "../../actions/resource";
 
 const types: Array<Chart> = ["Lines", "Pie", "Bars"];
 
@@ -43,7 +44,8 @@ type Props = {
   onUnlockAttribute: (key: string, chart: string) => Dispatch,
   onInit: (device: Device, resource: string) => Dispatch,
   onRefresh: (device: Device, resource: string) => Dispatch,
-  onFinish: (refreshInterval: number) => Dispatch
+  onFinish: (refreshInterval: number) => Dispatch,
+  onRestart: () => Dispatch
 };
 
 type State = {
@@ -63,6 +65,17 @@ class ChartScreen extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    AppState.addEventListener("change", this.handleAppStateChange);
+    this.handleStreaming();
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener("change", this.handleAppStateChange);
+    if (this.state.refreshInterval)
+      this.props.onFinish(this.state.refreshInterval);
+  }
+
+  handleStreaming() {
     const { device, resource, onInit, onRefresh } = this.props;
     const delay = 1000;
     onInit(device, resource);
@@ -71,10 +84,11 @@ class ChartScreen extends React.Component<Props, State> {
     });
   }
 
-  componentWillUnmount() {
-    if (this.state.refreshInterval)
-      this.props.onFinish(this.state.refreshInterval);
-  }
+  handleAppStateChange = nextAppState => {
+    if (nextAppState === "active") {
+      this.props.onRestart();
+    }
+  };
 
   handleOnLabelClick(key) {
     const {
@@ -234,8 +248,10 @@ const mapDispatchToProps = dispatch => {
     },
     onFinish: refreshInterval => {
       dispatch(removeAllAttributes());
+      dispatch(restartStreaming());
       clearInterval(refreshInterval);
-    }
+    },
+    onRestart: () => dispatch(restartStreaming())
   };
 };
 

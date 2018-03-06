@@ -1,6 +1,6 @@
 import { NavigationActions } from "react-navigation";
 import { Analytics, PageHit } from "expo-analytics";
-import ID from "../../GoogleAnalyticsTrackID";
+import ID from "../constants/GoogleAnalytics";
 
 const tracker = new Analytics(ID);
 

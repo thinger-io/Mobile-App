@@ -15,7 +15,7 @@ import type { Dispatch } from "../../types/Dispatch";
 import NavigationBar from "../navigation/NavigationBar";
 import type { Device } from "../../types/Device";
 import { Analytics, PageHit } from "expo-analytics";
-import ID from "../../../GoogleAnalyticsTrackID";
+import ID from "../../constants/GoogleAnalytics";
 
 type Props = {
   devices: Array<Device>,

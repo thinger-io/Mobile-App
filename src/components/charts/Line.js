@@ -22,16 +22,21 @@ type Props = {
 export default class extends React.Component<Props> {
   renderChart() {
     const { chartedAttributes, streaming } = this.props;
+    const time = new Date().getTime();
 
     const data = chartedAttributes
       .map(([key, value], color) => [key, value, color])
       .filter(([_, value]) => value)
       .map(([key, value, color]) => {
         return {
-          data: streaming.data[key].map((y, index) => ({
-            x: streaming.timestamp[index],
-            y
-          })),
+          data: streaming.data[key]
+            .filter((_, index) => {
+              return streaming.timestamp[index] > time - 20 * 1000;
+            })
+            .map((y, index) => ({
+              x: streaming.timestamp[index],
+              y
+            })),
           color: getColorByIndex(color * 2)
         };
       });

@@ -25,31 +25,15 @@ export default function streaming(
             newState = update(newState ? newState : state, {
               data: { [key]: { $push: [output[key]] } }
             });
-            newState = update(newState, {
-              data: {
-                [key]: { $set: newState.data[key].slice(-30) }
-              }
-            });
           }
         } else {
           newState = update(newState ? newState : state, {
             data: { [action.resource]: { $push: [output] } }
           });
-          newState = update(newState, {
-            data: {
-              [action.resource]: {
-                $set: newState.data[action.resource].slice(-30)
-              }
-            }
-          });
         }
-        newState = update(newState, {
+        return update(newState, {
           timestamp: { $push: [timestamp] }
         });
-        newState = update(newState, {
-          timestamp: { $set: newState.timestamp.slice(-30) }
-        });
-        return newState;
       } else return state;
     case "RESOURCE_RESTART_STREAMING":
       return {};

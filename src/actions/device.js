@@ -12,6 +12,11 @@ type SET_STATUS = {
 };
 type AUTHORIZE = { type: "DEVICE_AUTHORIZE", device: string };
 type DEAUTHORIZE = { type: "DEVICE_DEAUTHORIZE", device: string };
+type SET_NAME = {
+  type: "DEVICE_SET_NAME",
+  device: string,
+  name: string
+};
 type SET_SERVER = {
   type: "DEVICE_SET_SERVER",
   device: string,
@@ -29,6 +34,7 @@ export type DeviceAction =
   | ADD
   | REMOVE
   | SELECT
+  | SET_NAME
   | SET_STATUS
   | AUTHORIZE
   | DEAUTHORIZE
@@ -47,6 +53,10 @@ export function removeDevice(device: string): REMOVE {
 
 export function selectDevice(device: string): SELECT {
   return { type: "DEVICE_SELECT", device };
+}
+
+export function setDeviceName(device: string, name: string): SET_NAME {
+  return { type: "DEVICE_SET_NAME", device, name };
 }
 
 export function setDeviceState(device: string, online: boolean): SET_STATUS {

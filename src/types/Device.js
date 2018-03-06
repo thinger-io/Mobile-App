@@ -8,6 +8,7 @@ export type Device = {
   iat: number,
   exp?: number,
   res?: Array<string>,
+  name?: string,
   isFetching: boolean,
   isOnline: boolean,
   isAuthorized: boolean,

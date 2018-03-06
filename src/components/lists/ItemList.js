@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
   },
   id: {
     fontSize: FONT_SIZE_P,
-    color: DARK_BLUE
+    color: DARK_BLUE,
+    paddingRight: PADDING
   },
   valueContainer: {
-    flex: 1,
-    alignItems: "flex-end"
+    flex: 1
   }
 });

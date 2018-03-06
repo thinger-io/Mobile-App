@@ -23,6 +23,7 @@ export default class OutputItem extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   value: {
+    textAlign: "right",
     color: "gray",
     fontSize: FONT_SIZE_P
   }

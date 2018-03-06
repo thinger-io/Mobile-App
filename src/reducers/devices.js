@@ -25,6 +25,10 @@ export default function devices(
       return update(state, {
         [action.device]: { isAuthorized: { $set: false } }
       });
+    case "DEVICE_SET_NAME":
+      return update(state, {
+        [action.device]: { name: { $set: action.name } }
+      });
     case "DEVICE_SET_SERVER":
       return update(state, {
         [action.device]: { server: { $set: action.server } }

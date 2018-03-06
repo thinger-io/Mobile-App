@@ -14,7 +14,11 @@ import { ScrollView } from "react-native";
 import { timestampToString } from "../../utils/dates";
 import type { Device } from "../../types/Device";
 import type { Dispatch } from "../../types/Dispatch";
-import { setDeviceServer, removeDevice } from "../../actions/device";
+import {
+  setDeviceServer,
+  removeDevice,
+  setDeviceName
+} from "../../actions/device";
 import { goToMain, navigate } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
 import { THINGER_SERVER } from "../../constants/ThingerConstants";
@@ -23,7 +27,8 @@ type Props = {
   device: Device,
   removeDevice: (jti: string) => Dispatch,
   changeServer: (device: string, server: string) => Dispatch,
-  onShowQR: () => Dispatch
+  onShowQR: () => Dispatch,
+  changeName: (device: string, name: string) => Dispatch
 };
 
 type State = {
@@ -46,12 +51,18 @@ class DeviceInfo extends React.Component<Props, State> {
   }
 
   render() {
-    const { device, removeDevice, onShowQR } = this.props;
+    const { device, removeDevice, onShowQR, changeName } = this.props;
     return (
       <Screen navigationBar={<NavigationBar title="Settings" />}>
         {device && (
           <ScrollView>
             <List>
+              <TextInputItem
+                name={"Name"}
+                value={device.name ? device.name : ""}
+                placeholder={device.dev}
+                onChangeText={text => changeName(device.jti, text)}
+              />
               <OutputItem name={"Device"} value={device.dev} />
               <OutputItem name={"User"} value={device.usr} />
               <TextInputItem
@@ -100,7 +111,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(goToMain());
     },
     changeServer: (device, server) => dispatch(setDeviceServer(device, server)),
-    onShowQR: () => dispatch(navigate("ShowQR"))
+    onShowQR: () => dispatch(navigate("ShowQR")),
+    changeName: (device, name) => dispatch(setDeviceName(device, name))
   };
 };
 

@@ -127,7 +127,7 @@ class ResourcesScreen extends React.Component<Props, State> {
       <Screen
         navigationBar={
           <NavigationBar
-            title={device ? device.dev : "Device"}
+            title={device ? (device.name ? device.name : device.dev) : "Device"}
             button={{
               icon: "cog",
               onPress: onSettingsClick

@@ -49,7 +49,7 @@ class DevicesScreen extends React.Component<Props> {
         keyExtractor={item => item.jti}
         renderItem={({ item }) => (
           <DeviceComponent
-            name={item.dev}
+            name={item.name ? item.name : item.dev}
             user={item.usr}
             onClick={() => onDeviceClick(item)}
           />

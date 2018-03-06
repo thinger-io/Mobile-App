@@ -2,7 +2,7 @@
 
 import React from "react";
 import ItemList from "./ItemList";
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 
@@ -21,12 +21,13 @@ export default class TextInputItem extends React.Component<Props> {
       <ItemList
         name={name}
         value={
-          <TextInput
-            style={styles.value}
-            value={value}
-            placeholder={placeholder}
-            onChangeText={onChangeText}
-          />
+            <TextInput
+              style={styles.value}
+              value={value}
+              placeholder={placeholder}
+              onChangeText={onChangeText}
+            />
+
         }
       />
     );
@@ -35,8 +36,8 @@ export default class TextInputItem extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   value: {
-    flex: 1,
     fontSize: FONT_SIZE_P,
-    color: DARK_BLUE
+    color: DARK_BLUE,
+    textAlign: "right"
   }
 });

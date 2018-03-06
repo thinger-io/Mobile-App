@@ -20,7 +20,7 @@ export default class EnterItem extends React.Component<Props> {
           <Icon
             name="arrow-right"
             size={FONT_SIZE_P}
-            style={{ color: DARK_BLUE }}
+            style={{ color: DARK_BLUE, alignSelf: "flex-end" }}
           />
         }
         onPress={this.props.onPress}

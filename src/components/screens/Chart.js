@@ -85,7 +85,7 @@ class ChartScreen extends React.Component<Props, State> {
   }
 
   handleAppStateChange = nextAppState => {
-    if (nextAppState === "active") {
+    if (nextAppState === "background") {
       this.props.onRestart();
     }
   };

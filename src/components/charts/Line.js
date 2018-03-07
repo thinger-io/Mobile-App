@@ -30,10 +30,11 @@ export default class extends React.Component<Props> {
       .map(([key, value, color]) => {
         return {
           data: streaming.data[key]
-            .filter((_, index) => {
-              return streaming.timestamp[index] > time - 20 * 1000;
+            .map((y, index) => [y, index])
+            .filter(([_, index]) => {
+              return streaming.timestamp[index] > time - 30 * 1000;
             })
-            .map((y, index) => ({
+            .map(([y, index]) => ({
               x: streaming.timestamp[index],
               y
             })),
@@ -50,11 +51,11 @@ export default class extends React.Component<Props> {
         </View>
       );
 
-    const series: Array<Array<number>> = data.map(serie =>
-      serie.data.map(point => point.y)
+    const sequences: Array<Array<number>> = data.map(sequence =>
+      sequence.data.map(point => point.y)
     );
 
-    const allPoints: Array<number> = [].concat.apply([], series);
+    const allPoints: Array<number> = [].concat.apply([], sequences);
     const { min, max } = calculateDomain(allPoints);
 
     return (
@@ -70,19 +71,19 @@ export default class extends React.Component<Props> {
         }}
       >
         <VictoryGroup>
-          {data.map(serie => {
+          {data.map(sequence => {
             return (
-              serie && (
+              sequence && (
                 <VictoryLine
                   interpolation="natural"
-                  data={serie.data}
+                  data={sequence.data}
                   animate={{
                     duration: 500,
                     onLoad: { duration: 500 }
                   }}
                   style={{
                     data: {
-                      stroke: serie.color,
+                      stroke: sequence.color,
                       strokeWidth: 3
                     }
                   }}

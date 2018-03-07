@@ -21,13 +21,13 @@ export default class TextInputItem extends React.Component<Props> {
       <ItemList
         name={name}
         value={
-            <TextInput
-              style={styles.value}
-              value={value}
-              placeholder={placeholder}
-              onChangeText={onChangeText}
-            />
-
+          <TextInput
+            underlineColorAndroid={"transparent"}
+            style={styles.value}
+            value={value}
+            placeholder={placeholder}
+            onChangeText={onChangeText}
+          />
         }
       />
     );

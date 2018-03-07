@@ -6,7 +6,7 @@
     "sdkVersion": "25.0.0",
     "privacy": "unlisted",
     "githubUrl": "https://github.com/thinger-io/Mobile-App",
-    "primaryColor": "#0088CC",
+    "primaryColor": "#1d2b36",
     "icon": "icon.png",
     "ios": {
       "bundleIdentifier": "io.thinger.app"

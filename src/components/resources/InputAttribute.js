@@ -20,6 +20,7 @@ export default class InputAttribute extends React.Component<Props> {
       case "string":
         return (
           <TextInput
+            underlineColorAndroid={"transparent"}
             style={styles.input}
             value={inputValue}
             placeholder={value}
@@ -29,6 +30,7 @@ export default class InputAttribute extends React.Component<Props> {
       case "number":
         return (
           <TextInput
+            underlineColorAndroid={"transparent"}
             style={styles.input}
             keyboardType="numeric"
             value={inputValue}

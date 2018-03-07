@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Text, View } from "react-native";
-import { Camera, Permissions } from "expo";
+import { Camera, Permissions, ScreenOrientation } from "expo";
 import { connect } from "react-redux";
 import DropdownAlert from "react-native-dropdownalert";
 import TIOStyles, { PADDING } from "../../constants/ThingerStyles";
@@ -32,6 +32,14 @@ class QRScanner extends React.Component<Props, State> {
   };
 
   alert: ?DropdownAlert;
+
+  componentDidMount() {
+    ScreenOrientation.allow(ScreenOrientation.Orientation.PORTRAIT);
+  }
+
+  componentWillUnmount() {
+    ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
+  }
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);

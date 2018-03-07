@@ -161,6 +161,8 @@ class ChartScreen extends React.Component<Props, State> {
       orientation === "PORTRAIT" ? 250 : Dimensions.get("window").height - 70;
     const width = Dimensions.get("window").width;
 
+    console.log(Dimensions.get("window"));
+
     return (
       <View
         style={{

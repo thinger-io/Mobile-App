@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Line from "../charts/Line";
 import { getColorByIndex } from "../../utils/colors";
-import { FlatList, View, AppState } from "react-native";
+import { FlatList, View, AppState, Dimensions } from "react-native";
 import Label from "../Label";
 import Pie from "../charts/Pie";
 import Bars from "../charts/Bars";
@@ -27,6 +27,7 @@ import type { StreamingState } from "../../types/State";
 import TabBar from "../navigation/TabBar";
 import update from "update-immutable";
 import { restartStreaming } from "../../actions/resource";
+import type { Orientation } from "../../types/Orientation";
 
 const types: Array<Chart> = ["Lines", "Pie", "Bars"];
 
@@ -36,6 +37,7 @@ type Props = {
   data: Attribute,
   streaming: StreamingState,
   isFetching: boolean,
+  orientation: Orientation,
   selectedAttributes: { [chart: Chart]: { [attribute: string]: boolean } },
   lockedAttributes: { [chart: Chart]: { [attribute: string]: boolean } },
   onSelectAttribute: (key: string, chart: string) => Dispatch,
@@ -110,95 +112,137 @@ class ChartScreen extends React.Component<Props, State> {
     ]);
   }
 
-  render() {
+  renderTabBar() {
+    const { data } = this.props;
+    const type = this.state.type;
+
+    return typeof data === "object" ? (
+      <TabBar
+        tabs={[
+          {
+            title: "Lines",
+            icon: "line-chart",
+            active: type === "Lines",
+            onPress: () =>
+              this.setState(update(this.state, { type: { $set: "Lines" } }))
+          },
+          {
+            title: "Pie",
+            icon: "pie-chart",
+            active: type === "Pie",
+            onPress: () =>
+              this.setState(update(this.state, { type: { $set: "Pie" } }))
+          },
+          {
+            title: "Bars",
+            icon: "bar-chart",
+            active: type === "Bars",
+            onPress: () =>
+              this.setState(update(this.state, { type: { $set: "Bars" } }))
+          }
+        ]}
+      />
+    ) : (
+      undefined
+    );
+  }
+
+  renderChart() {
     const {
-      selectedAttributes,
-      lockedAttributes,
       data,
+      orientation,
       streaming,
-      resource,
       onLockAttribute,
       onUnlockAttribute
     } = this.props;
     const type = this.state.type;
     const chartedAttributes = this.parseChartedAttributes();
+    const height =
+      orientation === "PORTRAIT" ? 250 : Dimensions.get("window").height - 70;
+    const width = Dimensions.get("window").width;
+
+    return (
+      <View
+        style={{
+          height: orientation === "PORTRAIT" ? 250 : "100%",
+          alignItems: "center",
+          backgroundColor: DARK_BLUE
+        }}
+      >
+        {type === "Lines" && (
+          <Line
+            chartedAttributes={chartedAttributes}
+            streaming={streaming}
+            height={height}
+            width={width}
+          />
+        )}
+        {type === "Bars" &&
+          typeof data === "object" && (
+            <Bars
+              chartedAttributes={chartedAttributes}
+              data={data}
+              height={height}
+              width={width}
+            />
+          )}
+        {type === "Pie" &&
+          typeof data === "object" && (
+            <Pie
+              chartedAttributes={chartedAttributes}
+              data={data}
+              lockAttribute={onLockAttribute}
+              unlockAttribute={onUnlockAttribute}
+              height={height}
+              width={width}
+            />
+          )}
+      </View>
+    );
+  }
+
+  renderLabels() {
+    const {
+      orientation,
+      selectedAttributes,
+      lockedAttributes,
+      data
+    } = this.props;
+    const type = this.state.type;
+
+    return (
+      typeof data === "object" && (
+        <FlatList
+          data={Object.keys(selectedAttributes[type])}
+          horizontal={orientation === "LANDSCAPE"}
+          keyExtractor={item => item}
+          renderItem={({ item, index }) => {
+            return (
+              <Label
+                id={item}
+                value={data[item]}
+                color={getColorByIndex(index * 2)}
+                selected={selectedAttributes[type][item]}
+                locked={lockedAttributes[type][item]}
+                onClick={this.handleOnLabelClick}
+              />
+            );
+          }}
+        />
+      )
+    );
+  }
+
+  render() {
+    const { resource, orientation } = this.props;
 
     return (
       <Screen
         navigationBar={<NavigationBar title={resource} />}
-        tabBar={
-          typeof data === "object" ? (
-            <TabBar
-              tabs={[
-                {
-                  title: "Lines",
-                  icon: "line-chart",
-                  active: type === "Lines",
-                  onPress: () =>
-                    this.setState(
-                      update(this.state, { type: { $set: "Lines" } })
-                    )
-                },
-                {
-                  title: "Pie",
-                  icon: "pie-chart",
-                  active: type === "Pie",
-                  onPress: () =>
-                    this.setState(update(this.state, { type: { $set: "Pie" } }))
-                },
-                {
-                  title: "Bars",
-                  icon: "bar-chart",
-                  active: type === "Bars",
-                  onPress: () =>
-                    this.setState(
-                      update(this.state, { type: { $set: "Bars" } })
-                    )
-                }
-              ]}
-            />
-          ) : (
-            undefined
-          )
-        }
+        tabBar={orientation === "PORTRAIT" ? this.renderTabBar() : undefined}
       >
-        <View style={{ height: 250, backgroundColor: DARK_BLUE }}>
-          {type === "Lines" && (
-            <Line chartedAttributes={chartedAttributes} streaming={streaming} />
-          )}
-          {type === "Bars" &&
-            typeof data === "object" && (
-              <Bars chartedAttributes={chartedAttributes} data={data} />
-            )}
-          {type === "Pie" &&
-            typeof data === "object" && (
-              <Pie
-                chartedAttributes={chartedAttributes}
-                data={data}
-                lockAttribute={onLockAttribute}
-                unlockAttribute={onUnlockAttribute}
-              />
-            )}
-        </View>
-
-        {typeof data === "object" && (
-          <FlatList
-            data={Object.keys(selectedAttributes[type])}
-            keyExtractor={item => item}
-            renderItem={({ item, index }) => {
-              return (
-                <Label
-                  id={item}
-                  value={data[item]}
-                  color={getColorByIndex(index * 2)}
-                  selected={selectedAttributes[type][item]}
-                  locked={lockedAttributes[type][item]}
-                  onClick={this.handleOnLabelClick}
-                />
-              );
-            }}
-          />
-        )}
+        {this.renderChart()}
+        {orientation === "PORTRAIT" ? this.renderLabels() : undefined}
       </Screen>
     );
   }
@@ -214,7 +258,8 @@ const mapStateToProps = state => {
     streaming: state.streaming,
     isFetching: state.resources[resource].isFetching,
     selectedAttributes: state.selectedAttributes,
-    lockedAttributes: state.lockedAttributes
+    lockedAttributes: state.lockedAttributes,
+    orientation: state.orientation
   };
 };
 

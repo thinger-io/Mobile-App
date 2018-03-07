@@ -3,6 +3,7 @@
 import type { Device } from "./Device";
 import type { Resource } from "./Resource";
 import type { Chart } from "./Chart";
+import type { Orientation } from "./Orientation";
 
 export type State = {
   devices: DevicesState,
@@ -47,5 +48,7 @@ export type StreamingState = {
     [attribute: string]: Array<number>
   }
 };
+
+export type OrientationState = Orientation;
 
 export type NavState = any;

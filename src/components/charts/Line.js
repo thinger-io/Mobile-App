@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { View, ActivityIndicator, Text } from "react-native";
+import { View, ActivityIndicator, Text, Dimensions } from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 import type { StreamingState } from "../../types/State";
 import { PADDING } from "../../constants/ThingerStyles";
@@ -16,12 +16,14 @@ import { calculateDomain } from "../../utils/charts";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
-  streaming: StreamingState
+  streaming: StreamingState,
+  height: number,
+  width: number
 };
 
 export default class extends React.Component<Props> {
   renderChart() {
-    const { chartedAttributes, streaming } = this.props;
+    const { chartedAttributes, streaming, height, width } = this.props;
     const time = new Date().getTime();
 
     const data = chartedAttributes
@@ -57,15 +59,15 @@ export default class extends React.Component<Props> {
 
     const allPoints: Array<number> = [].concat.apply([], sequences);
     const { min, max } = calculateDomain(allPoints);
-
     return (
       <VictoryChart
-        height={250}
+        width={width}
+        height={height}
         domain={{ y: [min, max] }}
         domainPadding={{ y: 20 }}
         padding={{
           top: PADDING,
-          bottom: PADDING * 3,
+          bottom: PADDING * 2,
           left: PADDING * 4,
           right: PADDING * 2
         }}

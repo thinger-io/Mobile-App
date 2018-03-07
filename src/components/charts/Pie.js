@@ -10,12 +10,20 @@ import { View, Text } from "react-native";
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
   data: { [attribute: string]: string | boolean | number },
-  lockAttribute: (attribute: string, chart: Chart) => any
+  lockAttribute: (attribute: string, chart: Chart) => any,
+  height: number,
+  width: number
 };
 
 export default class extends React.PureComponent<Props> {
   render() {
-    const { chartedAttributes, data, lockAttribute } = this.props;
+    const {
+      chartedAttributes,
+      data,
+      lockAttribute,
+      height,
+      width
+    } = this.props;
 
     const pieData = chartedAttributes
       .map(([key, value], index) => ({
@@ -39,9 +47,12 @@ export default class extends React.PureComponent<Props> {
         </View>
       );
 
+    const size = Math.min(width, height);
+
     return (
       <VictoryPie
-        height={250}
+        height={size}
+        width={size}
         domainPadding={{ x: 50, y: 20 }}
         padding={{
           top: PADDING,

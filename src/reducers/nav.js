@@ -1,7 +1,7 @@
 //@flow
 
 import type { NavAction } from "../actions/nav";
-import { Routes } from "../components/navigators/Navigator";
+import { Routes } from "../components/navigation/Navigator";
 import { NavigationActions } from "react-navigation";
 import type { NavState } from "../types/State";
 

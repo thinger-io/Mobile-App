@@ -8,12 +8,14 @@ import { Text, View } from "react-native";
 
 type Props = {
   chartedAttributes: Array<[string, boolean]>,
-  data: { [attribute: string]: string | boolean | number }
+  data: { [attribute: string]: string | boolean | number },
+  height: number,
+  width: number
 };
 
 export default class extends React.PureComponent<Props> {
   render() {
-    const { chartedAttributes, data } = this.props;
+    const { chartedAttributes, data, height, width } = this.props;
 
     const barData = chartedAttributes
       .map(([key, value], index) => [key, value, index])
@@ -41,7 +43,8 @@ export default class extends React.PureComponent<Props> {
 
     return (
       <VictoryChart
-        height={250}
+        height={height}
+        width={width}
         domain={{ y: [-max, max] }}
         domainPadding={{ x: 50, y: 20 }}
         padding={{

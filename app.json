@@ -6,7 +6,6 @@
     "sdkVersion": "25.0.0",
     "privacy": "unlisted",
     "githubUrl": "https://github.com/thinger-io/Mobile-App",
-    "orientation": "portrait",
     "primaryColor": "#0088CC",
     "icon": "icon.png",
     "ios": {

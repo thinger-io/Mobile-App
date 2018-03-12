@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: PADDING,
-    paddingTop: Platform.OS === "ios" ? PADDING + 10 : PADDING + 20,
+    paddingTop: Platform.OS === "ios" ? PADDING + 10 : PADDING,
     alignItems: "center",
     backgroundColor: DARK_BLUE
   },

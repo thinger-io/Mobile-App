@@ -74,7 +74,7 @@ class QRScanner extends React.Component<Props> {
   render() {
     return (
       <Screen navigationBar={<NavigationBar title="QR Scanner" />}>
-        {this.renderCamera()}}
+        {this.renderCamera()}
         <View
           style={{
             flexDirection: "row",

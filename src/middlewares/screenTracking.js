@@ -1,15 +1,14 @@
 import { NavigationActions } from "react-navigation";
-import { Analytics, PageHit } from "expo-analytics";
+import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
 import ID from "../constants/GoogleAnalytics";
 
-const tracker = new Analytics(ID);
+const tracker = new GoogleAnalyticsTracker(ID);
 
 function getCurrentRouteName(navigationState) {
   if (!navigationState) {
     return null;
   }
   const route = navigationState.routes[navigationState.index];
-  // dive into nested navigators
   if (route.routes) {
     return getCurrentRouteName(route);
   }
@@ -28,7 +27,7 @@ export default (screenTracking = ({ getState }) => next => action => {
   const result = next(action);
   const nextScreen = getCurrentRouteName(getState().nav);
   if (nextScreen !== currentScreen) {
-    tracker.hit(new PageHit(nextScreen));
+    tracker.trackScreenView(nextScreen);
   }
   return result;
 });

@@ -5,7 +5,7 @@ import type { SelectedResourceState } from "../types/State";
 
 const initialState: SelectedResourceState = "";
 
-export default function selectedDevice(
+export default function selectedResource(
   state: SelectedResourceState = initialState,
   action: ResourceAction
 ) {

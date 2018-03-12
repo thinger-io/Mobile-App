@@ -1,8 +1,8 @@
 //@flow
 
-import update from "update-immutable";
 import type { AttributeAction } from "../actions/attribute";
 import type { LockedAttributesState } from "../types/State";
+import update from "immutability-helper/index";
 
 const initialState: LockedAttributesState = {
   Lines: {},
@@ -14,14 +14,17 @@ export default function lockedAttributes(
   state: LockedAttributesState = initialState,
   action: AttributeAction
 ) {
+  update.extend("$auto", function(value, object) {
+    return object ? update(object, value) : update({}, value);
+  });
   switch (action.type) {
     case "ATTRIBUTE_LOCK":
       return update(state, {
-        [action.chart]: { [action.attribute]: { $set: true } }
+        [action.chart]: { $auto: { [action.attribute]: { $set: true } } }
       });
     case "ATTRIBUTE_UNLOCK":
       return update(state, {
-        [action.chart]: { [action.attribute]: { $set: false } }
+        [action.chart]: { $auto: { [action.attribute]: { $set: false } } }
       });
     case "ATTRIBUTE_REMOVE_ALL":
       return initialState;

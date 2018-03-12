@@ -3,23 +3,23 @@
 import { addNavigationHelpers, StackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import React from "react";
-import DevicesScreen from "../screens/Devices";
-import ShowQRScreen from "../screens/ShowQR";
-import QRScannerScreen from "../screens/QRScanner";
-import DeviceInfo from "../screens/DeviceInfo";
-import Resources from "../screens/Resources";
+import Devices from "../screens/Devices";
 import { createReduxBoundAddListener } from "react-navigation-redux-helpers";
 import type { Dispatch } from "../../types/Dispatch";
+import QRScanner from "../screens/QRScanner";
+import Resources from "../screens/Resources";
+import DeviceInfo from "../screens/DeviceInfo";
 import Chart from "../screens/Chart";
+import ShowQR from "../screens/ShowQR";
 
 export const Routes = StackNavigator(
   {
-    Main: { screen: DevicesScreen, key: "Main" },
-    Scanner: { screen: QRScannerScreen },
+    Main: { screen: Devices, key: "Main" },
+    Scanner: { screen: QRScanner },
     Device: { screen: Resources },
     Info: { screen: DeviceInfo },
     Chart: { screen: Chart },
-    ShowQR: { screen: ShowQRScreen }
+    ShowQR: { screen: ShowQR }
   },
   {
     headerMode: "none"

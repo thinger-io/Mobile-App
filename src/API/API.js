@@ -1,7 +1,5 @@
 //@flow
 
-import fetch from "cross-fetch";
-
 function generateGETHeader(jwt: string) {
   return {
     method: "GET",

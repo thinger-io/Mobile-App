@@ -5,8 +5,8 @@ import React from "react";
 import { connect } from "react-redux";
 import Screen from "../containers/Screen";
 import NavigationBar from "../navigation/NavigationBar";
-import QRCode from "react-native-qrcode";
 import { COLOR_BACKGROUND } from "../../constants/ThingerColors";
+import QRCode from "react-native-qrcode-svg";
 
 type Props = {
   name: string,
@@ -23,8 +23,8 @@ class ShowQRScreen extends React.Component<Props> {
           <QRCode
             value={this.props.jwt}
             size={300}
-            bgColor="black"
-            fgColor={COLOR_BACKGROUND}
+            color="black"
+            backgroundColor={COLOR_BACKGROUND}
           />
         </View>
       </Screen>

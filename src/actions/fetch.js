@@ -49,6 +49,7 @@ export function getResourceFromApi(
       const json = await response.json();
       return dispatch(receiveResource(resource, json));
     } catch (error) {
+      console.error(error)
       if (error instanceof TypeError)
         dispatch(setDeviceServerStatus(device.jti, false));
     }
@@ -78,8 +79,10 @@ export function getResourcesFromApi(device: Device): ThunkAction {
         dispatch(getResourceFromApi(device, key))
       );
       await Promise.all(promises);
+      console.warn(12345677890)
       return dispatch(receiveDevice(device.jti));
     } catch (error) {
+      console.warn(123, error)
       dispatch(receiveDevice(device.jti));
       if (error instanceof TypeError)
         dispatch(setDeviceServerStatus(device.jti, false));

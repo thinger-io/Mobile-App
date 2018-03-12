@@ -9,9 +9,9 @@ import resources from "../reducers/resources";
 import selectedResource from "../reducers/selectedResource";
 import selectedAttributes from "../reducers/selectedAttributes";
 import lockedAttributes from "../reducers/lockedAttributes";
+import streaming from "../reducers/streaming";
 import orientation from "../reducers/orientation";
 import nav from "../reducers/nav";
-import streaming from "../reducers/streaming";
 import screenTracking from "../middlewares/screenTracking";
 
 const config = {

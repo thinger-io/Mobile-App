@@ -3,12 +3,12 @@
 import React from "react";
 import styles from "../../constants/ThingerStyles";
 import { FlatList, Text, View } from "react-native";
-import update from "update-immutable";
 import type { Attribute } from "../../types/Attribute";
 import type { MultipleResource } from "../../types/Resource";
 import InputAttribute from "./InputAttribute";
 import OutputAttribute from "./OutputAttribute";
 import ResourceComponent from "./Resource";
+import update from 'immutability-helper';
 
 type Props = {
   resource: string,

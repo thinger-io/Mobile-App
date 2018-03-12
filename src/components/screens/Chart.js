@@ -25,9 +25,9 @@ import type { Device } from "../../types/Device";
 import type { Attribute } from "../../types/Attribute";
 import type { StreamingState } from "../../types/State";
 import TabBar from "../navigation/TabBar";
-import update from "update-immutable";
 import { restartStreaming } from "../../actions/resource";
 import type { Orientation } from "../../types/Orientation";
+import update from 'immutability-helper';
 
 const types: Array<Chart> = ["Lines", "Pie", "Bars"];
 

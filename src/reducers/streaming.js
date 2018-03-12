@@ -1,6 +1,6 @@
 //@flow
 
-import update from "update-immutable";
+import update from "immutability-helper";
 import type { ResourceAction } from "../actions/resource";
 import type { StreamingState } from "../types/State";
 
@@ -13,6 +13,13 @@ export default function streaming(
   state: StreamingState = initialState,
   action: ResourceAction
 ) {
+  update.extend("$auto", function(value, object) {
+    return object ? update(object, value) : update({}, value);
+  });
+  update.extend("$autoArray", function(value, object) {
+    return object ? update(object, value) : update([], value);
+  });
+
   switch (action.type) {
     case "RESOURCE_RECEIVE":
       if (action.value.hasOwnProperty("out")) {
@@ -23,12 +30,18 @@ export default function streaming(
           const keys = Object.keys(output);
           for (const key of keys) {
             newState = update(newState ? newState : state, {
-              data: { [key]: { $push: [output[key]] } }
+              data: {
+                $auto: {
+                  [key]: { $autoArray: { $push: [output[key]] } }
+                }
+              }
             });
           }
         } else {
           newState = update(newState ? newState : state, {
-            data: { [action.resource]: { $push: [output] } }
+            data: {
+              $auto: { [action.resource]: { $autoArray: { $push: [output] } }}
+            }
           });
         }
         return update(newState, {
@@ -36,7 +49,7 @@ export default function streaming(
         });
       } else return state;
     case "RESOURCE_RESTART_STREAMING":
-      return {};
+      return initialState;
     default:
       return state;
   }

@@ -14,9 +14,8 @@ import { removeAllResources } from "../../actions/resource";
 import type { Dispatch } from "../../types/Dispatch";
 import NavigationBar from "../navigation/NavigationBar";
 import type { Device } from "../../types/Device";
-import { Analytics, PageHit } from "expo-analytics";
+import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
 import ID from "../../constants/GoogleAnalytics";
-import { AppLoading, Asset } from "expo";
 
 type Props = {
   devices: Array<Device>,
@@ -24,33 +23,10 @@ type Props = {
   onAddDevicePress: () => Dispatch
 };
 
-type State = {
-  isReady: boolean
-};
-
-function cacheImages(images) {
-  return images.map(image => {
-    if (typeof image === "string") {
-      return Image.prefetch(image);
-    } else {
-      return Asset.fromModule(image).downloadAsync();
-    }
-  });
-}
-
-class DevicesScreen extends React.Component<Props, State> {
-  state = {
-    isReady: false
-  };
-
+class DevicesScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
-    new Analytics(ID).hit(new PageHit("Main"));
-  }
-
-  static async loadAssetsAsync() {
-    const imageAssets = cacheImages([require("../../assets/no_devices.png")]);
-    await Promise.all([...imageAssets]);
+    new GoogleAnalyticsTracker(ID).trackScreenView("Main");
   }
 
   renderSeparator = () => {
@@ -93,16 +69,6 @@ class DevicesScreen extends React.Component<Props, State> {
   }
 
   render() {
-    if (!this.state.isReady) {
-      return (
-        <AppLoading
-          startAsync={DevicesScreen.loadAssetsAsync}
-          onFinish={() => this.setState({ isReady: true })}
-          onError={console.warn}
-        />
-      );
-    }
-
     return (
       <Screen
         navigationBar={

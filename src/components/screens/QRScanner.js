@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Text, View } from "react-native";
-import { Camera, Permissions, ScreenOrientation } from "expo";
 import { connect } from "react-redux";
 import DropdownAlert from "react-native-dropdownalert";
 import TIOStyles, { PADDING } from "../../constants/ThingerStyles";
@@ -12,39 +11,15 @@ import type { Dispatch } from "../../types/Dispatch";
 import { addDevice } from "../../actions/device";
 import { goBack } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
+import { RNCamera } from "react-native-camera";
 
 type Props = {
   devices: Array<string>,
   dispatch: Dispatch
 };
 
-type State = {
-  hasCameraPermission: ?boolean,
-  type: typeof Camera.Constants.Type,
-  barCodeTypes: Array<typeof Camera.Constants.BarCodeType>
-};
-
-class QRScanner extends React.Component<Props, State> {
-  state = {
-    hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
-    barCodeTypes: [Camera.Constants.BarCodeType.qr]
-  };
-
+class QRScanner extends React.Component<Props> {
   alert: ?DropdownAlert;
-
-  componentDidMount() {
-    ScreenOrientation.allow(ScreenOrientation.Orientation.PORTRAIT);
-  }
-
-  componentWillUnmount() {
-    ScreenOrientation.allow(ScreenOrientation.Orientation.ALL);
-  }
-
-  async componentWillMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === "granted" });
-  }
 
   handleOnBarCodeRead(data) {
     const { dispatch, devices } = this.props;
@@ -66,13 +41,17 @@ class QRScanner extends React.Component<Props, State> {
 
   renderCamera() {
     return (
-      <Camera
+      <RNCamera
         style={{
           flex: 1,
           backgroundColor: "transparent"
         }}
-        type={this.state.type}
-        barCodeTypes={this.state.barCodeTypes}
+        type={RNCamera.Constants.Type.back}
+        permissionDialogTitle={"Permission to use camera"}
+        permissionDialogMessage={
+          "We need your permission to use your camera phone"
+        }
+        barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
         onBarCodeRead={data => {
           this.handleOnBarCodeRead(data);
         }}
@@ -80,38 +59,34 @@ class QRScanner extends React.Component<Props, State> {
     );
   }
 
-  render() {
-    const { hasCameraPermission } = this.state;
+  /*
+  *
+  *         <DropdownAlert
+          ref={alert => (this.alert = alert)}
+          replaceEnabled={false}
+          defaultContainer={{
+            padding: 8,
+            paddingTop: 10,
+            flexDirection: "row"
+          }}
+        />*/
 
-    if (hasCameraPermission === null) {
-      return <View />;
-    } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
-    } else {
-      return (
-        <Screen navigationBar={<NavigationBar title="QR Scanner" />}>
-          {this.renderCamera()}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              padding: PADDING
-            }}
-          >
-            <Text style={TIOStyles.h2}>Scan your device token QR</Text>
-          </View>
-          <DropdownAlert
-            ref={alert => (this.alert = alert)}
-            replaceEnabled={false}
-            defaultContainer={{
-              padding: 8,
-              paddingTop: 10,
-              flexDirection: "row"
-            }}
-          />
-        </Screen>
-      );
-    }
+  render() {
+    return (
+      <Screen navigationBar={<NavigationBar title="QR Scanner" />}>
+        {this.renderCamera()}}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            padding: PADDING
+          }}
+        >
+          <Text style={TIOStyles.h2}>Scan your device token QR</Text>
+        </View>
+
+      </Screen>
+    );
   }
 }
 

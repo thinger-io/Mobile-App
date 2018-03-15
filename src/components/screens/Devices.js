@@ -1,10 +1,10 @@
 //@flow
 
 import { connect } from "react-redux";
-import { FlatList, View, Image, Text } from "react-native";
+import {FlatList, View, Image, Text } from "react-native";
 import DeviceComponent from "../devices/DeviceComponent";
 import React from "react";
-import { MARGIN } from "../../constants/ThingerStyles";
+import {MARGIN} from "../../constants/ThingerStyles";
 import ThingerStyles from "../../constants/ThingerStyles";
 import Screen from "../containers/Screen";
 import { navigate } from "../../actions/nav";

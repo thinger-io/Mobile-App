@@ -12,6 +12,7 @@ import { addDevice } from "../../actions/device";
 import { goBack } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
 import { RNCamera } from "react-native-camera";
+import {DARK_BLUE} from "../../constants/ThingerColors";
 
 const DEFAULT_RATIO = "16:9";
 
@@ -109,10 +110,11 @@ class QRScanner extends React.Component<Props, State> {
           style={{
             flexDirection: "row",
             justifyContent: "center",
-            padding: PADDING
+            padding: PADDING,
+            backgroundColor: DARK_BLUE
           }}
         >
-          <Text style={TIOStyles.h2}>Scan your device token QR</Text>
+          <Text style={{color: "white"}}>Scan your device token QR</Text>
         </View>
       </Screen>
     );

@@ -22,8 +22,12 @@ export const Routes = StackNavigator(
     ShowQR: { screen: ShowQR }
   },
   {
-    headerMode: "none"
-  }
+    headerMode: "none",
+    cardStyle: {
+      shadowOpacity: 0,
+    }
+  },
+
 );
 
 type Props = {

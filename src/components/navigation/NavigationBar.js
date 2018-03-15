@@ -1,13 +1,7 @@
 //@flow
 
 import React from "react";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FONT_SIZE_H1, PADDING } from "../../constants/ThingerStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
@@ -65,7 +59,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
     alignItems: "center",
     backgroundColor: DARK_BLUE
   },

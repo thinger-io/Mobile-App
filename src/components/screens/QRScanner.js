@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, Platform } from "react-native";
 import { connect } from "react-redux";
 import DropdownAlert from "react-native-dropdownalert";
 import TIOStyles, { PADDING } from "../../constants/ThingerStyles";
@@ -13,13 +13,28 @@ import { goBack } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
 import { RNCamera } from "react-native-camera";
 
+const DEFAULT_RATIO = "16:9";
+
 type Props = {
   devices: Array<string>,
   dispatch: Dispatch
 };
 
-class QRScanner extends React.Component<Props> {
+type State = {
+  ratio: string
+};
+
+class QRScanner extends React.Component<Props, State> {
   alert: ?DropdownAlert;
+
+  state = {
+    ratio: DEFAULT_RATIO
+  };
+
+  constructor(props) {
+    super(props);
+    this.getPrimaryRatio = this.getPrimaryRatio.bind(this);
+  }
 
   handleOnBarCodeRead(data) {
     const { dispatch, devices } = this.props;
@@ -39,14 +54,27 @@ class QRScanner extends React.Component<Props> {
     }
   }
 
+  async getPrimaryRatio(cam) {
+    if (Platform.OS === "android" && cam) {
+      const ratios: Array<string> = await cam.getSupportedRatiosAsync();
+      if (ratios.includes(DEFAULT_RATIO)) return;
+      this.setState({ ratio: ratios[0] });
+    }
+  }
+
   renderCamera() {
     return (
       <RNCamera
+        ref={ref => {
+          this.cam = ref;
+        }}
         style={{
           flex: 1,
           backgroundColor: "transparent"
         }}
         type={RNCamera.Constants.Type.back}
+        ratio={this.state.ratio}
+        onCameraReady={() => this.getPrimaryRatio(this.cam)}
         permissionDialogTitle={"Permission to use camera"}
         permissionDialogMessage={
           "We need your permission to use your camera phone"
@@ -60,16 +88,18 @@ class QRScanner extends React.Component<Props> {
   }
 
   /*
-  *
-  *         <DropdownAlert
-          ref={alert => (this.alert = alert)}
-          replaceEnabled={false}
-          defaultContainer={{
-            padding: 8,
-            paddingTop: 10,
-            flexDirection: "row"
-          }}
-        />*/
+
+  <DropdownAlert
+    ref={alert => (this.alert = alert)}
+    replaceEnabled={false}
+    defaultContainer={{
+      padding: 8,
+      paddingTop: 10,
+      flexDirection: "row"
+    }}
+  />
+
+  */
 
   render() {
     return (
@@ -84,7 +114,6 @@ class QRScanner extends React.Component<Props> {
         >
           <Text style={TIOStyles.h2}>Scan your device token QR</Text>
         </View>
-
       </Screen>
     );
   }

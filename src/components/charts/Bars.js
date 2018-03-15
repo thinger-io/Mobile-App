@@ -56,10 +56,6 @@ export default class extends React.PureComponent<Props> {
       >
         <VictoryBar
           data={barData}
-          animate={{
-            duration: 500,
-            onLoad: { duration: 500 }
-          }}
         />
         <VictoryAxis
           style={{

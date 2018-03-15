@@ -24,7 +24,6 @@ type Props = {
 export default class extends React.Component<Props> {
   renderChart() {
     const { chartedAttributes, streaming, height, width } = this.props;
-    const time = new Date().getTime();
 
     const data = chartedAttributes
       .map(([key, value], color) => [key, value, color])
@@ -32,12 +31,9 @@ export default class extends React.Component<Props> {
       .map(([key, value, color]) => {
         return {
           data: streaming.data[key]
-            .map((y, index) => [y, index])
-            .filter(([_, index]) => {
-              return streaming.timestamp[index] > time - 30 * 1000;
-            })
-            .map(([y, index]) => ({
-              x: streaming.timestamp[index],
+            .slice(-20)
+            .map((y, index) => ({
+              x: streaming.timestamp.slice(-20)[index],
               y
             })),
           color: getColorByIndex(color * 2)
@@ -91,11 +87,12 @@ export default class extends React.Component<Props> {
           })}
         </VictoryGroup>
         <VictoryAxis
+          crossAxis
           orientation={"bottom"}
           padding={{ left: 100 }}
           style={{
             axis: { stroke: "white" },
-            tickLabels: { fill: "white", padding: 5, angle: 45 },
+            tickLabels: { fill: "white", padding: 5 },
             ticks: { size: 10, stroke: "white" }
           }}
           tickFormat={timestamp => {
@@ -104,6 +101,7 @@ export default class extends React.Component<Props> {
           }}
         />
         <VictoryAxis
+          crossAxis
           dependentAxis
           orientation={"left"}
           style={{

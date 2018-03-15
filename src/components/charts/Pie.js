@@ -60,10 +60,6 @@ export default class extends React.PureComponent<Props> {
         }}
         data={pieData}
         labels={() => null}
-        animate={{
-          duration: 1000,
-          onLoad: { duration: 1000 }
-        }}
         style={{
           labels: {
             fill: "white"

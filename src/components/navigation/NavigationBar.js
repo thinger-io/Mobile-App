@@ -31,7 +31,7 @@ class NavigationBar extends React.Component<Props> {
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingLeft: 0 }}>
           {!main && (
             <TouchableOpacity onPress={() => dispatch(goBack())}>
               <Icon
@@ -65,13 +65,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: PADDING,
-    paddingTop: Platform.OS === "ios" ? PADDING + 10 : PADDING,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
     alignItems: "center",
     backgroundColor: DARK_BLUE
   },
   icon: {
-    color: "white"
+    color: "white",
+    padding: PADDING,
+    paddingRight: PADDING * 2
   },
   title: {
     fontSize: FONT_SIZE_H1,

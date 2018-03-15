@@ -11,20 +11,23 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="1024" height="1024"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon-128" translatesAutoresizingMaskIntoConstraints="NO" id="62k-BW-zjs">
-                    <rect key="frame" x="448" y="448" width="128" height="128"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
-                </imageView>
-            </subviews>
-            <color key="backgroundColor" red="0.037257615476846695" green="0.14838916063308716" blue="0.19431358575820923" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <nil key="simulatedStatusBarMetrics"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="548" y="455"/>
-        </view>
+        <viewController id="9mQ-E8-T7o">
+            <layoutGuides>
+                <viewControllerLayoutGuide type="top" id="yk3-6f-t2z"/>
+                <viewControllerLayoutGuide type="bottom" id="qzQ-bq-kHK"/>
+            </layoutGuides>
+            <view key="view" contentMode="scaleToFill" id="Z5W-gx-QV1">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Icon-128" translatesAutoresizingMaskIntoConstraints="NO" id="62k-BW-zjs">
+                        <rect key="frame" x="123" y="269" width="128" height="128"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" red="0.037257615479999999" green="0.14838916059999999" blue="0.19431358579999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            </view>
+        </viewController>
     </objects>
     <resources>
         <image name="Icon-128" width="128" height="128"/>

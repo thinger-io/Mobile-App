@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { View, ActivityIndicator, Text, Dimensions } from "react-native";
+import { View, ActivityIndicator, Text } from "react-native";
 import { getColorByIndex } from "../../utils/colors";
 import type { StreamingState } from "../../types/State";
 import { PADDING } from "../../constants/ThingerStyles";
@@ -79,10 +79,6 @@ export default class extends React.Component<Props> {
                 <VictoryLine
                   interpolation="natural"
                   data={sequence.data}
-                  animate={{
-                    duration: 500,
-                    onLoad: { duration: 500 }
-                  }}
                   style={{
                     data: {
                       stroke: sequence.color,
@@ -97,10 +93,6 @@ export default class extends React.Component<Props> {
         <VictoryAxis
           orientation={"bottom"}
           padding={{ left: 100 }}
-          animate={{
-            duration: 500,
-            onLoad: { duration: 500 }
-          }}
           style={{
             axis: { stroke: "white" },
             tickLabels: { fill: "white", padding: 5, angle: 45 },
@@ -114,10 +106,6 @@ export default class extends React.Component<Props> {
         <VictoryAxis
           dependentAxis
           orientation={"left"}
-          animate={{
-            duration: 500,
-            onLoad: { duration: 500 }
-          }}
           style={{
             axis: { stroke: "white" },
             tickLabels: { fill: "white", padding: 5 },

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    height: 38,
+    height: 42,
     alignItems: "center"
   }
 });

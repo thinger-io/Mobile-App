@@ -44,12 +44,12 @@ type Props = {
 };
 
 type State = {
-  refresh: boolean
+  pullRefresh: boolean
 };
 
 class ResourcesScreen extends React.Component<Props, State> {
   state = {
-    refresh: false
+    pullRefresh: false
   };
 
   constructor(props) {
@@ -59,9 +59,14 @@ class ResourcesScreen extends React.Component<Props, State> {
 
   async onRefresh() {
     const { onGetResources, device } = this.props;
-    this.setState({ refresh: true });
     await onGetResources(device);
-    this.setState({ refresh: false });
+  }
+
+  async onPullRefresh() {
+    const { onGetResources, device } = this.props;
+    this.setState({ pullRefresh: true });
+    await onGetResources(device);
+    this.setState({ pullRefresh: false });
   }
 
   renderItem = ({ item }) => {
@@ -115,7 +120,7 @@ class ResourcesScreen extends React.Component<Props, State> {
         renderItem={this.renderItem}
         keyExtractor={item => item}
         refreshing={device.isFetching}
-        onRefresh={(this.onRefresh: any)}
+        onRefresh={(this.onPullRefresh: any)}
       />
     );
   }

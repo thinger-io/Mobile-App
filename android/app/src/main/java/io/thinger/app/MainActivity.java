@@ -1,4 +1,4 @@
-package com.thingerio;
+package io.thinger.app;
 
 import com.facebook.react.ReactActivity;
 

@@ -24,10 +24,9 @@ export const Routes = StackNavigator(
   {
     headerMode: "none",
     cardStyle: {
-      shadowOpacity: 0,
+      shadowOpacity: 0
     }
-  },
-
+  }
 );
 
 type Props = {

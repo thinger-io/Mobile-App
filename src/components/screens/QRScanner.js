@@ -4,7 +4,7 @@ import React from "react";
 import { Text, View, Platform } from "react-native";
 import { connect } from "react-redux";
 import DropdownAlert from "react-native-dropdownalert";
-import TIOStyles, { PADDING } from "../../constants/ThingerStyles";
+import { PADDING } from "../../constants/ThingerStyles";
 import { parseJWT } from "../../utils/jwt";
 import Screen from "../containers/Screen";
 import type { Dispatch } from "../../types/Dispatch";
@@ -12,7 +12,7 @@ import { addDevice } from "../../actions/device";
 import { goBack } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
 import { RNCamera } from "react-native-camera";
-import {DARK_BLUE} from "../../constants/ThingerColors";
+import { DARK_BLUE } from "../../constants/ThingerColors";
 
 const DEFAULT_RATIO = "16:9";
 
@@ -22,14 +22,14 @@ type Props = {
 };
 
 type State = {
-  ratio: string
+  ratio: ?string
 };
 
 class QRScanner extends React.Component<Props, State> {
   alert: ?DropdownAlert;
 
   state = {
-    ratio: DEFAULT_RATIO
+    ratio: undefined
   };
 
   constructor(props) {
@@ -58,8 +58,9 @@ class QRScanner extends React.Component<Props, State> {
   async getPrimaryRatio(cam) {
     if (Platform.OS === "android" && cam) {
       const ratios: Array<string> = await cam.getSupportedRatiosAsync();
-      if (ratios.includes(DEFAULT_RATIO)) return;
-      this.setState({ ratio: ratios[0] });
+      if (ratios.includes(DEFAULT_RATIO)) {
+        this.setState({ ratio: DEFAULT_RATIO });
+      }
     }
   }
 
@@ -89,7 +90,7 @@ class QRScanner extends React.Component<Props, State> {
   }
 
   /*
-
+  TODO
   <DropdownAlert
     ref={alert => (this.alert = alert)}
     replaceEnabled={false}
@@ -114,7 +115,7 @@ class QRScanner extends React.Component<Props, State> {
             backgroundColor: DARK_BLUE
           }}
         >
-          <Text style={{color: "white"}}>Scan your device token QR</Text>
+          <Text style={{ color: "white" }}>Scan your device token QR</Text>
         </View>
       </Screen>
     );

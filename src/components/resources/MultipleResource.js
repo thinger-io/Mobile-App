@@ -8,7 +8,7 @@ import type { MultipleResource } from "../../types/Resource";
 import InputAttribute from "./InputAttribute";
 import OutputAttribute from "./OutputAttribute";
 import ResourceComponent from "./Resource";
-import update from 'immutability-helper';
+import update from "immutability-helper";
 
 type Props = {
   resource: string,

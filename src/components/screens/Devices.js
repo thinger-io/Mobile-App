@@ -1,11 +1,12 @@
 //@flow
 
 import { connect } from "react-redux";
-import {FlatList, View, Image, Text } from "react-native";
+import { FlatList, View, Image, Text } from "react-native";
 import DeviceComponent from "../devices/DeviceComponent";
 import React from "react";
-import {MARGIN} from "../../constants/ThingerStyles";
-import ThingerStyles from "../../constants/ThingerStyles";
+import {
+  MARGIN
+} from "../../constants/ThingerStyles";
 import Screen from "../containers/Screen";
 import { navigate } from "../../actions/nav";
 import { getResourcesFromApi } from "../../actions/fetch";
@@ -16,6 +17,8 @@ import NavigationBar from "../navigation/NavigationBar";
 import type { Device } from "../../types/Device";
 import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
 import ID from "../../constants/GoogleAnalytics";
+import H1Text from "../texts/H1";
+import H2Text from "../texts/H2";
 
 type Props = {
   devices: Array<Device>,
@@ -62,8 +65,8 @@ class DevicesScreen extends React.Component<Props> {
           source={require("../../assets/no_devices.png")}
           style={{ height: 100, width: 100, margin: MARGIN * 2 }}
         />
-        <Text style={ThingerStyles.h1}>Ooops!</Text>
-        <Text style={ThingerStyles.h2}>You could add a device...</Text>
+        <H1Text>Ooops!</H1Text>
+        <H2Text>You could add a device...</H2Text>
       </View>
     );
   }

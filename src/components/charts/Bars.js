@@ -54,9 +54,7 @@ export default class extends React.PureComponent<Props> {
           right: PADDING * 2
         }}
       >
-        <VictoryBar
-          data={barData}
-        />
+        <VictoryBar data={barData} />
         <VictoryAxis
           style={{
             axis: { stroke: "white" }

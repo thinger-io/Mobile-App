@@ -30,12 +30,10 @@ export default class extends React.Component<Props> {
       .filter(([_, value]) => value)
       .map(([key, value, color]) => {
         return {
-          data: streaming.data[key]
-            .slice(-20)
-            .map((y, index) => ({
-              x: streaming.timestamp.slice(-20)[index],
-              y
-            })),
+          data: streaming.data[key].slice(-20).map((y, index) => ({
+            x: streaming.timestamp.slice(-20)[index],
+            y
+          })),
           color: getColorByIndex(color * 2)
         };
       });

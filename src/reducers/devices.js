@@ -1,6 +1,6 @@
 //@flow
 
-import update from 'immutability-helper';
+import update from "immutability-helper";
 import type { DeviceAction } from "../actions/device";
 import type { DevicesState } from "../types/State";
 

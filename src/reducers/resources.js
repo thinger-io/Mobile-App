@@ -24,7 +24,7 @@ export default function resources(
     case "RESOURCE_RECEIVE":
       const newState = update(state, {
         [action.resource]: {
-            $auto: { data: { $set: action.value } }
+          $auto: { data: { $set: action.value } }
         }
       });
       return update(newState, {

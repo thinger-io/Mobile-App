@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { SEPARATOR_PADDING } from "../../constants/ThingerStyles";
-import styles from "../../constants/ThingerStyles";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import H1Text from "../texts/H1";
 import H2Text from "../texts/H2";
 

@@ -40,7 +40,7 @@ export default function streaming(
         } else {
           newState = update(newState ? newState : state, {
             data: {
-              $auto: { [action.resource]: { $autoArray: { $push: [output] } }}
+              $auto: { [action.resource]: { $autoArray: { $push: [output] } } }
             }
           });
         }

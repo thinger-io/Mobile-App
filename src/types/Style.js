@@ -4,4 +4,4 @@
  * @flow
  */
 
-export type Style = {[key: string]: Object}
+export type Style = { [key: string]: Object };

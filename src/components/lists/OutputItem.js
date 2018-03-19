@@ -3,7 +3,6 @@
 import React from "react";
 import ItemList from "./ItemList";
 import { StyleSheet, Text } from "react-native";
-import { DARK_BLUE } from "../../constants/ThingerColors";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
 
 type Props = {

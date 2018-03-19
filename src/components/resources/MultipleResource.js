@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, View } from "react-native";
 import type { Attribute } from "../../types/Attribute";
 import type { MultipleResource } from "../../types/Resource";
 import InputAttribute from "./InputAttribute";

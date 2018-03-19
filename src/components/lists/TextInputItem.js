@@ -2,7 +2,7 @@
 
 import React from "react";
 import ItemList from "./ItemList";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 

@@ -101,8 +101,8 @@ android {
         applicationId "io.thinger.app"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 3
-        versionName "0.2.1"
+        versionCode 4
+        versionName "0.2.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

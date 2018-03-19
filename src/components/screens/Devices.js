@@ -1,7 +1,7 @@
 //@flow
 
 import { connect } from "react-redux";
-import { FlatList, View, Image, Text } from "react-native";
+import { FlatList, View, Image } from "react-native";
 import DeviceComponent from "../devices/DeviceComponent";
 import React from "react";
 import {

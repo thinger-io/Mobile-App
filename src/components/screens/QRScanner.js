@@ -27,15 +27,11 @@ type State = {
 
 class QRScanner extends React.Component<Props, State> {
   alert: ?DropdownAlert;
+  cam: ?RNCamera;
 
   state = {
     ratio: undefined
   };
-
-  constructor(props) {
-    super(props);
-    this.getPrimaryRatio = this.getPrimaryRatio.bind(this);
-  }
 
   handleOnBarCodeRead(data) {
     const { dispatch, devices } = this.props;
@@ -44,7 +40,7 @@ class QRScanner extends React.Component<Props, State> {
       const device = parseJWT(data.data);
       const id = Object.keys(device)[0];
       if (devices.includes(id) && this.alert) {
-        this.alert.alertWithType("error", "Ups!", "This device already exists");
+        this.alert.alertWithType("warn", "Ups!", "This device already exists");
         return;
       }
       dispatch(addDevice(device));
@@ -89,20 +85,6 @@ class QRScanner extends React.Component<Props, State> {
     );
   }
 
-  /*
-  TODO
-  <DropdownAlert
-    ref={alert => (this.alert = alert)}
-    replaceEnabled={false}
-    defaultContainer={{
-      padding: 8,
-      paddingTop: 10,
-      flexDirection: "row"
-    }}
-  />
-
-  */
-
   render() {
     return (
       <Screen navigationBar={<NavigationBar title="QR Scanner" />}>
@@ -117,6 +99,15 @@ class QRScanner extends React.Component<Props, State> {
         >
           <Text style={{ color: "white" }}>Scan your device token QR</Text>
         </View>
+        <DropdownAlert
+          ref={alert => (this.alert = alert)}
+          replaceEnabled={false}
+          defaultContainer={{
+            padding: 8,
+            paddingTop: 10,
+            flexDirection: "row"
+          }}
+        />
       </Screen>
     );
   }

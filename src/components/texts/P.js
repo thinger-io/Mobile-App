@@ -6,21 +6,19 @@
 
 import React from "react";
 import { Text } from "react-native";
-import type { Style } from "../../types/Style";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
 
-type Props = {
-  children: string,
-  style?: Style
-};
+type Props = React$ElementProps<typeof Text>;
 
 export default class PText extends React.Component<Props> {
   render() {
+    const { style, children, ...props } = this.props;
     return (
       <Text
-        style={{ color: "black", fontSize: FONT_SIZE_P, ...this.props.style }}
+        style={{ color: "black", fontSize: FONT_SIZE_P, ...style }}
+        {...props}
       >
-        {this.props.children}
+        {children}
       </Text>
     );
   }

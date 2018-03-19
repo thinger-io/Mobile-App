@@ -5,23 +5,21 @@
  */
 
 import React from "react";
-import type { Style } from "../../types/Style";
-import {FONT_SIZE_H2} from "../../constants/ThingerStyles";
-import ThingerText from "./P";
+import { FONT_SIZE_H2 } from "../../constants/ThingerStyles";
+import { Text } from "react-native";
 
-type Props = {
-  children: string,
-  style?: Style
-};
+type Props = React$ElementProps<typeof Text>;
 
 export default class H2Text extends React.Component<Props> {
   render() {
+    const { style, children, ...props } = this.props;
     return (
-      <ThingerText
-        style={{ fontSize: FONT_SIZE_H2, ...this.props.style }}
+      <Text
+        style={{ color: "black", fontSize: FONT_SIZE_H2, ...style }}
+        {...props}
       >
-        {this.props.children}
-      </ThingerText>
+        {children}
+      </Text>
     );
   }
 }

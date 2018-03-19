@@ -1,7 +1,6 @@
 //@flow
 
 import React from "react";
-import styles from "../../constants/ThingerStyles";
 import { FlatList, Text, View } from "react-native";
 import type { Attribute } from "../../types/Attribute";
 import type { MultipleResource } from "../../types/Resource";
@@ -9,6 +8,7 @@ import InputAttribute from "./InputAttribute";
 import OutputAttribute from "./OutputAttribute";
 import ResourceComponent from "./Resource";
 import update from "immutability-helper";
+import H1Text from "../texts/H1";
 
 type Props = {
   resource: string,
@@ -65,9 +65,9 @@ class MultipleResourceView extends React.Component<Props, State> {
 
     return (
       <View>
-        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.h1}>
+        <H1Text ellipsizeMode="tail" numberOfLines={1}>
           {resource}
-        </Text>
+        </H1Text>
         <FlatList
           data={outputs.concat(inputs)}
           renderItem={({ item }) => {

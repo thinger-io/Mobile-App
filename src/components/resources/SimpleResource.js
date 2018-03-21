@@ -15,35 +15,51 @@ type Props = {
   onPostClick: (id: string, data: Attribute) => any,
   onUpdateClick: (id: string) => any,
   onChartClick: () => any,
-  onRun: (id: string) => any
+  onRun: () => any
 };
 
 type State = {
-  in: Attribute
+  in?: Attribute,
+  posted: boolean
+};
+
+const defaultState: State = {
+  in: undefined,
+  posted: false
 };
 
 class SimpleResourceView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { in: props.data.in };
+    this.state = defaultState;
     (this: any).handleOnPostClick = this.handleOnPostClick.bind(this);
     (this: any).handleOnChangeAttribute = this.handleOnChangeAttribute.bind(
       this
     );
   }
 
+  componentWillReceiveProps() {
+    if (this.state.posted) this.state = defaultState;
+  }
+
   handleOnPostClick() {
     const { resource, data, onPostClick } = this.props;
-    if (typeof data.in === "number" && typeof this.state.in === "string") {
+    if (this.state.in === undefined) {
+      onPostClick(resource, data.in);
+    } else if (
+      typeof data.in === "number" &&
+      typeof this.state.in === "string"
+    ) {
       onPostClick(resource, Number(String(this.state.in).replace(",", ".")));
     } else {
-      onPostClick(resource, data.in);
+      onPostClick(resource, this.state.in);
     }
+    this.setState({ in: this.state.in, posted: true });
   }
 
   handleOnChangeAttribute(id: string, value: Attribute) {
     const { onPostClick } = this.props;
-    this.setState({ in: value });
+    this.setState({ in: value, posted: false });
     if (typeof value === "boolean") onPostClick(id, value);
   }
 
@@ -52,9 +68,7 @@ class SimpleResourceView extends React.Component<Props, State> {
 
     // Run resource
     if (Object.keys(data).length === 0) {
-      return (
-        <RunAttribute id={resource} isSimple onRun={() => onRun(resource)} />
-      );
+      return <RunAttribute id={resource} isSimple onRun={onRun} />;
     }
 
     // Input Resource
@@ -97,7 +111,7 @@ class SimpleResourceView extends React.Component<Props, State> {
         }
         onPostClick={
           data.hasOwnProperty("in") && typeof data.in !== "boolean"
-            ? () => this.handleOnPostClick
+            ? () => this.handleOnPostClick()
             : undefined
         }
       >

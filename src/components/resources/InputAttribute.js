@@ -9,7 +9,7 @@ type Props = {
   id: string,
   isSimple?: boolean,
   value: Attribute,
-  inputValue: Attribute,
+  inputValue: ?Attribute,
   onChange: (id: string, value: Attribute) => any
 };
 
@@ -23,7 +23,7 @@ export default class InputAttribute extends React.Component<Props> {
             underlineColorAndroid={"transparent"}
             style={styles.input}
             value={inputValue}
-            placeholder={value}
+            placeholder={value ? value : id}
             onChangeText={text => onChange(id, text)}
           />
         );
@@ -34,16 +34,18 @@ export default class InputAttribute extends React.Component<Props> {
             style={styles.input}
             keyboardType="numeric"
             value={inputValue}
-            placeholder={value.toString()}
+            placeholder={value !== undefined ? value.toString() : id}
             onChangeText={text => onChange(id, text)}
           />
         );
       case "boolean":
         return (
-          <Switch
-            value={inputValue}
-            onValueChange={value => onChange(id, value)}
-          />
+          typeof inputValue === "boolean" && (
+            <Switch
+              value={inputValue}
+              onValueChange={value => onChange(id, value)}
+            />
+          )
         );
       default:
         return null;

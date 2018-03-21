@@ -1,12 +1,7 @@
 //@flow
 
 import { connect } from "react-redux";
-import {
-  ActivityIndicator,
-  FlatList,
-  KeyboardAvoidingView,
-  View
-} from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import React from "react";
 import ErrorMessage from "../ErrorMessage";
 import { DARK_BLUE } from "../../constants/ThingerColors";
@@ -27,6 +22,7 @@ import { isMultipleResource } from "../../types/Resource";
 import MultipleResourceView from "../resources/MultipleResource";
 import type { MultipleResource, SimpleResource } from "../../types/Resource";
 import SimpleResourceView from "../resources/SimpleResource";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 
 type Props = {
   device: Device,
@@ -81,19 +77,14 @@ class ResourcesScreen extends React.Component<Props, State> {
     if (isMultipleResource(resources[item].data)) {
       const data: MultipleResource = (resources[item].data: any);
       return (
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={100}
-          behaviour={"padding"}
-        >
-          <MultipleResourceView
-            resource={item}
-            data={data || {}}
-            isFetching={resources[item].isFetching && !this.state.refresh}
-            onUpdateClick={onUpdateClick}
-            onPostClick={onPostClick}
-            onChartClick={() => onChartClick(item)}
-          />
-        </KeyboardAvoidingView>
+        <MultipleResourceView
+          resource={item}
+          data={data || {}}
+          isFetching={resources[item].isFetching && !this.state.pullRefresh}
+          onUpdateClick={onUpdateClick}
+          onPostClick={onPostClick}
+          onChartClick={() => onChartClick(item)}
+        />
       );
     } else {
       const data: SimpleResource = (resources[item].data: any);
@@ -101,11 +92,11 @@ class ResourcesScreen extends React.Component<Props, State> {
         <SimpleResourceView
           resource={item}
           data={data || {}}
-          isFetching={resources[item].isFetching && !this.state.refresh}
+          isFetching={resources[item].isFetching && !this.state.pullRefresh}
           onUpdateClick={onUpdateClick}
           onPostClick={onPostClick}
           onChartClick={() => onChartClick(item)}
-          onRun={onRun}
+          onRun={() => onRun(item)}
         />
       );
     }
@@ -115,12 +106,13 @@ class ResourcesScreen extends React.Component<Props, State> {
     const { resources, device } = this.props;
 
     return (
-      <FlatList
+      <KeyboardAwareFlatList
+        keyboardOpeningTime={0}
         data={Object.keys(resources)}
         renderItem={this.renderItem}
         keyExtractor={item => item}
         refreshing={device.isFetching}
-        onRefresh={(this.onPullRefresh: any)}
+        onRefresh={(() => this.onPullRefresh(): any)}
       />
     );
   }
@@ -141,7 +133,7 @@ class ResourcesScreen extends React.Component<Props, State> {
         }
       >
         {device &&
-          (device.isFetching && !this.state.refresh ? (
+          (device.isFetching && !this.state.pullRefresh ? (
             <View
               style={{
                 flex: 1,

@@ -13,7 +13,7 @@ type Props = {
   children: React.Node,
   isFetching: boolean,
   onPostClick?: () => any,
-  onUpdateClick?: (id: string) => any,
+  onUpdateClick?: () => any,
   onChartClick?: () => any
 };
 

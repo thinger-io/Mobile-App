@@ -4,7 +4,25 @@ import update from "immutability-helper";
 import type { DeviceAction } from "../actions/device";
 import type { DevicesState } from "../types/State";
 
-const initialState: DevicesState = {};
+/* For testing in simulator without Camera */
+const initialState: DevicesState = {
+  "5a33c4474391fbe37d5ec9e6": {
+    dev: "deviceC",
+    jti: "5a33c4474391fbe37d5ec9e6",
+    usr: "jt",
+    iat: 1513342023,
+    jwt:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkZXZpY2VDIiwiaWF0IjoxNTEzMzQyMDIzLCJqdGkiOiI1YTMzYzQ0NzQzOTFmYmUzN2Q1ZWM5ZTYiLCJ1c3IiOiJqdCJ9.pny8SEwKAiJ0aFAIATHE9GS3HvwFdRfSqDUg-Mj_IzY",
+    isFetching: false,
+    isOnline: true,
+    isAuthorized: true,
+    server: "https://api.thinger.io",
+    hasServerConnection: true,
+    name: ""
+  }
+};
+
+// const initialState: DevicesState = {};
 
 export default function devices(
   state: DevicesState = initialState,

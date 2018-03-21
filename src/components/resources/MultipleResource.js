@@ -23,34 +23,43 @@ type Props = {
 };
 
 type State = {
-  in: { [attribute: string]: Attribute }
+  in: { [attribute: string]: Attribute },
+  posted: boolean
+};
+
+const defaultState: State = {
+  in: {},
+  posted: false
 };
 
 class MultipleResourceView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    if (props.data.in) this.state = { in: props.data.in };
+    this.state = defaultState;
     (this: any).handleOnPostClick = this.handleOnPostClick.bind(this);
     (this: any).handleOnChangeAttribute = this.handleOnChangeAttribute.bind(
       this
     );
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    if (!nextProps.isFetching && nextProps.data.in)
-      this.state.in = nextProps.data.in;
+  componentWillReceiveProps() {
+    if (this.state.posted) this.state = defaultState;
   }
 
   handleOnPostClick() {
     const { resource, data, onPostClick } = this.props;
     if (data.in) {
-      const castedData = castInputData(this.state.in, data.in);
+      const inputs = Object.assign({}, data.in, this.state.in);
+      const castedData = castInputData(inputs, data.in);
+      this.setState({ in: this.state.in, posted: true });
       onPostClick(resource, castedData);
     }
   }
 
   handleOnChangeAttribute(attribute: string, value: Attribute) {
-    this.setState(update(this.state, { in: { [attribute]: { $set: value } } }));
+    this.setState(
+      update(this.state, { in: { $merge: { [attribute]: value } } })
+    );
   }
 
   renderAttributes() {

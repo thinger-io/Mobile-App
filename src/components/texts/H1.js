@@ -15,12 +15,14 @@ export default class H1Text extends React.Component<Props> {
     const { style, children, ...props } = this.props;
     return (
       <Text
-        style={{
-          color: "black",
-          fontSize: FONT_SIZE_H1,
-          fontWeight: FONT_WEIGHT_H1,
-          ...style
-        }}
+        style={[
+          {
+            color: "black",
+            fontSize: FONT_SIZE_H1,
+            fontWeight: FONT_WEIGHT_H1
+          },
+          style
+        ]}
         {...props}
       >
         {children}

@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   value: {
     fontSize: FONT_SIZE_P,
     color: DARK_BLUE,
-    textAlign: "right"
+    textAlign: "right",
+    padding: 0
   }
 });

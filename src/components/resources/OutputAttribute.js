@@ -1,9 +1,9 @@
 //@flow
 
 import React from "react";
-import { StyleSheet, Text } from "react-native";
 import AttributeView from "./Attribute";
 import type { Attribute } from "../../types/Attribute";
+import PText from "../texts/P";
 
 type Props = {
   id: string,
@@ -17,10 +17,10 @@ export default class OutputAttribute extends React.Component<Props> {
     switch (typeof value) {
       case "string":
       case "number":
-        return <Text style={styles.value}>{value.toString()}</Text>;
+        return <PText>{value.toString()}</PText>;
       case "boolean":
-        if (value) return <Text style={styles.value}>{"ON"}</Text>;
-        else return <Text style={styles.value}>{"OFF"}</Text>;
+        if (value) return <PText>{"ON"}</PText>;
+        else return <PText>{"OFF"}</PText>;
       default:
         return null;
     }
@@ -36,12 +36,3 @@ export default class OutputAttribute extends React.Component<Props> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  value: {
-    fontSize: 18,
-    marginRight: 15,
-    textAlign: "right",
-    flex: 1
-  }
-});

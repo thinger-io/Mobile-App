@@ -15,7 +15,7 @@ export default class PText extends React.Component<Props> {
     const { style, children, ...props } = this.props;
     return (
       <Text
-        style={{ color: "black", fontSize: FONT_SIZE_P, ...style }}
+        style={[{ color: "black", fontSize: FONT_SIZE_P }, style]}
         {...props}
       >
         {children}

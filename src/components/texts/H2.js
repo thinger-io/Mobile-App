@@ -15,7 +15,7 @@ export default class H2Text extends React.Component<Props> {
     const { style, children, ...props } = this.props;
     return (
       <Text
-        style={{ color: "black", fontSize: FONT_SIZE_H2, ...style }}
+        style={[{ color: "black", fontSize: FONT_SIZE_H2 }, style]}
         {...props}
       >
         {children}

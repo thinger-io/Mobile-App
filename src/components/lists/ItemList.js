@@ -4,6 +4,7 @@ import * as React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FONT_SIZE_P, PADDING } from "../../constants/ThingerStyles";
 import { DARK_BLUE, DIVIDER_COLOR } from "../../constants/ThingerColors";
+import PText from "../texts/P";
 
 type Props = {
   name: string,
@@ -18,7 +19,7 @@ export default class ItemList extends React.Component<Props> {
 
     return (
       <View style={[styles.container, style]}>
-        <Text style={styles.id}>{name}</Text>
+        <PText style={styles.id}>{name}</PText>
         <View style={styles.valueContainer}>{value}</View>
       </View>
     );
@@ -52,8 +53,6 @@ const styles = StyleSheet.create({
     paddingVertical: PADDING
   },
   id: {
-    fontSize: FONT_SIZE_P,
-    color: DARK_BLUE,
     paddingRight: PADDING
   },
   valueContainer: {

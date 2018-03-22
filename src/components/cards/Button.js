@@ -2,12 +2,12 @@
 
 import {
   ActivityIndicator,
-  Text,
   TouchableOpacity,
   View,
   StyleSheet
 } from "react-native";
 import React from "react";
+import PText from "../texts/P";
 
 type Props = {
   onClick: () => any,
@@ -30,14 +30,14 @@ export default class CardButton extends React.Component<Props> {
           <ActivityIndicator size="small" color="#000000" />
         ) : (
           <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-            <Text
+            <PText
               style={{
                 marginLeft: 5,
                 fontSize: 18
               }}
             >
               {text}
-            </Text>
+            </PText>
           </View>
         )}
       </TouchableOpacity>

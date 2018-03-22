@@ -7,7 +7,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
-import {COLOR_TEXT} from "../../constants/ThingerColors";
+import { COLOR_TEXT } from "../../constants/ThingerColors";
 
 type Props = React$ElementProps<typeof Text>;
 

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 2 },
     shadowColor: "black",
     shadowOpacity: 0.4,
-    shadowRadius: 3,
+    shadowRadius: 3
   },
   body: {
     padding: PADDING

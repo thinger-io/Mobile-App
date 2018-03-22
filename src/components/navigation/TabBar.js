@@ -42,9 +42,14 @@ export default class TabBar extends React.Component<Props> {
                     <Icon
                       name={icon}
                       size={20}
-                      style={{ color: COLOR_TAB_BAR_INACTIVE, paddingBottom: 3 }}
+                      style={{
+                        color: COLOR_TAB_BAR_INACTIVE,
+                        paddingBottom: 3
+                      }}
                     />,
-                    <Text style={{ color: COLOR_TAB_BAR_INACTIVE }}>{title}</Text>
+                    <Text style={{ color: COLOR_TAB_BAR_INACTIVE }}>
+                      {title}
+                    </Text>
                   ]}
             </TouchableOpacity>
           );

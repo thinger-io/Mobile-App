@@ -4,7 +4,10 @@ import React from "react";
 import { StyleSheet, Switch, TextInput } from "react-native";
 import AttributeView from "./Attribute";
 import type { Attribute } from "../../types/Attribute";
-import {COLOR_TEXT, COLOR_TEXT_PLACEHOLDER} from "../../constants/ThingerColors";
+import {
+  COLOR_TEXT,
+  COLOR_TEXT_PLACEHOLDER
+} from "../../constants/ThingerColors";
 
 type Props = {
   id: string,

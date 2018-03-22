@@ -4,6 +4,7 @@ import React from "react";
 import { StyleSheet, Switch, TextInput } from "react-native";
 import AttributeView from "./Attribute";
 import type { Attribute } from "../../types/Attribute";
+import {COLOR_TEXT, COLOR_TEXT_PLACEHOLDER} from "../../constants/ThingerColors";
 
 type Props = {
   id: string,
@@ -22,6 +23,7 @@ export default class InputAttribute extends React.Component<Props> {
           <TextInput
             underlineColorAndroid={"transparent"}
             style={styles.input}
+            placeholderTextColor={COLOR_TEXT_PLACEHOLDER}
             value={inputValue}
             placeholder={value ? value : id}
             onChangeText={text => onChange(id, text)}
@@ -32,6 +34,7 @@ export default class InputAttribute extends React.Component<Props> {
           <TextInput
             underlineColorAndroid={"transparent"}
             style={styles.input}
+            placeholderTextColor={COLOR_TEXT_PLACEHOLDER}
             keyboardType="numeric"
             value={inputValue}
             placeholder={value !== undefined ? value.toString() : id}
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "right",
     backgroundColor: "#F5F5F5",
-    color: "black",
+    color: COLOR_TEXT,
     borderRadius: 10,
     padding: 5
   }

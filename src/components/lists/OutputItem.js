@@ -2,8 +2,9 @@
 
 import React from "react";
 import ItemList from "./ItemList";
-import { StyleSheet, Text } from "react-native";
-import { FONT_SIZE_P } from "../../constants/ThingerStyles";
+import { StyleSheet } from "react-native";
+import {COLOR_TEXT_INACTIVE} from "../../constants/ThingerColors";
+import PText from "../texts/P";
 
 type Props = {
   name: string,
@@ -15,7 +16,7 @@ export default class OutputItem extends React.Component<Props> {
     const { name, value } = this.props;
 
     return (
-      <ItemList name={name} value={<Text style={styles.value}>{value}</Text>} />
+      <ItemList name={name} value={<PText style={styles.value}>{value}</PText>} />
     );
   }
 }
@@ -23,7 +24,6 @@ export default class OutputItem extends React.Component<Props> {
 const styles = StyleSheet.create({
   value: {
     textAlign: "right",
-    color: "gray",
-    fontSize: FONT_SIZE_P
+    color: COLOR_TEXT_INACTIVE,
   }
 });

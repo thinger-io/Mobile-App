@@ -5,7 +5,7 @@ import type { DeviceAction } from "../actions/device";
 import type { DevicesState } from "../types/State";
 
 /* For testing in simulator without Camera */
-const initialState: DevicesState = {
+const initialStateTest: DevicesState = {
   "5a33c4474391fbe37d5ec9e6": {
     dev: "deviceC",
     jti: "5a33c4474391fbe37d5ec9e6",
@@ -22,7 +22,7 @@ const initialState: DevicesState = {
   }
 };
 
-// const initialState: DevicesState = {};
+const initialState: DevicesState = {};
 
 export default function devices(
   state: DevicesState = initialState,

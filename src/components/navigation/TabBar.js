@@ -5,8 +5,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { PADDING } from "../../constants/ThingerStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
-  COLOR_ACTIVE,
-  COLOR_INACTIVE,
+  COLOR_TAB_BAR_ACTIVE,
+  COLOR_TAB_BAR_INACTIVE,
   DIVIDER_COLOR
 } from "../../constants/ThingerColors";
 import type { Chart } from "../../types/Chart";
@@ -34,17 +34,17 @@ export default class TabBar extends React.Component<Props> {
                     <Icon
                       name={icon}
                       size={22}
-                      style={{ color: COLOR_ACTIVE, paddingBottom: 3 }}
+                      style={{ color: COLOR_TAB_BAR_ACTIVE, paddingBottom: 3 }}
                     />,
-                    <Text style={{ color: COLOR_ACTIVE }}>{title}</Text>
+                    <Text style={{ color: COLOR_TAB_BAR_ACTIVE }}>{title}</Text>
                   ]
                 : [
                     <Icon
                       name={icon}
                       size={20}
-                      style={{ color: COLOR_INACTIVE, paddingBottom: 3 }}
+                      style={{ color: COLOR_TAB_BAR_INACTIVE, paddingBottom: 3 }}
                     />,
-                    <Text style={{ color: COLOR_INACTIVE }}>{title}</Text>
+                    <Text style={{ color: COLOR_TAB_BAR_INACTIVE }}>{title}</Text>
                   ]}
             </TouchableOpacity>
           );

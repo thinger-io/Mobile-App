@@ -9,6 +9,10 @@ export const LIGHT_PINK: string = "#F48FB1";
 
 export const INPUT_COLOR: string = "#888";
 export const DIVIDER_COLOR: string = "#e1e1e1";
-export const COLOR_ACTIVE: string = DARK_BLUE;
-export const COLOR_INACTIVE: string = "#b4b4b4";
-export const COLOR_BACKGROUND: string = "#f0f0f0";
+export const COLOR_TAB_BAR_ACTIVE: string = DARK_BLUE;
+export const COLOR_TAB_BAR_INACTIVE: string = "#b4b4b4";
+export const COLOR_BACKGROUND: string = "#EFEFF4";
+export const COLOR_TEXT: string = "#000000";
+export const COLOR_TEXT_INPUT: string = "#000000";
+export const COLOR_TEXT_INACTIVE: string = "#818187";
+export const COLOR_TEXT_PLACEHOLDER: string = "#C7C7CD";

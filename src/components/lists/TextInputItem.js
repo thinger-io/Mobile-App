@@ -4,7 +4,7 @@ import React from "react";
 import ItemList from "./ItemList";
 import { StyleSheet, TextInput } from "react-native";
 import { FONT_SIZE_P } from "../../constants/ThingerStyles";
-import { DARK_BLUE } from "../../constants/ThingerColors";
+import {COLOR_TEXT_INPUT, COLOR_TEXT_PLACEHOLDER, DARK_BLUE} from "../../constants/ThingerColors";
 
 type Props = {
   name: string,
@@ -24,6 +24,7 @@ export default class TextInputItem extends React.Component<Props> {
           <TextInput
             underlineColorAndroid={"transparent"}
             style={styles.value}
+            placeholderTextColor={COLOR_TEXT_PLACEHOLDER}
             value={value}
             placeholder={placeholder}
             onChangeText={onChangeText}
@@ -37,7 +38,7 @@ export default class TextInputItem extends React.Component<Props> {
 const styles = StyleSheet.create({
   value: {
     fontSize: FONT_SIZE_P,
-    color: DARK_BLUE,
+    color: COLOR_TEXT_INPUT,
     textAlign: "right",
     padding: 0
   }

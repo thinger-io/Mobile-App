@@ -11,7 +11,7 @@ import {
   VictoryGroup,
   VictoryLine
 } from "victory-native";
-import { dateToString } from "../../utils/dates";
+import { getMinutes, getSeconds } from "../../utils/dates";
 import { calculateDomain } from "../../utils/charts";
 
 type Props = {
@@ -94,8 +94,9 @@ export default class extends React.Component<Props> {
             ticks: { size: 10, stroke: "white" }
           }}
           tickFormat={timestamp => {
-            const hour = dateToString(timestamp);
-            return hour.slice(-5, -3) + "'" + hour.slice(-2) + '"';
+            const minutes = getMinutes(timestamp);
+            const seconds = getSeconds(timestamp);
+            return minutes + "'" + seconds + '"';
           }}
         />
         <VictoryAxis

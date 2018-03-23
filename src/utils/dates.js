@@ -3,7 +3,12 @@ export function timestampToString(timestamp) {
   return date.toLocaleString();
 }
 
-export function dateToString(value) {
-  const date = new Date(value);
-  return date.toLocaleTimeString();
+export function getSeconds(timestamp) {
+  const date = new Date(timestamp);
+  return ("0" + date.getSeconds().toString()).slice(-2);
+}
+
+export function getMinutes(timestamp) {
+  const date = new Date(timestamp);
+  return ("0" + date.getMinutes().toString()).slice(-2);
 }

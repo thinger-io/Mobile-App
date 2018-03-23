@@ -46,13 +46,13 @@ type Props = {
   onUnlockAttribute: (key: string, chart: string) => Dispatch,
   onInit: (device: Device, resource: string) => Dispatch,
   onRefresh: (device: Device, resource: string) => Dispatch,
-  onFinish: (refreshInterval: number) => Dispatch,
+  onFinish: (refreshInterval: IntervalID) => Dispatch,
   onRestart: () => Dispatch
 };
 
 type State = {
   type: Chart,
-  refreshInterval: ?number
+  refreshInterval: ?IntervalID
 };
 
 class ChartScreen extends React.Component<Props, State> {

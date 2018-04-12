@@ -2,7 +2,7 @@
 
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import {FONT_SIZE_H1, MARGIN, PADDING} from "../../constants/ThingerStyles";
+import {FONT_SIZE_H1, FONT_SIZE_H2, PADDING} from "../../constants/ThingerStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
 import { DARK_BLUE } from "../../constants/ThingerColors";
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     paddingRight: PADDING * 2
   },
   title: {
-    fontSize: FONT_SIZE_H1,
+    fontSize: FONT_SIZE_H2,
     color: "white",
     flex: 3,
     textAlign: "center"

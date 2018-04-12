@@ -74,7 +74,7 @@ class DevicesScreen extends React.Component<Props> {
       <Screen
         navigationBar={
           <NavigationBar
-            title={"Devices"}
+            title={"Thinger.io"}
             main={true}
             button={{
               icon: "qrcode",

@@ -1,6 +1,10 @@
 //@flow
 
-import { addNavigationHelpers, StackNavigator } from "react-navigation";
+import {
+  addNavigationHelpers,
+  StackNavigator,
+  TabNavigator
+} from "react-navigation";
 import { connect } from "react-redux";
 import React from "react";
 import Devices from "../screens/Devices";
@@ -11,10 +15,45 @@ import Resources from "../screens/Resources";
 import DeviceInfo from "../screens/DeviceInfo";
 import Chart from "../screens/Chart";
 import ShowQR from "../screens/ShowQR";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import {COLOR_TAB_BAR_ACTIVE, COLOR_TAB_BAR_INACTIVE} from "../../constants/ThingerColors";
+import Login from "../screens/Login";
+
+const MainRoutes = TabNavigator(
+  {
+    UserDevices: {
+      screen: Login,
+      navigationOptions: {
+        title: "User",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="person" size={22} style={{ color: tintColor }} />
+        )
+      }
+    },
+    ScannedDevices: {
+      screen: Devices,
+      navigationOptions: {
+        title: "Scanned",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="devices-other" size={22} style={{ color: tintColor }} />
+        )
+      }
+    }
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: COLOR_TAB_BAR_ACTIVE,
+      inactiveTintColor: COLOR_TAB_BAR_INACTIVE,
+    },
+    tabBarPosition: 'bottom',
+    animationEnabled: false,
+    swipeEnabled: false,
+  }
+);
 
 export const Routes = StackNavigator(
   {
-    Main: { screen: Devices, key: "Main" },
+    Main: { screen: MainRoutes, key: "Main" },
     Scanner: { screen: QRScanner },
     Device: { screen: Resources },
     Info: { screen: DeviceInfo },

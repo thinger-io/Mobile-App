@@ -8,7 +8,7 @@ import type { NavState } from "../types/State";
 const { getActionForPathAndParams, getStateForAction } = Routes.router;
 
 const initialState: NavState = getStateForAction(
-  getActionForPathAndParams("Main")
+  getActionForPathAndParams("Main/UserDevices")
 );
 
 export default function lockedAttributes(

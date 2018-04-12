@@ -6,6 +6,7 @@ import type { Chart } from "./Chart";
 import type { Orientation } from "./Orientation";
 
 export type State = {
+  login: LoginState,
   devices: DevicesState,
   resources: ResourcesState,
   selectedDevice: SelectedDeviceState,
@@ -14,6 +15,12 @@ export type State = {
   lockedAttributes: LockedAttributesState,
   nav: NavState
 };
+
+export type LoginState = {
+  user: ?string,
+  password: ?string,
+  isLogged: boolean
+}
 
 export type DevicesState = {
   [device: string]: Device

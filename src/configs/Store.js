@@ -13,6 +13,7 @@ import streaming from "../reducers/streaming";
 import orientation from "../reducers/orientation";
 import nav from "../reducers/nav";
 import screenTracking from "../middlewares/screenTracking";
+import login from "../reducers/login";
 
 const config = {
   key: "root",
@@ -27,6 +28,7 @@ const navMiddleware = createReactNavigationReduxMiddleware(
 
 function configureStore() {
   const reducer = persistCombineReducers(config, {
+    login,
     devices,
     selectedDevice,
     resources,

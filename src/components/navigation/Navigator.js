@@ -21,6 +21,7 @@ import {
   COLOR_TAB_BAR_INACTIVE
 } from "../../constants/ThingerColors";
 import UserDevices from "../screens/User";
+import UserSettings from "../screens/UserSettings";
 
 const MainRoutes = TabNavigator(
   {
@@ -58,6 +59,7 @@ export const Routes = StackNavigator(
   {
     Main: { screen: MainRoutes, key: "Main" },
     Scanner: { screen: QRScanner },
+    Settings: { screen: UserSettings },
     Device: { screen: Resources },
     Info: { screen: DeviceInfo },
     Chart: { screen: Chart },

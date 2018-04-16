@@ -13,6 +13,7 @@ import NavigationBar from "../navigation/NavigationBar";
 import type { LoginState } from "../../types/State";
 import { logOut } from "../../actions/login";
 import type { Dispatch } from "../../types/Dispatch";
+import {goBack} from "../../actions/nav";
 
 type Props = {
   login: LoginState,
@@ -59,7 +60,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogOut: () => dispatch(logOut())
+    onLogOut: () => {
+      dispatch(logOut());
+      return dispatch(goBack());
+    }
   };
 };
 

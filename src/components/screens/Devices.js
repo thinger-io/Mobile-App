@@ -23,6 +23,8 @@ type Props = {
   devices: Array<Device>,
   onDeviceClick: (device: Device) => Dispatch,
   onAddDevicePress: () => Dispatch,
+  onSettingsPress: () => Dispatch,
+  isUserDevices: boolean,
   isFetching: boolean
 };
 
@@ -73,20 +75,27 @@ class DevicesScreen extends React.Component<Props> {
   }
 
   render() {
+    const {
+      isFetching,
+      isUserDevices,
+      onAddDevicePress,
+      onSettingsPress
+    } = this.props;
+
     return (
       <Screen
         navigationBar={
           <NavigationBar
-            title={"Thinger.io"}
+            title={"thinger.io"}
             main={true}
             button={{
-              icon: "qrcode",
-              onPress: this.props.onAddDevicePress
+              icon: isUserDevices ? "cog" : "qrcode",
+              onPress: isUserDevices ? onSettingsPress : onAddDevicePress
             }}
           />
         }
       >
-        {this.props.isFetching ? (
+        {isFetching ? (
           <View
             style={{
               flex: 1,
@@ -107,16 +116,17 @@ class DevicesScreen extends React.Component<Props> {
 const mapStateToProps = state => {
   const { routes: tabs, index: selectedTab } = state.nav.routes[0];
   const currentTab = tabs[selectedTab].routeName;
+  const isUserDevices: boolean = currentTab === "UserDevices";
 
   return {
-    devices:
-      currentTab === "UserDevices"
-        ? (Object.values(state.devices): any).filter(device =>
-            state.userDevices.includes(device.id)
-          )
-        : (Object.values(state.devices): any).filter(
-            device => !state.userDevices.includes(device.id)
-          ),
+    devices: isUserDevices
+      ? (Object.values(state.devices): any).filter(device =>
+          state.userDevices.includes(device.id)
+        )
+      : (Object.values(state.devices): any).filter(
+          device => !state.userDevices.includes(device.id)
+        ),
+    isUserDevices,
     isFetching: state.login.isFetching
   };
 };
@@ -129,6 +139,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(getResourcesFromApi(device));
       dispatch(navigate("Device"));
     },
+    onSettingsPress: () => dispatch(navigate("Settings")),
     onAddDevicePress: () => dispatch(navigate("Scanner"))
   };
 };

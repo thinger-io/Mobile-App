@@ -1,7 +1,7 @@
 //@flow
 
 import { connect } from "react-redux";
-import { FlatList, View, Image } from "react-native";
+import { FlatList, View, Image, ActivityIndicator } from "react-native";
 import DeviceComponent from "../devices/DeviceComponent";
 import React from "react";
 import { MARGIN } from "../../constants/ThingerStyles";
@@ -17,11 +17,13 @@ import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
 import ID from "../../constants/GoogleAnalytics";
 import H1Text from "../texts/H1";
 import H2Text from "../texts/H2";
+import { DARK_BLUE } from "../../constants/ThingerColors";
 
 type Props = {
   devices: Array<Device>,
   onDeviceClick: (device: Device) => Dispatch,
-  onAddDevicePress: () => Dispatch
+  onAddDevicePress: () => Dispatch,
+  isFetching: boolean
 };
 
 class DevicesScreen extends React.Component<Props> {
@@ -44,10 +46,11 @@ class DevicesScreen extends React.Component<Props> {
 
   renderContent() {
     const { devices, onDeviceClick } = this.props;
+
     return devices.length ? (
       <FlatList
         data={devices}
-        keyExtractor={item => item.jti}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <DeviceComponent
             name={item.name ? item.name : item.dev}
@@ -83,15 +86,38 @@ class DevicesScreen extends React.Component<Props> {
           />
         }
       >
-        {this.renderContent()}
+        {this.props.isFetching ? (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <ActivityIndicator size="large" color={DARK_BLUE} />
+          </View>
+        ) : (
+          this.renderContent()
+        )}
       </Screen>
     );
   }
 }
 
 const mapStateToProps = state => {
+  const { routes: tabs, index: selectedTab } = state.nav.routes[0];
+  const currentTab = tabs[selectedTab].routeName;
+
   return {
-    devices: Object.values(state.devices)
+    devices:
+      currentTab === "UserDevices"
+        ? (Object.values(state.devices): any).filter(device =>
+            state.userDevices.includes(device.id)
+          )
+        : (Object.values(state.devices): any).filter(
+            device => !state.userDevices.includes(device.id)
+          ),
+    isFetching: state.login.isFetching
   };
 };
 
@@ -99,7 +125,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onDeviceClick: device => {
       dispatch(removeAllResources());
-      dispatch(selectDevice(device.jti));
+      dispatch(selectDevice(device.id));
       dispatch(getResourcesFromApi(device));
       dispatch(navigate("Device"));
     },

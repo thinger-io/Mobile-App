@@ -33,11 +33,11 @@ class ShowQRScreen extends React.Component<Props> {
 }
 
 const mapStateToProps = state => {
-  const jti = state.selectedDevice;
+  const id = state.selectedDevice;
 
   return {
-    name: state.devices[jti].dev,
-    jwt: state.devices[jti].jwt
+    name: state.devices[id].dev,
+    jwt: state.devices[id].jwt
   };
 };
 

@@ -3,11 +3,15 @@
 import update from "immutability-helper";
 import type { LoginState } from "../types/State";
 import type { LoginAction } from "../actions/login";
+import { THINGER_SERVER } from "../constants/ThingerConstants";
 
 const initialState: LoginState = {
   user: undefined,
   password: undefined,
-  isLogged: false
+  server: THINGER_SERVER,
+  isLogged: false,
+  accessToken: undefined,
+  isFetching: false
 };
 
 export default function devices(
@@ -22,6 +26,32 @@ export default function devices(
     case "LOGIN_SET_PASSWORD":
       return update(state, {
         password: { $set: action.password }
+      });
+    case "LOGIN_SET_SERVER":
+      return update(state, {
+        server: { $set: action.server }
+      });
+    case "REQUEST_SESSION":
+      return update(state, {
+        isFetching: { $set: true }
+      });
+    case "RECEIVE_SESSION":
+      return update(state, {
+        accessToken: { $set: action.accessToken },
+        isLogged: { $set: true },
+        isFetching: { $set: false }
+      });
+    case "RECEIVE_SESSION_FAILURE":
+      return update(state, {
+        isFetching: { $set: false }
+      });
+    case "LOGIN_REQUEST_DEVICES":
+      return update(state, {
+        isFetching: { $set: true }
+      });
+    case "LOGIN_RECEIVE_DEVICES":
+      return update(state, {
+        isFetching: { $set: false }
       });
     default:
       return state;

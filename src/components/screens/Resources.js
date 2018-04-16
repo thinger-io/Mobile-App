@@ -170,10 +170,10 @@ class ResourcesScreen extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => {
-  const jti = state.selectedDevice;
+  const id = state.selectedDevice;
 
   return {
-    device: state.devices[jti],
+    device: state.devices[id],
     resources: state.resources
   };
 };

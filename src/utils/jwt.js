@@ -15,7 +15,7 @@ export function parseJWT(jwt: string) {
     return {
       [json.jti]: {
         dev: json.dev,
-        jti: json.jti,
+        id: json.jti,
         usr: json.usr,
         iat: json.iat,
         exp: json.exp,

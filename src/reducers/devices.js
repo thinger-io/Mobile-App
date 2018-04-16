@@ -8,7 +8,7 @@ import type { DevicesState } from "../types/State";
 const initialStateTest: DevicesState = {
   "5a33c4474391fbe37d5ec9e6": {
     dev: "deviceC",
-    jti: "5a33c4474391fbe37d5ec9e6",
+    id: "5a33c4474391fbe37d5ec9e6",
     usr: "jt",
     iat: 1513342023,
     jwt:
@@ -25,7 +25,7 @@ const initialStateTest: DevicesState = {
 const initialState: DevicesState = {};
 
 export default function devices(
-  state: DevicesState = initialState,
+  state: DevicesState = initialStateTest,
   action: DeviceAction
 ) {
   switch (action.type) {

@@ -2,10 +2,10 @@
 
 export type Device = {
   jwt: string,
-  jti: string,
+  id: string,
   dev: string,
   usr: string,
-  iat: number,
+  iat?: number,
   exp?: number,
   res?: Array<string>,
   name?: string,

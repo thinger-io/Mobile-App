@@ -25,7 +25,7 @@ import { THINGER_SERVER } from "../../constants/ThingerConstants";
 
 type Props = {
   device: Device,
-  removeDevice: (jti: string) => Dispatch,
+  removeDevice: (id: string) => Dispatch,
   changeServer: (device: string, server: string) => Dispatch,
   onShowQR: () => Dispatch,
   changeName: (device: string, name: string) => Dispatch
@@ -47,7 +47,7 @@ class DeviceInfo extends React.Component<Props, State> {
   handleOnChangeText(text: string) {
     const { device, changeServer } = this.props;
     this.setState({ server: text });
-    changeServer(device.jti, text);
+    changeServer(device.id, text);
   }
 
   render() {
@@ -61,7 +61,7 @@ class DeviceInfo extends React.Component<Props, State> {
                 name={"Name"}
                 value={device.name ? device.name : ""}
                 placeholder={device.dev}
-                onChangeText={text => changeName(device.jti, text)}
+                onChangeText={text => changeName(device.id, text)}
               />
               <OutputItem name={"Device"} value={device.dev} />
               <OutputItem name={"User"} value={device.usr} />
@@ -86,7 +86,7 @@ class DeviceInfo extends React.Component<Props, State> {
               <RoundedButton
                 color={"red"}
                 text="Remove"
-                onPress={() => removeDevice(device.jti)}
+                onPress={() => removeDevice(device.id)}
               />
             </CenterView>
           </ScrollView>
@@ -97,17 +97,17 @@ class DeviceInfo extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => {
-  const jti = state.selectedDevice;
+  const id = state.selectedDevice;
 
   return {
-    device: state.devices[jti]
+    device: state.devices[id]
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeDevice: jti => {
-      dispatch(removeDevice(jti));
+    removeDevice: id => {
+      dispatch(removeDevice(id));
       dispatch(goToMain());
     },
     changeServer: (device, server) => dispatch(setDeviceServer(device, server)),

@@ -249,10 +249,10 @@ class ChartScreen extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => {
-  const jti = state.selectedDevice;
+  const id = state.selectedDevice;
   const resource = state.selectedResource;
   return {
-    device: state.devices[jti],
+    device: state.devices[id],
     resource,
     data: state.resources[resource].data.out,
     streaming: state.streaming,

@@ -8,6 +8,8 @@ import type { Orientation } from "./Orientation";
 export type State = {
   login: LoginState,
   devices: DevicesState,
+  userDevices: Array<string>,
+  scannedDevices: Array<string>,
   resources: ResourcesState,
   selectedDevice: SelectedDeviceState,
   selectedResource: SelectedResourceState,
@@ -19,8 +21,11 @@ export type State = {
 export type LoginState = {
   user: ?string,
   password: ?string,
-  isLogged: boolean
-}
+  server: ?string,
+  accessToken: ?string,
+  isLogged: boolean,
+  isFetching: boolean
+};
 
 export type DevicesState = {
   [device: string]: Device

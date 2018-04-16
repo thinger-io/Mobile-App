@@ -32,6 +32,21 @@ type postValue =
     };
 
 export default class API {
+  static login(server: string, username: string, password: string) {
+    return fetch(`${server}/oauth/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json, text/plain, */*"
+      },
+      body: "grant_type=password&username=" + username + "&password=" + password
+    });
+  }
+
+  static getUserDeviceList(server: string, user: string, jwt: string) {
+    return fetch(`${server}/v1/users/${user}/devices`, generateGETHeader(jwt));
+  }
+
   static getResources(
     server: string,
     user: string,

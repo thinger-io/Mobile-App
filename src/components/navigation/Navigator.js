@@ -16,13 +16,16 @@ import DeviceInfo from "../screens/DeviceInfo";
 import Chart from "../screens/Chart";
 import ShowQR from "../screens/ShowQR";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import {COLOR_TAB_BAR_ACTIVE, COLOR_TAB_BAR_INACTIVE} from "../../constants/ThingerColors";
-import Login from "../screens/Login";
+import {
+  COLOR_TAB_BAR_ACTIVE,
+  COLOR_TAB_BAR_INACTIVE
+} from "../../constants/ThingerColors";
+import UserDevices from "../screens/User";
 
 const MainRoutes = TabNavigator(
   {
     UserDevices: {
-      screen: Login,
+      screen: UserDevices,
       navigationOptions: {
         title: "User",
         tabBarIcon: ({ tintColor }) => (
@@ -43,11 +46,11 @@ const MainRoutes = TabNavigator(
   {
     tabBarOptions: {
       activeTintColor: COLOR_TAB_BAR_ACTIVE,
-      inactiveTintColor: COLOR_TAB_BAR_INACTIVE,
+      inactiveTintColor: COLOR_TAB_BAR_INACTIVE
     },
-    tabBarPosition: 'bottom',
+    tabBarPosition: "bottom",
     animationEnabled: false,
-    swipeEnabled: false,
+    swipeEnabled: false
   }
 );
 
@@ -69,6 +72,7 @@ export const Routes = StackNavigator(
 );
 
 type Props = {
+  isLogged: boolean,
   dispatch: Dispatch,
   nav: any
 };
@@ -82,7 +86,8 @@ class Navigator extends React.Component<Props> {
         navigation={addNavigationHelpers({
           dispatch,
           state: nav,
-          addListener
+          addListener,
+          isLogged: this.props.isLogged
         })}
       />
     );
@@ -91,6 +96,7 @@ class Navigator extends React.Component<Props> {
 
 const mapStateToProps = state => {
   return {
+    isLogged: state.login.isLogged,
     nav: state.nav
   };
 };

@@ -14,11 +14,12 @@ import orientation from "../reducers/orientation";
 import nav from "../reducers/nav";
 import screenTracking from "../middlewares/screenTracking";
 import login from "../reducers/login";
+import userDevices from "../reducers/userDevices";
 
 const config = {
   key: "root",
   storage,
-  whitelist: ["devices"]
+  whitelist: ["devices", "userDevices", "login"]
 };
 
 const navMiddleware = createReactNavigationReduxMiddleware(
@@ -30,6 +31,7 @@ function configureStore() {
   const reducer = persistCombineReducers(config, {
     login,
     devices,
+    userDevices,
     selectedDevice,
     resources,
     selectedResource,

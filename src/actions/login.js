@@ -17,7 +17,8 @@ type REQUEST_SESSION = {
 };
 type RECEIVE_SESSION = {
   type: "RECEIVE_SESSION",
-  accessToken: string
+  accessToken: string,
+  refreshToken: string
 };
 type RECEIVE_SESSION_FAILURE = {
   type: "RECEIVE_SESSION_FAILURE"
@@ -28,6 +29,9 @@ type REQUEST_DEVICES = {
 type RECEIVE_DEVICES = {
   type: "LOGIN_RECEIVE_DEVICES"
 };
+type LOG_OUT = {
+  type: "LOG_OUT"
+};
 
 export type LoginAction =
   | SET_USER
@@ -37,7 +41,8 @@ export type LoginAction =
   | RECEIVE_SESSION
   | RECEIVE_SESSION_FAILURE
   | REQUEST_DEVICES
-  | RECEIVE_DEVICES;
+  | RECEIVE_DEVICES
+  | LOG_OUT;
 
 export function setUser(user: string): SET_USER {
   return { type: "LOGIN_SET_USER", user };
@@ -55,8 +60,11 @@ export function requestSession(): REQUEST_SESSION {
   return { type: "REQUEST_SESSION" };
 }
 
-export function receiveSession(accessToken: string): RECEIVE_SESSION {
-  return { type: "RECEIVE_SESSION", accessToken };
+export function receiveSession(
+  accessToken: string,
+  refreshToken: string
+): RECEIVE_SESSION {
+  return { type: "RECEIVE_SESSION", accessToken, refreshToken };
 }
 
 export function receiveSessionFailure(): RECEIVE_SESSION_FAILURE {
@@ -69,4 +77,8 @@ export function requestDevices(): REQUEST_DEVICES {
 
 export function receiveDevices(): RECEIVE_DEVICES {
   return { type: "LOGIN_RECEIVE_DEVICES" };
+}
+
+export function logOut(): LOG_OUT {
+  return { type: "LOG_OUT" };
 }

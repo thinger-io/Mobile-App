@@ -23,6 +23,7 @@ export type LoginState = {
   password: ?string,
   server: ?string,
   accessToken: ?string,
+  refreshToken: ?string,
   isLogged: boolean,
   isFetching: boolean
 };

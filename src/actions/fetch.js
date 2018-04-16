@@ -10,7 +10,14 @@ import {
   setDeviceState
 } from "./device";
 import { receiveResource, requestResource } from "./resource";
-import {receiveDevices, receiveSession, receiveSessionFailure, requestDevices, requestSession} from "./login";
+import {
+  logOut,
+  receiveDevices,
+  receiveSession,
+  receiveSessionFailure,
+  requestDevices,
+  requestSession
+} from "./login";
 import API from "../API/API";
 import type { Device } from "../types/Device";
 import type { ThunkAction } from "../types/Dispatch";
@@ -43,7 +50,7 @@ export function loginFromApi(
       const response = await API.login(server, username, password);
       if (response.status === 200) {
         const json = await response.json();
-        return dispatch(receiveSession(json.access_token));
+        return dispatch(receiveSession(json.access_token, json.refresh_token));
       } else {
         return dispatch(receiveSessionFailure());
       }
@@ -53,36 +60,74 @@ export function loginFromApi(
   };
 }
 
-export function getDevicesFromUser(
+export function refreshTokenFromApi(
+  server: string,
+  refreshToken: string
+): ThunkAction {
+  return async dispatch => {
+    try {
+      dispatch(requestSession());
+      const response = await API.refreshToken(server, refreshToken);
+      if (response.status === 200) {
+        const json = await response.json();
+        dispatch(receiveSession(json.access_token, json.refresh_token));
+      } else {
+        dispatch(logOut());
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+}
+
+export function getDevicesFromApi(
   server: string,
   username: string,
-  jwt: string
+  accessToken: string,
+  refreshToken: string
 ): ThunkAction {
   return async dispatch => {
     dispatch(requestDevices());
-    const userDevices = await API.getUserDeviceList(server, username, jwt);
-    const devices = await userDevices.json();
-    const promises = devices.map(device =>
-      dispatch(addDevice(
-        {
-          [device.device]: {
-            jwt,
-            id: device.device,
-            dev: device.device,
-            usr: username,
-            name: device.description,
-            isFetching: false,
-            isOnline: device.connection === "active",
-            isAuthorized: true,
+    const response = await API.getUserDeviceList(server, username, accessToken);
+    switch (response.status) {
+      case 200:
+        const devices = await response.json();
+        const promises = devices.map(device =>
+          dispatch(
+            addDevice(
+              {
+                [device.device]: {
+                  jwt: accessToken,
+                  id: device.device,
+                  dev: device.device,
+                  usr: username,
+                  name: device.description,
+                  isFetching: false,
+                  isOnline: device.connection === "active",
+                  isAuthorized: true,
+                  server,
+                  hasServerConnection: true
+                }
+              },
+              true
+            )
+          )
+        );
+        await Promise.all(promises);
+        return dispatch(receiveDevices());
+      case 401:
+        const refresh = await dispatch(
+          refreshTokenFromApi(server, refreshToken)
+        );
+        return dispatch(
+          getDevicesFromApi(
             server,
-            hasServerConnection: true
-          }
-        },
-        true
-      ))
-    );
-    await Promise.all(promises);
-    return dispatch(receiveDevices());
+            username,
+            refresh.accessToken,
+            refresh.refreshToken
+          )
+        );
+    }
   };
 }
 

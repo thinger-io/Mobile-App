@@ -43,6 +43,17 @@ export default class API {
     });
   }
 
+  static refreshToken(server: string, refreshToken: string) {
+    return fetch(`${server}/oauth/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json, text/plain, */*"
+      },
+      body: "grant_type=refresh_token&refresh_token=" + refreshToken
+    });
+  }
+
   static getUserDeviceList(server: string, user: string, jwt: string) {
     return fetch(`${server}/v1/users/${user}/devices`, generateGETHeader(jwt));
   }

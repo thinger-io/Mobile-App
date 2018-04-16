@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import React from "react";
 import Login from "./Login";
 import Devices from "./Devices";
-import { getDevicesFromUser } from "../../actions/fetch";
+import { getDevicesFromApi } from "../../actions/fetch";
 import type { Dispatch } from "../../types/Dispatch";
 import type { LoginState } from "../../types/State";
 
@@ -14,11 +14,10 @@ type Props = {
 };
 
 type State = {
-  isLogged: boolean,
-}
+  isLogged: boolean
+};
 
 class UserScreen extends React.Component<Props, State> {
-
   state = {
     isLogged: false
   };
@@ -26,16 +25,17 @@ class UserScreen extends React.Component<Props, State> {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!prevState.isLogged && nextProps.login.isLogged) {
       nextProps.dispatch(
-        getDevicesFromUser(
+        getDevicesFromApi(
           nextProps.login.server,
           nextProps.login.user,
-          nextProps.login.accessToken
+          nextProps.login.accessToken,
+          nextProps.login.refreshToken
         )
       );
       return {
         isLogged: true
-      }
-    }
+      };
+    } else if (!nextProps.login.isLogged) return { isLogged: false };
   }
 
   render() {

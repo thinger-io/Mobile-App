@@ -11,6 +11,7 @@ const initialState: LoginState = {
   server: THINGER_SERVER,
   isLogged: false,
   accessToken: undefined,
+  refreshToken: undefined,
   isFetching: false
 };
 
@@ -38,6 +39,7 @@ export default function devices(
     case "RECEIVE_SESSION":
       return update(state, {
         accessToken: { $set: action.accessToken },
+        refreshToken: { $set: action.refreshToken },
         isLogged: { $set: true },
         isFetching: { $set: false }
       });
@@ -53,6 +55,8 @@ export default function devices(
       return update(state, {
         isFetching: { $set: false }
       });
+    case "LOG_OUT":
+      return initialState;
     default:
       return state;
   }

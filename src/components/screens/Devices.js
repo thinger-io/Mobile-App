@@ -28,7 +28,6 @@ import { DARK_BLUE } from "../../constants/ThingerColors";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { parseJWT } from "../../utils/jwt";
-import DropdownAlert from "react-native-dropdownalert";
 import { ToastActionsCreators } from "react-native-redux-toast";
 
 type Props = {
@@ -45,8 +44,6 @@ type Props = {
 };
 
 class DevicesScreen extends React.Component<Props> {
-  alert: ?DropdownAlert;
-
   constructor(props) {
     super(props);
     new GoogleAnalyticsTracker(ID).trackScreenView("Main");
@@ -185,10 +182,6 @@ class DevicesScreen extends React.Component<Props> {
         ) : (
           this.renderContent()
         )}
-        <DropdownAlert
-          ref={alert => (this.alert = alert)}
-          replaceEnabled={false}
-        />
       </Screen>
     );
   }

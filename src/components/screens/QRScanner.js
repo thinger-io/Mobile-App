@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { Text, View, Platform } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import { PADDING } from "../../constants/ThingerStyles";
 import { parseJWT } from "../../utils/jwt";
@@ -13,29 +13,27 @@ import NavigationBar from "../navigation/NavigationBar";
 import { RNCamera } from "react-native-camera";
 import { DARK_BLUE } from "../../constants/ThingerColors";
 import { ToastActionsCreators } from "react-native-redux-toast";
-
-const DEFAULT_RATIO = "16:9";
+import type { Device } from "../../types/Device";
 
 type Props = {
   devices: Array<string>,
-  dispatch: Dispatch,
-  displayMessage: (message: string) => Dispatch,
+  addDevice: (device: Device) => Dispatch,
   displayError: (message: string) => Dispatch
 };
 
 type State = {
-  ratio: ?string
+  scanning: boolean
 };
 
 class QRScanner extends React.Component<Props, State> {
-  cam: ?RNCamera;
-
   state = {
-    ratio: undefined
+    scanning: false
   };
 
   handleOnBarCodeRead(data) {
-    const { dispatch, devices, displayError, displayMessage } = this.props;
+    const { devices, displayError, addDevice } = this.props;
+
+    this.setState({ scanning: true });
 
     try {
       const device = parseJWT(data.data);
@@ -43,44 +41,30 @@ class QRScanner extends React.Component<Props, State> {
       if (devices.includes(id)) {
         displayError("This device already exists");
       } else {
-        dispatch(addDevice(device, false));
-        displayMessage("Added!");
-        dispatch(goBack());
+        addDevice(device);
       }
+      setTimeout(() => this.setState({ scanning: false }), 1000);
     } catch (e) {
       displayError("This QR isn't a device");
-    }
-  }
-
-  async getPrimaryRatio(cam) {
-    if (Platform.OS === "android" && cam) {
-      const ratios: Array<string> = await cam.getSupportedRatiosAsync();
-      if (ratios.includes(DEFAULT_RATIO)) {
-        this.setState({ ratio: DEFAULT_RATIO });
-      }
+      setTimeout(() => this.setState({ scanning: false }), 1000);
     }
   }
 
   renderCamera() {
     return (
       <RNCamera
-        ref={ref => {
-          this.cam = ref;
-        }}
         style={{
           flex: 1,
           backgroundColor: "transparent"
         }}
         type={RNCamera.Constants.Type.back}
-        ratio={this.state.ratio}
-        onCameraReady={() => this.getPrimaryRatio(this.cam)}
         permissionDialogTitle={"Permission to use camera"}
         permissionDialogMessage={
           "We need your permission to use your camera phone"
         }
         barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
         onBarCodeRead={data => {
-          this.handleOnBarCodeRead(data);
+          if (!this.state.scanning) this.handleOnBarCodeRead(data);
         }}
       />
     );
@@ -113,8 +97,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    displayMessage: (message: string) =>
-      dispatch(ToastActionsCreators.displayInfo(message, 1000)),
+    addDevice: (device: Device) => {
+      dispatch(addDevice(device, false));
+      dispatch(ToastActionsCreators.displayInfo("Added!", 1000));
+      return dispatch(goBack());
+    },
     displayError: (message: string) =>
       dispatch(ToastActionsCreators.displayError(message, 1000))
   };

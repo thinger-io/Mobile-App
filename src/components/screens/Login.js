@@ -1,7 +1,13 @@
 //@flow
 
 import { connect } from "react-redux";
-import { ActivityIndicator, Image, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  View
+} from "react-native";
 import React from "react";
 import Screen from "../containers/Screen";
 import { navigate } from "../../actions/nav";
@@ -35,7 +41,8 @@ class LoginScreen extends React.Component<Props> {
   render() {
     return (
       <Screen>
-        <View
+        <KeyboardAvoidingView
+          behavior="padding"
           style={{
             flex: 1,
             backgroundColor: DARK_BLUE,
@@ -128,7 +135,7 @@ class LoginScreen extends React.Component<Props> {
               <H2Text>Login</H2Text>
             )}
           </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
       </Screen>
     );
   }
@@ -145,7 +152,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddDevicePress: () => dispatch(navigate("Scanner")),
+    onQRScannerPress: () => dispatch(navigate("Scanner")),
     onSetUser: user => dispatch(setUser(user)),
     onSetPassword: password => dispatch(setPassword(password)),
     onSetServer: user => dispatch(setUser(user)),

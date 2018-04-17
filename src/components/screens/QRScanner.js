@@ -3,7 +3,6 @@
 import React from "react";
 import { Text, View, Platform } from "react-native";
 import { connect } from "react-redux";
-import DropdownAlert from "react-native-dropdownalert";
 import { PADDING } from "../../constants/ThingerStyles";
 import { parseJWT } from "../../utils/jwt";
 import Screen from "../containers/Screen";
@@ -13,12 +12,15 @@ import { goBack } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
 import { RNCamera } from "react-native-camera";
 import { DARK_BLUE } from "../../constants/ThingerColors";
+import { ToastActionsCreators } from "react-native-redux-toast";
 
 const DEFAULT_RATIO = "16:9";
 
 type Props = {
   devices: Array<string>,
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  displayMessage: (message: string) => Dispatch,
+  displayError: (message: string) => Dispatch
 };
 
 type State = {
@@ -26,7 +28,6 @@ type State = {
 };
 
 class QRScanner extends React.Component<Props, State> {
-  alert: ?DropdownAlert;
   cam: ?RNCamera;
 
   state = {
@@ -34,20 +35,20 @@ class QRScanner extends React.Component<Props, State> {
   };
 
   handleOnBarCodeRead(data) {
-    const { dispatch, devices } = this.props;
+    const { dispatch, devices, displayError, displayMessage } = this.props;
 
     try {
       const device = parseJWT(data.data);
       const id = Object.keys(device)[0];
-      if (devices.includes(id) && this.alert) {
-        this.alert.alertWithType("warn", "Ups!", "This device already exists");
-        return;
+      if (devices.includes(id)) {
+        displayError("This device already exists");
+      } else {
+        dispatch(addDevice(device, false));
+        displayMessage("Added!");
+        dispatch(goBack());
       }
-      dispatch(addDevice(device, false));
-      dispatch(goBack());
     } catch (e) {
-      if (this.alert)
-        this.alert.alertWithType("error", "Ups!", "This QR isn't a device");
+      displayError("This QR isn't a device");
     }
   }
 
@@ -99,15 +100,6 @@ class QRScanner extends React.Component<Props, State> {
         >
           <Text style={{ color: "white" }}>Scan your device token QR</Text>
         </View>
-        <DropdownAlert
-          ref={alert => (this.alert = alert)}
-          replaceEnabled={false}
-          defaultContainer={{
-            padding: 8,
-            paddingTop: 10,
-            flexDirection: "row"
-          }}
-        />
       </Screen>
     );
   }
@@ -119,4 +111,13 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(QRScanner);
+const mapDispatchToProps = dispatch => {
+  return {
+    displayMessage: (message: string) =>
+      dispatch(ToastActionsCreators.displayInfo(message, 1000)),
+    displayError: (message: string) =>
+      dispatch(ToastActionsCreators.displayError(message, 1000))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(QRScanner);

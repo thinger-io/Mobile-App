@@ -1,14 +1,21 @@
 //@flow
 
 import { connect } from "react-redux";
-import { FlatList, View, Image, ActivityIndicator } from "react-native";
+import {
+  FlatList,
+  View,
+  Image,
+  ActivityIndicator,
+  StyleSheet,
+  Clipboard
+} from "react-native";
 import DeviceComponent from "../devices/DeviceComponent";
 import React from "react";
 import { MARGIN } from "../../constants/ThingerStyles";
 import Screen from "../containers/Screen";
 import { navigate } from "../../actions/nav";
 import { getResourcesFromApi } from "../../actions/fetch";
-import { selectDevice } from "../../actions/device";
+import { addDevice, selectDevice } from "../../actions/device";
 import { removeAllResources } from "../../actions/resource";
 import type { Dispatch } from "../../types/Dispatch";
 import NavigationBar from "../navigation/NavigationBar";
@@ -18,17 +25,28 @@ import ID from "../../constants/GoogleAnalytics";
 import H1Text from "../texts/H1";
 import H2Text from "../texts/H2";
 import { DARK_BLUE } from "../../constants/ThingerColors";
+import ActionButton from "react-native-action-button";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { parseJWT } from "../../utils/jwt";
+import DropdownAlert from "react-native-dropdownalert";
+import { ToastActionsCreators } from "react-native-redux-toast";
 
 type Props = {
+  ids: Array<string>,
   devices: Array<Device>,
   onDeviceClick: (device: Device) => Dispatch,
-  onAddDevicePress: () => Dispatch,
+  onQRScannerPress: () => Dispatch,
+  onAddDevice: (device: Device) => Dispatch,
   onSettingsPress: () => Dispatch,
   isUserDevices: boolean,
-  isFetching: boolean
+  isFetching: boolean,
+  displayMessage: (message: string) => Dispatch,
+  displayError: (message: string) => Dispatch
 };
 
 class DevicesScreen extends React.Component<Props> {
+  alert: ?DropdownAlert;
+
   constructor(props) {
     super(props);
     new GoogleAnalyticsTracker(ID).trackScreenView("Main");
@@ -46,41 +64,96 @@ class DevicesScreen extends React.Component<Props> {
     );
   };
 
-  renderContent() {
-    const { devices, onDeviceClick } = this.props;
+  onClipboardButtonPress = async () => {
+    const {
+      ids: devices,
+      onAddDevice,
+      displayMessage,
+      displayError
+    } = this.props;
 
-    return devices.length ? (
-      <FlatList
-        data={devices}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <DeviceComponent
-            name={item.name ? item.name : item.dev}
-            user={item.usr}
-            onClick={() => onDeviceClick(item)}
+    try {
+      const token = await Clipboard.getString();
+      const device = parseJWT(token);
+      const id = Object.keys(device)[0];
+      if (devices.includes(id)) {
+        displayError("This device already exists");
+      } else {
+        onAddDevice(device);
+        displayMessage("Added!");
+      }
+    } catch (e) {
+      displayError("This QR isn't a device");
+    }
+  };
+
+  renderContent() {
+    const {
+      devices,
+      onDeviceClick,
+      isUserDevices,
+      onQRScannerPress
+    } = this.props;
+
+    return (
+      <View style={{ flex: 1 }}>
+        {devices.length ? (
+          <FlatList
+            data={devices}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <DeviceComponent
+                name={item.name ? item.name : item.dev}
+                user={item.usr}
+                onClick={() => onDeviceClick(item)}
+              />
+            )}
+            ItemSeparatorComponent={this.renderSeparator}
           />
+        ) : (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Image
+              source={require("../../assets/no_devices.png")}
+              style={{ height: 100, width: 100, margin: MARGIN * 2 }}
+            />
+            <H1Text>Ooops!</H1Text>
+            <H2Text>You could add a device...</H2Text>
+          </View>
         )}
-        ItemSeparatorComponent={this.renderSeparator}
-      />
-    ) : (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Image
-          source={require("../../assets/no_devices.png")}
-          style={{ height: 100, width: 100, margin: MARGIN * 2 }}
-        />
-        <H1Text>Ooops!</H1Text>
-        <H2Text>You could add a device...</H2Text>
+
+        {!isUserDevices && (
+          <ActionButton buttonColor="rgba(231,76,60,1)">
+            <ActionButton.Item
+              buttonColor="#9b59b6"
+              title="by clipboard"
+              onPress={this.onClipboardButtonPress}
+            >
+              <Icon name="font-download" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item
+              buttonColor="#3498db"
+              title="by picture"
+              onPress={() => {}}
+            >
+              <Icon name="photo" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item
+              buttonColor="#1abc9c"
+              title="by QR scanner"
+              onPress={onQRScannerPress}
+            >
+              <Icon name="photo-camera" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
+        )}
       </View>
     );
   }
 
   render() {
-    const {
-      isFetching,
-      isUserDevices,
-      onAddDevicePress,
-      onSettingsPress
-    } = this.props;
+    const { isFetching, isUserDevices, onSettingsPress } = this.props;
 
     return (
       <Screen
@@ -88,10 +161,14 @@ class DevicesScreen extends React.Component<Props> {
           <NavigationBar
             title={"thinger.io"}
             main={true}
-            button={{
-              icon: isUserDevices ? "cog" : "qrcode",
-              onPress: isUserDevices ? onSettingsPress : onAddDevicePress
-            }}
+            button={
+              isUserDevices
+                ? {
+                    icon: "cog",
+                    onPress: onSettingsPress
+                  }
+                : undefined
+            }
           />
         }
       >
@@ -108,10 +185,22 @@ class DevicesScreen extends React.Component<Props> {
         ) : (
           this.renderContent()
         )}
+        <DropdownAlert
+          ref={alert => (this.alert = alert)}
+          replaceEnabled={false}
+        />
       </Screen>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  actionButtonIcon: {
+    fontSize: 22,
+    height: 22,
+    color: "white"
+  }
+});
 
 const mapStateToProps = state => {
   const { routes: tabs, index: selectedTab } = state.nav.routes[0];
@@ -119,6 +208,7 @@ const mapStateToProps = state => {
   const isUserDevices: boolean = currentTab === "UserDevices";
 
   return {
+    ids: Object.keys(state.devices),
     devices: isUserDevices
       ? (Object.values(state.devices): any).filter(device =>
           state.userDevices.includes(device.id)
@@ -140,7 +230,12 @@ const mapDispatchToProps = dispatch => {
       dispatch(navigate("Device"));
     },
     onSettingsPress: () => dispatch(navigate("Settings")),
-    onAddDevicePress: () => dispatch(navigate("Scanner"))
+    onQRScannerPress: () => dispatch(navigate("Scanner")),
+    onAddDevice: (device: Device) => dispatch(addDevice(device, false)),
+    displayMessage: (message: string) =>
+      dispatch(ToastActionsCreators.displayInfo(message, 1000)),
+    displayError: (message: string) =>
+      dispatch(ToastActionsCreators.displayError(message, 1000))
   };
 };
 

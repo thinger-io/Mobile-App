@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE_H2,
     color: "white",
     flex: 3,
-    textAlign: "center"
+    textAlign: "center",
+    paddingVertical: PADDING
   }
 });

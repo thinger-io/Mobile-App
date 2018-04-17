@@ -13,6 +13,7 @@ import Navigator from "./components/navigation/Navigator";
 import { setOrientation } from "./actions/orientation";
 import { DARK_BLUE } from "./constants/ThingerColors";
 import { SafeAreaView } from "react-navigation";
+import { Toast } from "react-native-redux-toast";
 
 const { store, persistor } = configureStore();
 
@@ -35,6 +36,7 @@ export default class App extends Component<Props> {
           <SafeAreaView style={styles.safeArea}>
             <StatusBar barStyle="light-content" />
             <Navigator />
+            <Toast messageStyle={{ color: "white" }} />
           </SafeAreaView>
         </PersistGate>
       </Provider>

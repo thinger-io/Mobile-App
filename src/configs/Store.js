@@ -15,6 +15,7 @@ import nav from "../reducers/nav";
 import screenTracking from "../middlewares/screenTracking";
 import login from "../reducers/login";
 import userDevices from "../reducers/userDevices";
+import { toastReducer as toast } from "react-native-redux-toast";
 
 const config = {
   key: "root",
@@ -39,6 +40,7 @@ function configureStore() {
     lockedAttributes,
     streaming,
     orientation,
+    toast,
     nav
   });
   const middleware = [thunkMiddleware, navMiddleware, screenTracking];

@@ -22,10 +22,11 @@ import {
 import { goToMain, navigate } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
 import { THINGER_SERVER } from "../../constants/ThingerConstants";
-import {LIGHT_RED} from "../../constants/ThingerColors";
+import { LIGHT_RED } from "../../constants/ThingerColors";
 
 type Props = {
   device: Device,
+  isUserDevice: boolean,
   removeDevice: (id: string) => Dispatch,
   changeServer: (device: string, server: string) => Dispatch,
   onShowQR: () => Dispatch,
@@ -52,44 +53,61 @@ class DeviceInfo extends React.Component<Props, State> {
   }
 
   render() {
-    const { device, removeDevice, onShowQR, changeName } = this.props;
+    const {
+      device,
+      isUserDevice,
+      removeDevice,
+      onShowQR,
+      changeName
+    } = this.props;
     return (
       <Screen navigationBar={<NavigationBar title="Settings" />}>
         {device && (
           <ScrollView>
             <List>
-              <TextInputItem
-                name={"Name"}
-                value={device.name ? device.name : ""}
-                placeholder={device.dev}
-                onChangeText={text => changeName(device.id, text)}
-              />
               <OutputItem name={"Device"} value={device.dev} />
               <OutputItem name={"User"} value={device.usr} />
-              <TextInputItem
-                name={"Server"}
-                value={this.state.server}
-                placeholder={THINGER_SERVER}
-                onChangeText={this.handleOnChangeText}
-              />
-              <EnterItem name={"Token QR"} onPress={() => onShowQR()} />
-              <OutputItem
-                name={"Token creation date"}
-                value={timestampToString(device.iat)}
-              />
-              <OutputItem
-                name={"Token expiration date"}
-                value={device.exp ? timestampToString(device.exp) : "Never"}
-              />
+              {isUserDevice ? (
+                <OutputItem
+                  name={"Description"}
+                  value={device.desc ? device.desc : ""}
+                />
+              ) : (
+                [
+                  <TextInputItem
+                    name={"Alias"}
+                    value={device.name ? device.name : ""}
+                    placeholder={device.dev}
+                    onChangeText={text => changeName(device.id, text)}
+                  />,
+                  <TextInputItem
+                    name={"Server"}
+                    value={this.state.server}
+                    placeholder={THINGER_SERVER}
+                    onChangeText={this.handleOnChangeText}
+                  />,
+                  <EnterItem name={"Token QR"} onPress={() => onShowQR()} />,
+                  <OutputItem
+                    name={"Token creation date"}
+                    value={timestampToString(device.iat)}
+                  />,
+                  <OutputItem
+                    name={"Token expiration date"}
+                    value={device.exp ? timestampToString(device.exp) : "Never"}
+                  />
+                ]
+              )}
             </List>
 
-            <CenterView style={{ margin: MARGIN }}>
-              <RoundedButton
-                color={LIGHT_RED}
-                text="Remove"
-                onPress={() => removeDevice(device.id)}
-              />
-            </CenterView>
+            {!isUserDevice && (
+              <CenterView style={{ margin: MARGIN }}>
+                <RoundedButton
+                  color={LIGHT_RED}
+                  text="Remove"
+                  onPress={() => removeDevice(device.id)}
+                />
+              </CenterView>
+            )}
           </ScrollView>
         )}
       </Screen>
@@ -101,7 +119,8 @@ const mapStateToProps = state => {
   const id = state.selectedDevice;
 
   return {
-    device: state.devices[id]
+    device: state.devices[id],
+    isUserDevice: state.userDevices.includes(id)
   };
 };
 

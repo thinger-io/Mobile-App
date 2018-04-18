@@ -101,7 +101,7 @@ export function getDevicesFromApi(
                   id: device.device,
                   dev: device.device,
                   usr: username,
-                  name: device.description,
+                  desc: device.description,
                   isFetching: false,
                   isOnline: device.connection === "active",
                   isAuthorized: true,

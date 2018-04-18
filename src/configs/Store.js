@@ -16,6 +16,7 @@ import screenTracking from "../middlewares/screenTracking";
 import login from "../reducers/login";
 import userDevices from "../reducers/userDevices";
 import { toastReducer as toast } from "react-native-redux-toast";
+import vibrate from "../middlewares/vibrate";
 
 const config = {
   key: "root",
@@ -43,7 +44,7 @@ function configureStore() {
     toast,
     nav
   });
-  const middleware = [thunkMiddleware, navMiddleware, screenTracking];
+  const middleware = [thunkMiddleware, navMiddleware, screenTracking, vibrate];
   const store = createStore(reducer, applyMiddleware(...middleware));
   const persistor = persistStore(store);
 

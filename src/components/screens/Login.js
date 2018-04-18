@@ -6,7 +6,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TouchableOpacity,
-  View
+  Vibration
 } from "react-native";
 import React from "react";
 import Screen from "../containers/Screen";
@@ -24,6 +24,8 @@ import { BORDER_RADIUS, MARGIN, PADDING } from "../../constants/ThingerStyles";
 import { setPassword, setUser } from "../../actions/login";
 import H2Text from "../texts/H2";
 import { loginFromApi } from "../../actions/fetch";
+import type { LoginAction } from "../../actions/login";
+import { ToastActionsCreators } from "react-native-redux-toast";
 
 type Props = {
   username: string,
@@ -156,8 +158,15 @@ const mapDispatchToProps = dispatch => {
     onSetUser: user => dispatch(setUser(user)),
     onSetPassword: password => dispatch(setPassword(password)),
     onSetServer: user => dispatch(setUser(user)),
-    onLogin: (user, password, server) =>
-      dispatch(loginFromApi(server, user, password))
+    onLogin: async (user, password, server) => {
+      const response: LoginAction = await dispatch(
+        loginFromApi(server, user, password)
+      );
+      if (response.type === "RECEIVE_SESSION_FAILURE")
+        dispatch(
+          ToastActionsCreators.displayError("Wrong email or password", 1000)
+        );
+    }
   };
 };
 

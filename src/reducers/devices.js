@@ -25,7 +25,7 @@ const initialStateTest: DevicesState = {
 const initialState: DevicesState = {};
 
 export default function devices(
-  state: DevicesState = initialStateTest,
+  state: DevicesState = initialState,
   action: DeviceAction
 ) {
   switch (action.type) {

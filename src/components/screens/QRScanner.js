@@ -1,7 +1,7 @@
 //@flow
 
 import React from "react";
-import { Text, Vibration, View } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import { PADDING } from "../../constants/ThingerStyles";
 import { parseJWT } from "../../utils/jwt";

@@ -1,12 +1,15 @@
 //@flow
 
-import { View } from "react-native";
+import { View, Share } from "react-native";
 import React from "react";
 import { connect } from "react-redux";
 import Screen from "../containers/Screen";
 import NavigationBar from "../navigation/NavigationBar";
-import { COLOR_BACKGROUND } from "../../constants/ThingerColors";
+import {COLOR_BACKGROUND, DARK_BLUE, LIGHT_BLUE, LIGHT_RED} from "../../constants/ThingerColors";
 import QRCode from "react-native-qrcode-svg";
+import RoundedButton from "../buttons/RoundedButton";
+import {MARGIN, PADDING} from "../../constants/ThingerStyles";
+import CenterView from "../containers/CenterView";
 
 type Props = {
   name: string,
@@ -26,6 +29,17 @@ class ShowQRScreen extends React.Component<Props> {
             color="black"
             backgroundColor={COLOR_BACKGROUND}
           />
+          <CenterView style={{ margin: MARGIN }}>
+            <RoundedButton
+              style={{marginVertical: MARGIN}}
+              color={DARK_BLUE}
+              text={"Share"}
+              onPress={() =>
+                Share.share({ title: this.props.name, message: this.props.jwt })
+              }
+            />
+          </CenterView>
+
         </View>
       </Screen>
     );

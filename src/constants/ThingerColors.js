@@ -3,7 +3,7 @@
 export const BLUE: string = "#0088CC";
 export const DARK_BLUE: string = "#1d2b36";
 export const LIGHT_BLUE: string = "#90CAF9";
-export const LIGHT_RED: string = "#E57373";
+export const LIGHT_RED: string = "#EF5350";
 export const LIGHT_GREEN: string = "#AED581";
 export const LIGHT_PINK: string = "#F48FB1";
 

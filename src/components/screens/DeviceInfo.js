@@ -22,6 +22,7 @@ import {
 import { goToMain, navigate } from "../../actions/nav";
 import NavigationBar from "../navigation/NavigationBar";
 import { THINGER_SERVER } from "../../constants/ThingerConstants";
+import {LIGHT_RED} from "../../constants/ThingerColors";
 
 type Props = {
   device: Device,
@@ -84,7 +85,7 @@ class DeviceInfo extends React.Component<Props, State> {
 
             <CenterView style={{ margin: MARGIN }}>
               <RoundedButton
-                color={"red"}
+                color={LIGHT_RED}
                 text="Remove"
                 onPress={() => removeDevice(device.id)}
               />

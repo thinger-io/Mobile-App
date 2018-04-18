@@ -1,5 +1,5 @@
 import storage from "redux-persist/es/storage";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
 import { persistStore, persistCombineReducers } from "redux-persist";
 import { createReactNavigationReduxMiddleware } from "react-navigation-redux-helpers";
@@ -21,7 +21,7 @@ import vibrate from "../middlewares/vibrate";
 const config = {
   key: "root",
   storage,
-  whitelist: ["devices", "userDevices", "login"]
+  whitelist: ["devices", "login"]
 };
 
 const navMiddleware = createReactNavigationReduxMiddleware(
@@ -45,7 +45,8 @@ function configureStore() {
     nav
   });
   const middleware = [thunkMiddleware, navMiddleware, screenTracking, vibrate];
-  const store = createStore(reducer, applyMiddleware(...middleware));
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const store = createStore(reducer, composeEnhancers(applyMiddleware(...middleware)));
   const persistor = persistStore(store);
 
   // For purge the Store

@@ -32,10 +32,9 @@ class UserScreen extends React.Component<Props, State> {
           nextProps.login.refreshToken
         )
       );
-      return {
-        isLogged: true
-      };
+      return { isLogged: true };
     } else if (!nextProps.login.isLogged) return { isLogged: false };
+    else return null;
   }
 
   render() {

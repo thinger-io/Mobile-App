@@ -42,8 +42,9 @@ class MultipleResourceView extends React.Component<Props, State> {
     );
   }
 
-  componentWillReceiveProps() {
-    if (this.state.posted) this.state = defaultState;
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (prevState.posted) return defaultState;
+    else return undefined;
   }
 
   handleOnPostClick() {

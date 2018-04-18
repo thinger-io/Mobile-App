@@ -6,7 +6,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TouchableOpacity,
-  Vibration
+  Keyboard
 } from "react-native";
 import React from "react";
 import Screen from "../containers/Screen";
@@ -114,13 +114,14 @@ class LoginScreen extends React.Component<Props> {
             onChangeText={this.props.onSetServer}
           />
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              Keyboard.dismiss();
               this.props.onLogin(
                 this.props.username,
                 this.props.password,
                 this.props.server
               )
-            }
+            }}
             style={{
               alignItems: "center",
               margin: MARGIN * 1.5,

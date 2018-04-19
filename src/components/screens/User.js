@@ -22,6 +22,16 @@ class UserScreen extends React.Component<Props, State> {
     isLogged: false
   };
 
+  constructor(props) {
+    super(props);
+    getDevicesFromApi(
+      props.login.server,
+      props.login.user,
+      props.login.accessToken,
+      props.login.refreshToken
+    );
+  }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     if (!prevState.isLogged && nextProps.login.isLogged) {
       nextProps.dispatch(

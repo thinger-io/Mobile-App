@@ -14,7 +14,7 @@ import type { LoginState } from "../../types/State";
 import { logOut } from "../../actions/login";
 import type { Dispatch } from "../../types/Dispatch";
 import { goBack } from "../../actions/nav";
-import {LIGHT_RED} from "../../constants/ThingerColors";
+import { LIGHT_RED } from "../../constants/ThingerColors";
 
 type Props = {
   login: LoginState,

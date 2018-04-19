@@ -5,10 +5,13 @@ import React from "react";
 import { connect } from "react-redux";
 import Screen from "../containers/Screen";
 import NavigationBar from "../navigation/NavigationBar";
-import {COLOR_BACKGROUND, DARK_BLUE, LIGHT_BLUE, LIGHT_RED} from "../../constants/ThingerColors";
+import {
+  COLOR_BACKGROUND,
+  DARK_BLUE
+} from "../../constants/ThingerColors";
 import QRCode from "react-native-qrcode-svg";
 import RoundedButton from "../buttons/RoundedButton";
-import {MARGIN, PADDING} from "../../constants/ThingerStyles";
+import { MARGIN, PADDING } from "../../constants/ThingerStyles";
 import CenterView from "../containers/CenterView";
 
 type Props = {
@@ -31,7 +34,7 @@ class ShowQRScreen extends React.Component<Props> {
           />
           <CenterView style={{ margin: MARGIN }}>
             <RoundedButton
-              style={{marginVertical: MARGIN}}
+              style={{ marginVertical: MARGIN }}
               color={DARK_BLUE}
               text={"Share"}
               onPress={() =>
@@ -39,7 +42,6 @@ class ShowQRScreen extends React.Component<Props> {
               }
             />
           </CenterView>
-
         </View>
       </Screen>
     );

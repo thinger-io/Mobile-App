@@ -45,8 +45,12 @@ function configureStore() {
     nav
   });
   const middleware = [thunkMiddleware, navMiddleware, screenTracking, vibrate];
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  const store = createStore(reducer, composeEnhancers(applyMiddleware(...middleware)));
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const store = createStore(
+    reducer,
+    composeEnhancers(applyMiddleware(...middleware))
+  );
   const persistor = persistStore(store);
 
   // For purge the Store

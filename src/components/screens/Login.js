@@ -120,7 +120,7 @@ class LoginScreen extends React.Component<Props> {
                 this.props.username,
                 this.props.password,
                 this.props.server
-              )
+              );
             }}
             style={{
               alignItems: "center",

@@ -1,35 +1,32 @@
-//@flow
+// @flow
 
-import React from "react";
-import { FlatList, View } from "react-native";
-import type { Attribute } from "../../types/Attribute";
-import type { MultipleResource } from "../../types/Resource";
-import InputAttribute from "./InputAttribute";
-import OutputAttribute from "./OutputAttribute";
-import ResourceComponent from "./Resource";
-import update from "immutability-helper";
-import H1Text from "../texts/H1";
+import React from 'react';
+import { FlatList, View } from 'react-native';
+import update from 'immutability-helper';
+import type { Attribute } from '../../types/Attribute';
+import type { MultipleResource } from '../../types/Resource';
+import InputAttribute from './InputAttribute';
+import OutputAttribute from './OutputAttribute';
+import ResourceComponent from './Resource';
+import H1Text from '../texts/H1';
 
 type Props = {
   resource: string,
   data: MultipleResource,
   isFetching: boolean,
-  onPostClick: (
-    resource: string,
-    data: { [attribute: string]: Attribute }
-  ) => any,
+  onPostClick: (resource: string, data: { [attribute: string]: Attribute }) => any,
   onUpdateClick: (resource: string) => any,
-  onChartClick: () => any
+  onChartClick: () => any,
 };
 
 type State = {
   in: { [attribute: string]: Attribute },
-  posted: boolean
+  posted: boolean,
 };
 
 const defaultState: State = {
   in: {},
-  posted: false
+  posted: false,
 };
 
 class MultipleResourceView extends React.Component<Props, State> {
@@ -37,14 +34,12 @@ class MultipleResourceView extends React.Component<Props, State> {
     super(props);
     this.state = defaultState;
     (this: any).handleOnPostClick = this.handleOnPostClick.bind(this);
-    (this: any).handleOnChangeAttribute = this.handleOnChangeAttribute.bind(
-      this
-    );
+    (this: any).handleOnChangeAttribute = this.handleOnChangeAttribute.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (prevState.posted) return defaultState;
-    else return null;
+    return null;
   }
 
   handleOnPostClick() {
@@ -58,20 +53,14 @@ class MultipleResourceView extends React.Component<Props, State> {
   }
 
   handleOnChangeAttribute(attribute: string, value: Attribute) {
-    this.setState(
-      update(this.state, { in: { $merge: { [attribute]: value } } })
-    );
+    this.setState(update(this.state, { in: { $merge: { [attribute]: value } } }));
   }
 
   renderAttributes() {
     const { resource, data } = this.props;
 
-    const inputs = data.in
-      ? Object.keys(data.in).map(key => ({ type: "in", key }))
-      : [];
-    const outputs = data.out
-      ? Object.keys(data.out).map(key => ({ type: "out", key }))
-      : [];
+    const inputs = data.in ? Object.keys(data.in).map(key => ({ type: 'in', key })) : [];
+    const outputs = data.out ? Object.keys(data.out).map(key => ({ type: 'out', key })) : [];
 
     return (
       <View>
@@ -80,18 +69,16 @@ class MultipleResourceView extends React.Component<Props, State> {
         </H1Text>
         <FlatList
           data={outputs.concat(inputs)}
-          renderItem={({ item }) => {
-            return item.type === "in" && data.in && this.state.in ? (
-              <InputAttribute
-                id={item.key}
-                value={data.in[item.key]}
-                inputValue={this.state.in[item.key]}
-                onChange={this.handleOnChangeAttribute}
-              />
-            ) : item.type === "out" && data.out ? (
-              <OutputAttribute id={item.key} value={data.out[item.key]} />
-            ) : null;
-          }}
+          renderItem={({ item }) => (item.type === 'in' && data.in && this.state.in ? (
+            <InputAttribute
+              id={item.key}
+              value={data.in[item.key]}
+              inputValue={this.state.in[item.key]}
+              onChange={this.handleOnChangeAttribute}
+            />
+          ) : item.type === 'out' && data.out ? (
+            <OutputAttribute id={item.key} value={data.out[item.key]} />
+          ) : null)}
         />
       </View>
     );
@@ -99,11 +86,7 @@ class MultipleResourceView extends React.Component<Props, State> {
 
   render() {
     const {
-      resource,
-      data,
-      isFetching,
-      onUpdateClick,
-      onChartClick
+      resource, data, isFetching, onUpdateClick, onChartClick,
     } = this.props;
     return (
       <ResourceComponent
@@ -120,13 +103,13 @@ class MultipleResourceView extends React.Component<Props, State> {
 
 function castInputData(
   editedData: { [attribute: string]: Attribute },
-  data: { [attribute: string]: Attribute }
+  data: { [attribute: string]: Attribute },
 ): { [attribute: string]: Attribute } {
   let result = {};
   Object.entries(editedData).forEach(([key, value]) => {
-    if (typeof data[key] === "number" && typeof value === "string") {
+    if (typeof data[key] === 'number' && typeof value === 'string') {
       result = Object.assign(result, {
-        [key]: Number(String(value).replace(",", "."))
+        [key]: Number(String(value).replace(',', '.')),
       });
     } else {
       result = Object.assign(result, { [key]: value });

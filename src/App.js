@@ -8,7 +8,6 @@ import Reactotron from 'reactotron-react-native';
 import { StatusBar, Dimensions, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
-import { SafeAreaView } from 'react-navigation';
 import { Toast } from 'react-native-redux-toast';
 import configureStore from './config/store';
 import AppWithNavigation from './components/navigation/Navigator';
@@ -34,9 +33,8 @@ class App extends Component<Props> {
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-          {/* <StatusBar barStyle="light-content" /> */}
+          <StatusBar barStyle="light-content" />
           <AppWithNavigation persistenceKey="NavigationState" />
-          {/* <AppWithNavigation /> */}
           <Toast messageStyle={{ color: 'white' }} />
         </PersistGate>
       </Provider>

@@ -45,3 +45,24 @@ export function* getAll(api, { deviceId }) {
   }
   yield put(DevicesActions.setNoFetching(deviceId));
 }
+
+export function* post(api, { deviceId, id, values }) {
+  yield put(ResourcesActions.setData(id, { in: values }));
+  yield put(ResourcesActions.setFetching(id));
+  const device = yield select(state => state.devices.byId[deviceId]);
+  API.setBaseURL(device.server);
+  API.setAuthorization(device.jwt);
+  const { ok, data } = yield call(api.resources.post, {
+    user: device.usr,
+    device: device.dev,
+    resource: id,
+    values,
+  });
+  if (ok) {
+    yield put(DevicesActions.setOnline(deviceId));
+    yield put(ResourcesActions.setData(id, { ...data, in: values }));
+  } else {
+    yield put(DevicesActions.setOffline(deviceId));
+  }
+  yield put(ResourcesActions.setNoFetching(id));
+}

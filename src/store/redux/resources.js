@@ -19,6 +19,7 @@ const { Types, Creators } = createActions(
     // Sagas
     getAll: ['deviceId'],
     get: ['deviceId', 'id'],
+    post: ['deviceId', 'id', 'values'],
   },
   {
     prefix: 'RESOURCES_',

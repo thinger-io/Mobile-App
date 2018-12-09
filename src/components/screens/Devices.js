@@ -1,72 +1,86 @@
-//@flow
+// @flow
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
-  FlatList,
-  View,
-  Image,
-  ActivityIndicator,
-  StyleSheet,
-  Clipboard
-} from "react-native";
-import DeviceComponent from "../devices/DeviceComponent";
-import React from "react";
-import { MARGIN } from "../../constants/ThingerStyles";
-import Screen from "../containers/Screen";
-import { navigate } from "../../actions/nav";
-import { getResourcesFromApi } from "../../actions/fetch";
-import { addDevice, selectDevice } from "../../actions/device";
-import { removeAllResources } from "../../actions/resource";
-import type { Dispatch } from "../../types/Dispatch";
-import NavigationBar from "../navigation/NavigationBar";
-import type { Device } from "../../types/Device";
-import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
-import ID from "../../constants/GoogleAnalytics";
-import H1Text from "../texts/H1";
-import H2Text from "../texts/H2";
-import { DARK_BLUE } from "../../constants/ThingerColors";
-import ActionButton from "react-native-action-button";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import { parseJWT } from "../../utils/jwt";
-import { ToastActionsCreators } from "react-native-redux-toast";
+  FlatList, View, Image, ActivityIndicator, StyleSheet, Clipboard,
+} from 'react-native';
+import React from 'react';
+import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { type NavigationState } from 'react-navigation';
+import { ToastActionsCreators } from 'react-native-redux-toast';
+import ResourcesActions from '../../store/redux/resources';
+import DeviceComponent from '../devices/DeviceComponent';
+import { MARGIN } from '../../constants/ThingerStyles';
+import Screen from '../containers/Screen';
+import { getResourcesFromApi } from '../../actions/fetch';
+import DevicesActions from '../../store/redux/devices';
+import { removeAllResources } from '../../actions/resource';
+import type { Dispatch } from '../../types/Dispatch';
+import NavigationBar from '../navigation/NavigationBar';
+import type { Device } from '../../types/Device';
+import ID from '../../constants/GoogleAnalytics';
+import H1Text from '../texts/H1';
+import H2Text from '../texts/H2';
+import { DARK_BLUE } from '../../constants/ThingerColors';
+import { parseJWT } from '../../utils/jwt';
+
+const noDeviceIcon = require('../../assets/no_devices.png');
 
 type Props = {
   ids: Array<string>,
   devices: Array<Device>,
-  onDeviceClick: (device: Device) => Dispatch,
-  onQRScannerPress: () => Dispatch,
-  onAddDevice: (device: Device) => Dispatch,
-  onSettingsPress: () => Dispatch,
+  addDevice: (device: Device) => Dispatch,
   isUserDevices: boolean,
   isFetching: boolean,
   displayMessage: (message: string) => Dispatch,
-  displayError: (message: string) => Dispatch
+  displayError: (message: string) => Dispatch,
+  navigation: NavigationState,
+};
+
+const styles = StyleSheet.create({
+  actionButtonIcon: {
+    fontSize: 22,
+    height: 22,
+    color: 'white',
+  },
+});
+
+const mapStateToProps = state => ({
+  ids: state.devices.ids,
+  devices: state.devices.ids.map(id => state.devices.byId[id]),
+  isFetching: state.login.isFetching,
+});
+
+// const mapDispatchToProps = dispatch => ({
+//   displayMessage: (message: string) => dispatch(ToastActionsCreators.displayInfo(message, 1000)),
+//   displayError: (message: string) => dispatch(ToastActionsCreators.displayError(message, 1000)),
+// });
+
+const mapDispatchToProps = {
+  addDevice: DevicesActions.Add,
 };
 
 class DevicesScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
-    new GoogleAnalyticsTracker(ID).trackScreenView("Main");
+    new GoogleAnalyticsTracker(ID).trackScreenView('Main');
   }
 
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: "100%",
-          backgroundColor: "#CED0CE"
-        }}
-      />
-    );
-  };
+  renderSeparator = () => (
+    <View
+      style={{
+        height: 1,
+        width: '100%',
+        backgroundColor: '#CED0CE',
+      }}
+    />
+  );
 
   onClipboardButtonPress = async () => {
     const {
-      ids: devices,
-      onAddDevice,
-      displayMessage,
-      displayError
+      ids: devices, addDevice, displayMessage, displayError,
     } = this.props;
 
     try {
@@ -74,10 +88,10 @@ class DevicesScreen extends React.Component<Props> {
       const device = parseJWT(token);
       const id = Object.keys(device)[0];
       if (devices.includes(id)) {
-        displayError("This device already exists");
+        displayError('This device already exists');
       } else {
-        onAddDevice(device);
-        displayMessage("Added!");
+        addDevice(device);
+        displayMessage('Added!');
       }
     } catch (e) {
       displayError("This QR isn't a device");
@@ -85,12 +99,7 @@ class DevicesScreen extends React.Component<Props> {
   };
 
   renderContent() {
-    const {
-      devices,
-      onDeviceClick,
-      isUserDevices,
-      onQRScannerPress
-    } = this.props;
+    const { devices, isUserDevices, navigation } = this.props;
 
     return (
       <View style={{ flex: 1 }}>
@@ -98,23 +107,22 @@ class DevicesScreen extends React.Component<Props> {
           <FlatList
             data={devices}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => (
+            renderItem={({ item: device }) => (
               <DeviceComponent
-                name={item.name ? item.name : item.dev}
-                user={item.usr}
-                onClick={() => onDeviceClick(item)}
+                name={device.name ? device.name : device.dev}
+                user={device.usr}
+                onClick={() => navigation.navigate('Device', {
+                  device: device.id,
+                  title: device.name || device.dev,
+                })
+                }
               />
             )}
             ItemSeparatorComponent={this.renderSeparator}
           />
         ) : (
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            <Image
-              source={require("../../assets/no_devices.png")}
-              style={{ height: 100, width: 100, margin: MARGIN * 2 }}
-            />
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={noDeviceIcon} style={{ height: 100, width: 100, margin: MARGIN * 2 }} />
             <H1Text>Ooops!</H1Text>
             <H2Text>You could add a device...</H2Text>
           </View>
@@ -132,14 +140,14 @@ class DevicesScreen extends React.Component<Props> {
             <ActionButton.Item
               buttonColor="#3498db"
               title="from picture"
-              onPress={() => console.error("TODO: No implemented yet")}
+              onPress={() => console.error('TODO: No implemented yet')}
             >
               <Icon name="photo" style={styles.actionButtonIcon} />
             </ActionButton.Item>
             <ActionButton.Item
               buttonColor="#1abc9c"
               title="from QR scanner"
-              onPress={onQRScannerPress}
+              onPress={() => navigation.navigate('QRScanner')}
             >
               <Icon name="photo-camera" style={styles.actionButtonIcon} />
             </ActionButton.Item>
@@ -150,31 +158,31 @@ class DevicesScreen extends React.Component<Props> {
   }
 
   render() {
-    const { isFetching, isUserDevices, onSettingsPress } = this.props;
+    const { isFetching, isUserDevices } = this.props;
 
     return (
       <Screen
-        navigationBar={
+        navigationBar={(
           <NavigationBar
-            title={"thinger.io"}
-            main={true}
+            title="thinger.io"
+            main
             button={
               isUserDevices
                 ? {
-                    icon: "cog",
-                    onPress: onSettingsPress
-                  }
+                  icon: 'cog',
+                  onPress: () => navigation.navigate('Settings'),
+                }
                 : undefined
             }
           />
-        }
+)}
       >
         {isFetching ? (
           <View
             style={{
               flex: 1,
-              alignItems: "center",
-              justifyContent: "center"
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <ActivityIndicator size="large" color={DARK_BLUE} />
@@ -187,49 +195,7 @@ class DevicesScreen extends React.Component<Props> {
   }
 }
 
-const styles = StyleSheet.create({
-  actionButtonIcon: {
-    fontSize: 22,
-    height: 22,
-    color: "white"
-  }
-});
-
-const mapStateToProps = state => {
-  const { routes: tabs, index: selectedTab } = state.nav.routes[0];
-  const currentTab = tabs[selectedTab].routeName;
-  const isUserDevices: boolean = currentTab === "UserDevices";
-
-  return {
-    ids: Object.keys(state.devices),
-    devices: isUserDevices
-      ? (Object.values(state.devices): any).filter(device =>
-          state.userDevices.includes(device.id)
-        )
-      : (Object.values(state.devices): any).filter(
-          device => !state.userDevices.includes(device.id)
-        ),
-    isUserDevices,
-    isFetching: state.login.isFetching
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onDeviceClick: device => {
-      dispatch(removeAllResources());
-      dispatch(selectDevice(device.id));
-      dispatch(getResourcesFromApi(device));
-      dispatch(navigate("Device"));
-    },
-    onSettingsPress: () => dispatch(navigate("Settings")),
-    onQRScannerPress: () => dispatch(navigate("Scanner")),
-    onAddDevice: (device: Device) => dispatch(addDevice(device, false)),
-    displayMessage: (message: string) =>
-      dispatch(ToastActionsCreators.displayInfo(message, 1000)),
-    displayError: (message: string) =>
-      dispatch(ToastActionsCreators.displayError(message, 1000))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DevicesScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DevicesScreen);

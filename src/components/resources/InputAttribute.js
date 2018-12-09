@@ -1,41 +1,40 @@
-//@flow
+// @flow
 
-import React from "react";
-import { StyleSheet, Switch, TextInput } from "react-native";
-import AttributeView from "./Attribute";
-import type { Attribute } from "../../types/Attribute";
-import {
-  COLOR_TEXT,
-  COLOR_TEXT_PLACEHOLDER
-} from "../../constants/ThingerColors";
+import React from 'react';
+import { StyleSheet, Switch, TextInput } from 'react-native';
+import AttributeView from './Attribute';
+import type { Attribute } from '../../types/Attribute';
+import { COLOR_TEXT, COLOR_TEXT_PLACEHOLDER } from '../../constants/ThingerColors';
 
 type Props = {
   id: string,
   isSimple?: boolean,
   value: Attribute,
   inputValue: ?Attribute,
-  onChange: (id: string, value: Attribute) => any
+  onChange: (id: string, value: Attribute) => any,
 };
 
 export default class InputAttribute extends React.Component<Props> {
   renderValue() {
-    const { id, value, inputValue, onChange } = this.props;
+    const {
+      id, value, inputValue, onChange,
+    } = this.props;
     switch (typeof value) {
-      case "string":
+      case 'string':
         return (
           <TextInput
-            underlineColorAndroid={"transparent"}
+            underlineColorAndroid="transparent"
             style={styles.input}
             placeholderTextColor={COLOR_TEXT_PLACEHOLDER}
             value={inputValue}
-            placeholder={value ? value : id}
+            placeholder={value || id}
             onChangeText={text => onChange(id, text)}
           />
         );
-      case "number":
+      case 'number':
         return (
           <TextInput
-            underlineColorAndroid={"transparent"}
+            underlineColorAndroid="transparent"
             style={styles.input}
             placeholderTextColor={COLOR_TEXT_PLACEHOLDER}
             keyboardType="numeric"
@@ -44,15 +43,8 @@ export default class InputAttribute extends React.Component<Props> {
             onChangeText={text => onChange(id, text)}
           />
         );
-      case "boolean":
-        return (
-          typeof inputValue === "boolean" && (
-            <Switch
-              value={inputValue}
-              onValueChange={value => onChange(id, value)}
-            />
-          )
-        );
+      case 'boolean':
+        return <Switch value={inputValue} onValueChange={v => onChange(id, v)} />;
       default:
         return null;
     }
@@ -74,10 +66,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginRight: 10,
     flex: 1,
-    textAlign: "right",
-    backgroundColor: "#F5F5F5",
+    textAlign: 'right',
+    backgroundColor: '#F5F5F5',
     color: COLOR_TEXT,
     borderRadius: 10,
-    padding: 5
-  }
+    padding: 5,
+  },
 });

@@ -1,25 +1,25 @@
-//@flow
+// @flow
 
-import { connect } from "react-redux";
-import React from "react";
-import Login from "./Login";
-import Devices from "./Devices";
-import { getDevicesFromApi } from "../../actions/fetch";
-import type { Dispatch } from "../../types/Dispatch";
-import type { LoginState } from "../../types/State";
+import { connect } from 'react-redux';
+import React from 'react';
+import Login from './Login';
+import Devices from './Devices';
+import { getDevicesFromApi } from '../../actions/fetch';
+import type { Dispatch } from '../../types/Dispatch';
+import type { LoginState } from '../../types/State';
 
 type Props = {
   login: LoginState,
-  dispatch: Dispatch
+  dispatch: Dispatch,
 };
 
 type State = {
-  isLogged: boolean
+  isLogged: boolean,
 };
 
 class UserScreen extends React.Component<Props, State> {
   state = {
-    isLogged: false
+    isLogged: false,
   };
 
   constructor(props) {
@@ -28,7 +28,7 @@ class UserScreen extends React.Component<Props, State> {
       props.login.server,
       props.login.user,
       props.login.accessToken,
-      props.login.refreshToken
+      props.login.refreshToken,
     );
   }
 
@@ -39,28 +39,25 @@ class UserScreen extends React.Component<Props, State> {
           nextProps.login.server,
           nextProps.login.user,
           nextProps.login.accessToken,
-          nextProps.login.refreshToken
-        )
+          nextProps.login.refreshToken,
+        ),
       );
       return { isLogged: true };
-    } else if (!nextProps.login.isLogged) return { isLogged: false };
-    else return null;
+    } if (!nextProps.login.isLogged) return { isLogged: false };
+    return null;
   }
 
   render() {
     const { login } = this.props;
     if (login.isLogged && login.server && login.user && login.accessToken) {
       return <Devices />;
-    } else {
-      return <Login />;
     }
+    return <Login />;
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    login: state.login
-  };
-};
+const mapStateToProps = state => ({
+  login: state.login,
+});
 
 export default connect(mapStateToProps)(UserScreen);

@@ -1,31 +1,33 @@
-//@flow
+// @flow
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
   ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   TouchableOpacity,
-  Keyboard
-} from "react-native";
-import React from "react";
-import Screen from "../containers/Screen";
-import { navigate } from "../../actions/nav";
-import type { Dispatch } from "../../types/Dispatch";
+  Keyboard,
+} from 'react-native';
+import React from 'react';
+import { Kohana } from 'react-native-textinput-effects';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { ToastActionsCreators } from 'react-native-redux-toast';
+import { NavigationActions } from 'react-navigation';
+import Screen from '../containers/Screen';
+import type { Dispatch } from '../../types/Dispatch';
 import {
   COLOR_BACKGROUND,
   COLOR_TEXT_INPUT,
   DARK_BLUE,
-  LIGHT_GREEN
-} from "../../constants/ThingerColors";
-import { Kohana } from "react-native-textinput-effects";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import { BORDER_RADIUS, MARGIN, PADDING } from "../../constants/ThingerStyles";
-import { setPassword, setUser } from "../../actions/login";
-import H2Text from "../texts/H2";
-import { loginFromApi } from "../../actions/fetch";
-import type { LoginAction } from "../../actions/login";
-import { ToastActionsCreators } from "react-native-redux-toast";
+  LIGHT_GREEN,
+} from '../../constants/ThingerColors';
+import { BORDER_RADIUS, MARGIN, PADDING } from '../../constants/ThingerStyles';
+import { setPassword, setUser } from '../../actions/login';
+import H2Text from '../texts/H2';
+import { loginFromApi } from '../../actions/fetch';
+import type { LoginAction } from '../../actions/login';
+
+const icon = require('../../assets/icon.png');
 
 type Props = {
   username: string,
@@ -35,12 +37,21 @@ type Props = {
   onSetUser: (user: string) => Dispatch,
   onSetPassword: (password: string) => Dispatch,
   onSetServer: (server: string) => Dispatch,
-  onAddDevicePress: () => Dispatch,
-  onLogin: (username: string, password: string, server: string) => Dispatch
+  onLogin: (username: string, password: string, server: string) => Dispatch,
 };
 
-class LoginScreen extends React.Component<Props> {
+class LoginScreen extends React.PureComponent<Props> {
   render() {
+    const {
+      onSetUser,
+      onSetPassword,
+      onSetServer,
+      onLogin,
+      server,
+      username,
+      password,
+      isFetching,
+    } = this.props;
     return (
       <Screen>
         <KeyboardAvoidingView
@@ -48,16 +59,16 @@ class LoginScreen extends React.Component<Props> {
           style={{
             flex: 1,
             backgroundColor: DARK_BLUE,
-            paddingTop: PADDING * 2
+            paddingTop: PADDING * 2,
           }}
         >
           <Image
-            source={require("../../assets/icon.png")}
+            source={icon}
             style={{
               height: 150,
               width: 150,
               margin: MARGIN * 2,
-              alignSelf: "center"
+              alignSelf: 'center',
             }}
           />
           <Kohana
@@ -65,17 +76,17 @@ class LoginScreen extends React.Component<Props> {
               backgroundColor: COLOR_BACKGROUND,
               flex: 0,
               marginHorizontal: MARGIN * 1.5,
-              borderRadius: BORDER_RADIUS
+              borderRadius: BORDER_RADIUS,
             }}
-            label={"Username"}
+            label="Username"
             iconClass={Icon}
-            iconName={"person"}
+            iconName="person"
             iconColor={DARK_BLUE}
-            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: "100" }}
+            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
             inputStyle={{ color: DARK_BLUE }}
             autoCapitalize="none"
             useNativeDriver
-            onChangeText={this.props.onSetUser}
+            onChangeText={onSetUser}
           />
           <Kohana
             style={{
@@ -83,56 +94,52 @@ class LoginScreen extends React.Component<Props> {
               flex: 0,
               marginHorizontal: MARGIN * 1.5,
               marginVertical: 4,
-              borderRadius: BORDER_RADIUS
+              borderRadius: BORDER_RADIUS,
             }}
-            label={"Password"}
+            label="Password"
             iconClass={Icon}
-            iconName={"lock"}
+            iconName="lock"
             iconColor={DARK_BLUE}
-            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: "100" }}
+            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
             inputStyle={{ color: DARK_BLUE }}
-            secureTextEntry={true}
+            secureTextEntry
             useNativeDriver
-            onChangeText={text => this.props.onSetPassword(text)}
+            onChangeText={text => onSetPassword(text)}
           />
           <Kohana
             style={{
               backgroundColor: COLOR_BACKGROUND,
               flex: 0,
               marginHorizontal: MARGIN * 1.5,
-              borderRadius: BORDER_RADIUS
+              borderRadius: BORDER_RADIUS,
             }}
-            label={"Server"}
+            label="Server"
             iconClass={Icon}
-            iconName={"http"}
+            iconName="http"
             iconColor={DARK_BLUE}
-            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: "100" }}
+            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
             inputStyle={{ color: DARK_BLUE }}
             autoCapitalize="none"
             useNativeDriver
-            defaultValue={this.props.server}
-            onChangeText={this.props.onSetServer}
+            defaultValue={server}
+            onChangeText={onSetServer}
           />
           <TouchableOpacity
             onPress={() => {
               Keyboard.dismiss();
-              this.props.onLogin(
-                this.props.username,
-                this.props.password,
-                this.props.server
-              );
+              onLogin(username, password, server);
             }}
             style={{
-              alignItems: "center",
+              alignItems: 'center',
               margin: MARGIN * 1.5,
               marginTop: 4,
               height: 55,
               backgroundColor: LIGHT_GREEN,
               padding: PADDING,
-              borderRadius: BORDER_RADIUS
+              borderRadius: BORDER_RADIUS,
             }}
           >
-            {this.props.isFetching ? (
+            {isFetching ? (
               <ActivityIndicator size="small" color="#000000" />
             ) : (
               <H2Text>Login</H2Text>
@@ -144,31 +151,25 @@ class LoginScreen extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    username: state.login.user,
-    password: state.login.password,
-    server: state.login.server,
-    isFetching: state.login.isFetching
-  };
-};
+const mapStateToProps = state => ({
+  username: state.login.user,
+  password: state.login.password,
+  server: state.login.server,
+  isFetching: state.login.isFetching,
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onQRScannerPress: () => dispatch(navigate("Scanner")),
-    onSetUser: user => dispatch(setUser(user)),
-    onSetPassword: password => dispatch(setPassword(password)),
-    onSetServer: user => dispatch(setUser(user)),
-    onLogin: async (user, password, server) => {
-      const response: LoginAction = await dispatch(
-        loginFromApi(server, user, password)
-      );
-      if (response.type === "RECEIVE_SESSION_FAILURE")
-        dispatch(
-          ToastActionsCreators.displayError("Wrong email or password", 1000)
-        );
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  onQRScannerPress: () => NavigationActions.navigate('Scanner'),
+  onSetUser: user => dispatch(setUser(user)),
+  onSetPassword: password => dispatch(setPassword(password)),
+  onSetServer: user => dispatch(setUser(user)),
+  onLogin: async (user, password, server) => {
+    const response: LoginAction = await dispatch(loginFromApi(server, user, password));
+    if (response.type === 'RECEIVE_SESSION_FAILURE') dispatch(ToastActionsCreators.displayError('Wrong email or password', 1000));
+  },
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoginScreen);

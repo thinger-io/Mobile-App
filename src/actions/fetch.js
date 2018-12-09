@@ -1,4 +1,4 @@
-//@flow
+// @flow
 
 import {
   addDevice,
@@ -7,21 +7,21 @@ import {
   receiveDevice,
   requestDevice,
   setDeviceServerStatus,
-  setDeviceState
-} from "./device";
-import { receiveResource, requestResource } from "./resource";
+  setDeviceState,
+} from './device';
+import { receiveResource, requestResource } from './resource';
 import {
   logOut,
   receiveDevices,
   receiveSession,
   receiveSessionFailure,
   requestDevices,
-  requestSession
-} from "./login";
-import API from "../API/API";
-import type { Device } from "../types/Device";
-import type { ThunkAction } from "../types/Dispatch";
-import type { Attribute } from "../types/Attribute";
+  requestSession,
+} from './login';
+import API from '../API/API';
+import type { Device } from '../types/Device';
+import type { ThunkAction } from '../types/Dispatch';
+import type { Attribute } from '../types/Attribute';
 
 function handleResponseStatus(device, status, dispatch) {
   switch (status) {
@@ -39,32 +39,24 @@ function handleResponseStatus(device, status, dispatch) {
   }
 }
 
-export function loginFromApi(
-  server: string,
-  username: string,
-  password: string
-): ThunkAction {
-  return async dispatch => {
+export function loginFromApi(server: string, username: string, password: string): ThunkAction {
+  return async (dispatch) => {
     try {
       dispatch(requestSession());
       const response = await API.login(server, username, password);
       if (response.status === 200) {
         const json = await response.json();
         return dispatch(receiveSession(json.access_token, json.refresh_token));
-      } else {
-        return dispatch(receiveSessionFailure());
       }
+      return dispatch(receiveSessionFailure());
     } catch (error) {
       console.error(error);
     }
   };
 }
 
-export function refreshTokenFromApi(
-  server: string,
-  refreshToken: string
-): ThunkAction {
-  return async dispatch => {
+export function refreshTokenFromApi(server: string, refreshToken: string): ThunkAction {
+  return async (dispatch) => {
     try {
       dispatch(requestSession());
       const response = await API.refreshToken(server, refreshToken);
@@ -84,58 +76,46 @@ export function getDevicesFromApi(
   server: string,
   username: string,
   accessToken: string,
-  refreshToken: string
+  refreshToken: string,
 ): ThunkAction {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch(requestDevices());
     const response = await API.getUserDeviceList(server, username, accessToken);
     switch (response.status) {
       case 200:
         const devices = await response.json();
-        const promises = devices.map(device =>
-          dispatch(
-            addDevice(
-              {
-                [device.device]: {
-                  jwt: accessToken,
-                  id: device.device,
-                  dev: device.device,
-                  usr: username,
-                  desc: device.description,
-                  isFetching: false,
-                  isOnline: device.connection === "active",
-                  isAuthorized: true,
-                  server,
-                  hasServerConnection: true
-                }
+        const promises = devices.map(device => dispatch(
+          addDevice(
+            {
+              [device.device]: {
+                jwt: accessToken,
+                id: device.device,
+                dev: device.device,
+                usr: username,
+                desc: device.description,
+                isFetching: false,
+                isOnline: device.connection === 'active',
+                isAuthorized: true,
+                server,
+                hasServerConnection: true,
               },
-              true
-            )
-          )
-        );
+            },
+            true,
+          ),
+        ));
         await Promise.all(promises);
         return dispatch(receiveDevices());
       case 401:
-        const refresh = await dispatch(
-          refreshTokenFromApi(server, refreshToken)
-        );
+        const refresh = await dispatch(refreshTokenFromApi(server, refreshToken));
         return dispatch(
-          getDevicesFromApi(
-            server,
-            username,
-            refresh.accessToken,
-            refresh.refreshToken
-          )
+          getDevicesFromApi(server, username, refresh.accessToken, refresh.refreshToken),
         );
     }
   };
 }
 
-export function getResourceFromApi(
-  device: Device,
-  resource: string
-): ThunkAction {
-  return async dispatch => {
+export function getResourceFromApi(device: Device, resource: string): ThunkAction {
+  return async (dispatch) => {
     try {
       dispatch(requestResource(resource));
       const response = await API.getResource(
@@ -143,31 +123,25 @@ export function getResourceFromApi(
         device.usr,
         device.dev,
         resource,
-        device.jwt
+        device.jwt,
       );
       dispatch(setDeviceServerStatus(device.id, true));
       await handleResponseStatus(device, response.status, dispatch);
       const json = await response.json();
       return dispatch(receiveResource(resource, json));
     } catch (error) {
-      if (error instanceof TypeError)
-        dispatch(setDeviceServerStatus(device.id, false));
+      if (error instanceof TypeError) dispatch(setDeviceServerStatus(device.id, false));
     }
   };
 }
 
 export function getResourcesFromApi(device: Device): ThunkAction {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(requestDevice(device.id));
       let resources;
       if (!device.res) {
-        const response = await API.getResources(
-          device.server,
-          device.usr,
-          device.dev,
-          device.jwt
-        );
+        const response = await API.getResources(device.server, device.usr, device.dev, device.jwt);
         dispatch(setDeviceServerStatus(device.id, true));
         await handleResponseStatus(device, response.status, dispatch);
         const json = await response.json();
@@ -175,15 +149,12 @@ export function getResourcesFromApi(device: Device): ThunkAction {
       } else {
         resources = device.res;
       }
-      const promises = resources.map(key =>
-        dispatch(getResourceFromApi(device, key))
-      );
+      const promises = resources.map(key => dispatch(getResourceFromApi(device, key)));
       await Promise.all(promises);
       return dispatch(receiveDevice(device.id));
     } catch (error) {
       dispatch(receiveDevice(device.id));
-      if (error instanceof TypeError)
-        dispatch(setDeviceServerStatus(device.id, false));
+      if (error instanceof TypeError) dispatch(setDeviceServerStatus(device.id, false));
     }
   };
 }
@@ -191,9 +162,9 @@ export function getResourcesFromApi(device: Device): ThunkAction {
 export function postResource(
   device: Device,
   resource: string,
-  value: Attribute | { [attribute: string]: Attribute }
+  value: Attribute | { [attribute: string]: Attribute },
 ): ThunkAction {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch(requestResource(resource));
     const response = await API.post(
       device.server,
@@ -201,12 +172,10 @@ export function postResource(
       device.dev,
       resource,
       value,
-      device.jwt
+      device.jwt,
     );
     const json = await response.json();
-    return dispatch(
-      receiveResource(resource, Object.assign({}, { in: value }, json))
-    );
+    return dispatch(receiveResource(resource, Object.assign({}, { in: value }, json)));
   };
 }
 

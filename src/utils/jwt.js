@@ -1,8 +1,8 @@
-import base64 from "base-64";
+import base64 from 'base-64';
 
 export function parseJWT(jwt: string) {
   try {
-    const data: string = jwt.split(".")[1];
+    const data: string = jwt.split('.')[1];
     const payload = base64.decode(data);
     const json: {
       dev: string,
@@ -10,7 +10,7 @@ export function parseJWT(jwt: string) {
       usr: string,
       iat: number,
       exp: number,
-      res: Array<string>
+      res: Array<string>,
     } = JSON.parse(payload);
     return {
       [json.jti]: {
@@ -24,9 +24,9 @@ export function parseJWT(jwt: string) {
         isFetching: false,
         isOnline: false,
         isAuthorized: false,
-        server: "https://api.thinger.io",
-        hasServerConnection: false
-      }
+        server: 'https://api.thinger.io',
+        hasServerConnection: false,
+      },
     };
   } catch (error) {
     throw error;

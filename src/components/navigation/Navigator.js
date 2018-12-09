@@ -1,106 +1,99 @@
-//@flow
+// @flow
 
 import {
-  addNavigationHelpers,
-  StackNavigator,
-  TabNavigator
-} from "react-navigation";
-import { connect } from "react-redux";
-import React from "react";
-import Devices from "../screens/Devices";
-import { createReduxBoundAddListener } from "react-navigation-redux-helpers";
-import type { Dispatch } from "../../types/Dispatch";
-import QRScanner from "../screens/QRScanner";
-import Resources from "../screens/Resources";
-import DeviceInfo from "../screens/DeviceInfo";
-import Chart from "../screens/Chart";
-import ShowQR from "../screens/ShowQR";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import {
-  COLOR_TAB_BAR_ACTIVE,
-  COLOR_TAB_BAR_INACTIVE
-} from "../../constants/ThingerColors";
-import UserDevices from "../screens/User";
-import UserSettings from "../screens/UserSettings";
+  createAppContainer,
+  createStackNavigator,
+  createBottomTabNavigator,
+} from 'react-navigation';
+import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Devices from '../screens/Devices';
+import QRScanner from '../screens/QRScanner';
+import Resources from '../screens/Resources';
+import DeviceInfo from '../screens/DeviceInfo';
+import Chart from '../screens/Chart';
+import ShowQR from '../screens/ShowQR';
+import { COLOR_TAB_BAR_ACTIVE, COLOR_TAB_BAR_INACTIVE } from '../../constants/ThingerColors';
+import UserDevices from '../screens/User';
+import UserSettings from '../screens/UserSettings';
+import { DARK_BLUE } from '../../constants/ThingerColors';
 
-const MainRoutes = TabNavigator(
+const MainRoutes = createBottomTabNavigator(
   {
     UserDevices: {
       screen: UserDevices,
       navigationOptions: {
-        title: "User",
+        title: 'User',
         tabBarIcon: ({ tintColor }) => (
           <Icon name="person" size={22} style={{ color: tintColor }} />
-        )
-      }
+        ),
+      },
     },
     ScannedDevices: {
       screen: Devices,
       navigationOptions: {
-        title: "Scanned",
+        title: 'Scanned',
         tabBarIcon: ({ tintColor }) => (
           <Icon name="devices-other" size={22} style={{ color: tintColor }} />
-        )
-      }
-    }
+        ),
+      },
+    },
   },
   {
     tabBarOptions: {
       activeTintColor: COLOR_TAB_BAR_ACTIVE,
-      inactiveTintColor: COLOR_TAB_BAR_INACTIVE
+      inactiveTintColor: COLOR_TAB_BAR_INACTIVE,
     },
-    tabBarPosition: "bottom",
+    tabBarPosition: 'bottom',
     animationEnabled: false,
-    swipeEnabled: false
-  }
+    swipeEnabled: false,
+  },
 );
 
-export const Routes = StackNavigator(
+const MainNavigator = createStackNavigator(
   {
-    Main: { screen: MainRoutes, key: "Main" },
+    Main: { screen: MainRoutes, key: 'Main', title: 'thinger.io' },
     Scanner: { screen: QRScanner },
     Settings: { screen: UserSettings },
     Device: { screen: Resources },
     Info: { screen: DeviceInfo },
     Chart: { screen: Chart },
-    ShowQR: { screen: ShowQR }
+    ShowQR: { screen: ShowQR },
   },
   {
-    headerMode: "none",
-    cardStyle: {
-      shadowOpacity: 0
-    }
-  }
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: DARK_BLUE,
+        borderBottomWidth: 0,
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
+  },
 );
 
-type Props = {
-  isLogged: boolean,
-  dispatch: Dispatch,
-  nav: any
-};
+const App = createAppContainer(MainNavigator);
 
-class Navigator extends React.Component<Props> {
-  render() {
-    const { dispatch, nav } = this.props;
-    const addListener = createReduxBoundAddListener("root");
-    return (
-      <Routes
-        navigation={addNavigationHelpers({
-          dispatch,
-          state: nav,
-          addListener,
-          isLogged: this.props.isLogged
-        })}
-      />
-    );
-  }
-}
+export default App;
 
-const mapStateToProps = state => {
-  return {
-    isLogged: state.login.isLogged,
-    nav: state.nav
-  };
-};
+// type Props = {
+//   isLogged: boolean,
+//   dispatch: Dispatch,
+//   nav: any,
+// };
 
-export default connect(mapStateToProps)(Navigator);
+// class Navigator extends React.Component<Props> {
+//   render() {
+//     const { dispatch, nav } = this.props;
+//     return <Routes />;
+//   }
+// }
+
+// const mapStateToProps = state => ({
+//   isLogged: state.login.isLogged,
+//   nav: state.nav,
+// });
+
+// export default connect(mapStateToProps)(Navigator);

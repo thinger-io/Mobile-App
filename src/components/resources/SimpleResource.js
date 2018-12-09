@@ -1,12 +1,12 @@
-//@flow
+// @flow
 
-import * as React from "react";
-import type { Attribute } from "../../types/Attribute";
-import type { SimpleResource } from "../../types/Resource";
-import RunAttribute from "./RunAttribute";
-import InputAttribute from "./InputAttribute";
-import OutputAttribute from "./OutputAttribute";
-import ResourceComponent from "./Resource";
+import * as React from 'react';
+import type { Attribute } from '../../types/Attribute';
+import type { SimpleResource } from '../../types/Resource';
+import RunAttribute from './RunAttribute';
+import InputAttribute from './InputAttribute';
+import OutputAttribute from './OutputAttribute';
+import ResourceComponent from './Resource';
 
 type Props = {
   resource: string,
@@ -15,17 +15,17 @@ type Props = {
   onPostClick: (id: string, data: Attribute) => any,
   onUpdateClick: (id: string) => any,
   onChartClick: () => any,
-  onRun: () => any
+  onRun: () => any,
 };
 
 type State = {
   in?: Attribute,
-  posted: boolean
+  posted: boolean,
 };
 
 const defaultState: State = {
   in: undefined,
-  posted: false
+  posted: false,
 };
 
 class SimpleResourceView extends React.Component<Props, State> {
@@ -33,39 +33,36 @@ class SimpleResourceView extends React.Component<Props, State> {
     super(props);
     this.state = defaultState;
     (this: any).handleOnPostClick = this.handleOnPostClick.bind(this);
-    (this: any).handleOnChangeAttribute = this.handleOnChangeAttribute.bind(
-      this
-    );
+    (this: any).handleOnChangeAttribute = this.handleOnChangeAttribute.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     if (prevState.posted) return defaultState;
-    else return null;
+    return null;
   }
 
   handleOnPostClick() {
     const { resource, data, onPostClick } = this.props;
-    if (this.state.in === undefined) {
+    const { in: input } = this.state;
+    if (input === undefined) {
       onPostClick(resource, data.in);
-    } else if (
-      typeof data.in === "number" &&
-      typeof this.state.in === "string"
-    ) {
-      onPostClick(resource, Number(String(this.state.in).replace(",", ".")));
+    } else if (typeof data.in === 'number' && typeof input === 'string') {
+      onPostClick(resource, Number(String(input).replace(',', '.')));
     } else {
-      onPostClick(resource, this.state.in);
+      onPostClick(resource, input);
     }
-    this.setState({ in: this.state.in, posted: true });
+    this.setState({ in: input, posted: true });
   }
 
   handleOnChangeAttribute(id: string, value: Attribute) {
     const { onPostClick } = this.props;
     this.setState({ in: value, posted: false });
-    if (typeof value === "boolean") onPostClick(id, value);
+    if (typeof value === 'boolean') onPostClick(id, value);
   }
 
   renderAttributes() {
     const { resource, data, onRun } = this.props;
+    const { in: input } = this.state;
 
     // Run resource
     if (Object.keys(data).length === 0) {
@@ -73,12 +70,12 @@ class SimpleResourceView extends React.Component<Props, State> {
     }
 
     // Input Resource
-    if (data.hasOwnProperty("in")) {
+    if ('in' in data) {
       return (
         <InputAttribute
           id={resource}
           value={data.in}
-          inputValue={this.state.in}
+          inputValue={input}
           isSimple
           onChange={this.handleOnChangeAttribute}
         />
@@ -86,34 +83,24 @@ class SimpleResourceView extends React.Component<Props, State> {
     }
 
     // Output Resource
-    if (data.hasOwnProperty("out")) {
+    if ('out' in data) {
       return <OutputAttribute id={resource} value={data.out} isSimple />;
     }
+
+    return null;
   }
 
   render() {
     const {
-      resource,
-      data,
-      isFetching,
-      onUpdateClick,
-      onChartClick
+      resource, data, isFetching, onUpdateClick, onChartClick,
     } = this.props;
     return (
       <ResourceComponent
         isFetching={isFetching}
-        onUpdateClick={
-          data.hasOwnProperty("out") ? () => onUpdateClick(resource) : undefined
-        }
-        onChartClick={
-          data.hasOwnProperty("out") && typeof data.out === "number"
-            ? onChartClick
-            : undefined
-        }
+        onUpdateClick={'out' in data ? () => onUpdateClick(resource) : undefined}
+        onChartClick={'out' in data && typeof data.out === 'number' ? onChartClick : undefined}
         onPostClick={
-          data.hasOwnProperty("in") && typeof data.in !== "boolean"
-            ? () => this.handleOnPostClick()
-            : undefined
+          'in' in data && typeof data.in !== 'boolean' ? () => this.handleOnPostClick() : undefined
         }
       >
         {this.renderAttributes()}

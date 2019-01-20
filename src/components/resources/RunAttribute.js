@@ -1,28 +1,31 @@
-//@flow
+// @flow
 
-import React from "react";
-import { TouchableOpacity } from "react-native";
-import AttributeView from "./Attribute";
-import { DARK_BLUE } from "../../constants/ThingerColors";
-import Icon from "react-native-vector-icons/FontAwesome";
+import React from 'react';
+import { TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AttributeView from './Attribute';
+import { DARK_BLUE } from '../../constants/ThingerColors';
 
 type Props = {
   id: string,
-  isSimple?: boolean,
-  onRun: () => any
+  run: () => any,
 };
 
 export default class RunAttribute extends React.Component<Props> {
+  onRun = () => {
+    const { run, id } = this.props;
+    run(id);
+  };
+
   renderValue() {
-    const { onRun } = this.props;
     return (
       <TouchableOpacity
         style={{
           flex: 1,
-          alignItems: "flex-end",
-          marginRight: 15
+          alignItems: 'flex-end',
+          marginRight: 15,
         }}
-        onPress={onRun}
+        onPress={this.onRun}
       >
         <Icon name="paper-plane" size={22} style={{ color: DARK_BLUE }} />
       </TouchableOpacity>
@@ -30,10 +33,10 @@ export default class RunAttribute extends React.Component<Props> {
   }
 
   render() {
-    const { id, isSimple } = this.props;
+    const { id } = this.props;
 
     return (
-      <AttributeView id={id} isSimple={isSimple}>
+      <AttributeView id={id} isSimple>
         {this.renderValue()}
       </AttributeView>
     );

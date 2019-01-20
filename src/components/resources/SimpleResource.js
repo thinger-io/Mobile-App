@@ -15,7 +15,7 @@ type Props = {
   onPostClick: (id: string, data: Attribute) => any,
   onUpdateClick: (id: string) => any,
   onChartClick: () => any,
-  onRun: () => any,
+  run: () => any,
 };
 
 type State = {
@@ -61,12 +61,12 @@ class SimpleResourceView extends React.Component<Props, State> {
   }
 
   renderAttributes() {
-    const { resource, data, onRun } = this.props;
+    const { resource, data, run } = this.props;
     const { in: input } = this.state;
 
     // Run resource
     if (Object.keys(data).length === 0) {
-      return <RunAttribute id={resource} isSimple onRun={onRun} />;
+      return <RunAttribute id={resource} run={run} />;
     }
 
     // Input Resource

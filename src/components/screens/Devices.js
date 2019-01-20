@@ -10,13 +10,10 @@ import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { type NavigationState } from 'react-navigation';
 import { ToastActionsCreators } from 'react-native-redux-toast';
-import ResourcesActions from '../../store/redux/resources';
 import DeviceComponent from '../devices/DeviceComponent';
 import { MARGIN } from '../../constants/ThingerStyles';
 import Screen from '../containers/Screen';
-import { getResourcesFromApi } from '../../actions/fetch';
 import DevicesActions from '../../store/redux/devices';
-import { removeAllResources } from '../../actions/resource';
 import type { Dispatch } from '../../types/Dispatch';
 import NavigationBar from '../navigation/NavigationBar';
 import type { Device } from '../../types/Device';
@@ -37,6 +34,7 @@ type Props = {
   displayMessage: (message: string) => Dispatch,
   displayError: (message: string) => Dispatch,
   navigation: NavigationState,
+  getDevices: () => null,
 };
 
 const styles = StyleSheet.create({
@@ -47,25 +45,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
   ids: state.devices.ids,
-  devices: state.devices.ids.map(id => state.devices.byId[id]),
+  devices: state.devices[props.isUserDevices ? 'userIds' : 'ids'].map(id => state.devices.byId[id]),
+  userDevices: state.devices.userIds.map(id => state.devices.byId[id]),
   isFetching: state.login.isFetching,
+  displayInfo: ToastActionsCreators.displayInfo,
+  displayError: ToastActionsCreators.displayError,
 });
-
-// const mapDispatchToProps = dispatch => ({
-//   displayMessage: (message: string) => dispatch(ToastActionsCreators.displayInfo(message, 1000)),
-//   displayError: (message: string) => dispatch(ToastActionsCreators.displayError(message, 1000)),
-// });
 
 const mapDispatchToProps = {
   addDevice: DevicesActions.Add,
+  getDevices: DevicesActions.getDevices,
 };
 
 class DevicesScreen extends React.Component<Props> {
   constructor(props) {
     super(props);
     new GoogleAnalyticsTracker(ID).trackScreenView('Main');
+  }
+
+  componentDidMount() {
+    const { isUserDevices, getDevices } = this.props;
+    if (isUserDevices) getDevices();
   }
 
   renderSeparator = () => (
@@ -88,13 +90,13 @@ class DevicesScreen extends React.Component<Props> {
       const device = parseJWT(token);
       const id = Object.keys(device)[0];
       if (devices.includes(id)) {
-        displayError('This device already exists');
+        displayError('This device already exists', 1000);
       } else {
         addDevice(device);
-        displayMessage('Added!');
+        displayMessage('Added!', 1000);
       }
     } catch (e) {
-      displayError("This QR isn't a device");
+      displayError("This QR isn't a device", 1000);
     }
   };
 
@@ -158,7 +160,7 @@ class DevicesScreen extends React.Component<Props> {
   }
 
   render() {
-    const { isFetching, isUserDevices } = this.props;
+    const { isFetching, isUserDevices, navigation } = this.props;
 
     return (
       <Screen

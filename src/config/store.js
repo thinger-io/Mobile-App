@@ -10,6 +10,7 @@ import Config from '.';
 import rootSaga from '../store/sagas';
 import { reducer as devices } from '../store/redux/devices';
 import { reducer as resources } from '../store/redux/resources';
+import { reducer as auth } from '../store/redux/auth';
 import selectedDevice from '../reducers/selectedDevice';
 import selectedResource from '../reducers/selectedResource';
 import selectedAttributes from '../reducers/selectedAttributes';
@@ -24,11 +25,12 @@ import vibrate from '../middlewares/vibrate';
 const config = {
   key: 'root',
   storage,
-  whitelist: ['devices', 'login'],
+  whitelist: ['devices', 'auth', 'resources'],
 };
 
 function configureStore() {
   const reducer = persistCombineReducers(config, {
+    auth,
     devices,
     lockedAttributes,
     login,

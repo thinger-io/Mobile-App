@@ -19,6 +19,14 @@ const create = () => {
 };
 
 const setBaseURL = url => api2.setBaseURL(url);
+const setJSONHeader = () => api2.setHeaders({
+  'Content-Type': 'application/x-www-form-urlencoded',
+  Accept: 'application/json, text/plain, */*',
+});
+const setEncodeHeader = () => api2.setHeaders({
+  Accept: 'application/json, text/plain, */*',
+  'Content-Type': 'application/x-www-form-urlencoded',
+});
 const setAuthorization = jwt => api2.setHeader('Authorization', `Bearer ${jwt}`);
 const removeAuthorization = () => api2.setHeader('Authorization', null);
 
@@ -30,6 +38,8 @@ export default {
   getApi,
   getApiWithEndpoints,
   setBaseURL,
+  setJSONHeader,
+  setEncodeHeader,
   setAuthorization,
   removeAuthorization,
 };

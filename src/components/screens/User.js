@@ -1,63 +1,30 @@
 // @flow
 
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import React from 'react';
 import Login from './Login';
 import Devices from './Devices';
-import { getDevicesFromApi } from '../../actions/fetch';
-import type { Dispatch } from '../../types/Dispatch';
-import type { LoginState } from '../../types/State';
-
-type Props = {
-  login: LoginState,
-  dispatch: Dispatch,
-};
-
-type State = {
-  isLogged: boolean,
-};
-
-class UserScreen extends React.Component<Props, State> {
-  state = {
-    isLogged: false,
-  };
-
-  constructor(props) {
-    super(props);
-    getDevicesFromApi(
-      props.login.server,
-      props.login.user,
-      props.login.accessToken,
-      props.login.refreshToken,
-    );
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (!prevState.isLogged && nextProps.login.isLogged) {
-      nextProps.dispatch(
-        getDevicesFromApi(
-          nextProps.login.server,
-          nextProps.login.user,
-          nextProps.login.accessToken,
-          nextProps.login.refreshToken,
-        ),
-      );
-      return { isLogged: true };
-    } if (!nextProps.login.isLogged) return { isLogged: false };
-    return null;
-  }
-
-  render() {
-    const { login } = this.props;
-    if (login.isLogged && login.server && login.user && login.accessToken) {
-      return <Devices />;
-    }
-    return <Login />;
-  }
-}
 
 const mapStateToProps = state => ({
-  login: state.login,
+  user: state.auth.username,
 });
+
+function UserScreen({ user, navigation }) {
+  if (user) {
+    return <Devices isUserDevices navigation={navigation} />;
+  }
+  return <Login />;
+}
+
+UserScreen.propTypes = {
+  user: PropTypes.string,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
+UserScreen.defaultProps = {
+  user: undefined,
+};
 
 export default connect(mapStateToProps)(UserScreen);

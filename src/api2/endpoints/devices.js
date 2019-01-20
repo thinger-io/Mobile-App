@@ -1,5 +1,5 @@
 const devices = api => ({
-  get: user => api.get(`v1/users/${user}/devices`),
+  getDevices: username => api.get(`v1/users/${username}/devices`),
 });
 
 export default devices;

@@ -22,24 +22,25 @@ export const initialState = {
       name: '',
     },
   },
-  selected: null,
 };
 
 // Types and Action Creators
 const { Types, Creators } = createActions(
   {
     add: ['device'],
+    setUserDevices: ['ids', 'byId'],
     remove: ['id'],
-    select: ['id'],
     setName: ['id', 'name'],
     setServer: ['id', 'server'],
     setResources: ['id', 'resources'],
     setOnline: ['id'],
     setOffline: ['id'],
-    setFetching: ['id'],
-    setNoFetching: ['id'],
+    setFetching: ['id', 'isFetching'],
     authorize: ['id'],
     deauthorize: ['id'],
+
+    //  Sagas
+    getDevices: null,
   },
   {
     prefix: 'DEVICES_',
@@ -54,18 +55,21 @@ export const handlers = {
     ids: union(state.ids, device.id),
     byId: { ...state.byId, [device.id]: device },
   }),
+  [Types.SET_USER_DEVICES]: (state = initialState, { ids, byId }) => ({
+    ...state,
+    userIds: ids,
+    byId: { ...state.byId, ...byId },
+  }),
   [Types.REMOVE]: (state = initialState, { id }) => update(state, {
     ids: { $unset: [id] },
     byId: { $remove: [id] },
   }),
-  [Types.SELECT]: (state = initialState, { id }) => update(state, { selected: { $set: id } }),
   [Types.SET_NAME]: (state = initialState, { id, name }) => update(state, { byId: { [id]: { name: { $set: name } } } }),
   [Types.SET_SERVER]: (state = initialState, { id, server }) => update(state, { byId: { [id]: { server: { $set: server } } } }),
   [Types.SET_RESOURCES]: (state = initialState, { id, resources }) => update(state, { byId: { [id]: { resources: { $set: resources } } } }),
   [Types.SET_ONLINE]: (state = initialState, { id }) => update(state, { byId: { [id]: { isOnline: { $set: true } } } }),
   [Types.SET_OFFLINE]: (state = initialState, { id }) => update(state, { byId: { [id]: { isOnline: { $set: false } } } }),
-  [Types.SET_FETCHING]: (state = initialState, { id }) => update(state, { byId: { [id]: { isFetching: { $set: true } } } }),
-  [Types.SET_NO_FETCHING]: (state = initialState, { id }) => update(state, { byId: { [id]: { isFetching: { $set: false } } } }),
+  [Types.SET_FETCHING]: (state = initialState, { id, isFetching = true }) => update(state, { byId: { [id]: { isFetching: { $set: isFetching } } } }),
   [Types.AUTHORIZE]: (state = initialState, { id }) => update(state, { byId: { [id]: { isAuthorized: { $set: true } } } }),
   [Types.DEAUTHORIZE]: (state = initialState, { id }) => update(state, { byId: { [id]: { isAuthorized: { $set: false } } } }),
 };

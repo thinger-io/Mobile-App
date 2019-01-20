@@ -14,7 +14,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ToastActionsCreators } from 'react-native-redux-toast';
 import { NavigationActions } from 'react-navigation';
 import Screen from '../containers/Screen';
-import type { Dispatch } from '../../types/Dispatch';
 import {
   COLOR_BACKGROUND,
   COLOR_TEXT_INPUT,
@@ -22,36 +21,40 @@ import {
   LIGHT_GREEN,
 } from '../../constants/ThingerColors';
 import { BORDER_RADIUS, MARGIN, PADDING } from '../../constants/ThingerStyles';
-import { setPassword, setUser } from '../../actions/login';
 import H2Text from '../texts/H2';
-import { loginFromApi } from '../../actions/fetch';
-import type { LoginAction } from '../../actions/login';
+import AuthActions from '../../store/redux/auth';
+import { THINGER_SERVER } from '../../constants/ThingerConstants';
 
 const icon = require('../../assets/icon.png');
 
-type Props = {
-  username: string,
-  password: string,
-  server: string,
-  isFetching: boolean,
-  onSetUser: (user: string) => Dispatch,
-  onSetPassword: (password: string) => Dispatch,
-  onSetServer: (server: string) => Dispatch,
-  onLogin: (username: string, password: string, server: string) => Dispatch,
+const mapStateToProps = state => ({
+  isFetching: state.auth.isFetching,
+});
+
+const mapDispatchToProps = {
+  login: AuthActions.login,
+  navigate: NavigationActions.navigate,
+  displayError: ToastActionsCreators.displayError,
 };
 
 class LoginScreen extends React.PureComponent<Props> {
+  state = {
+    username: undefined,
+    password: undefined,
+    server: THINGER_SERVER,
+  };
+
+  onSetUsername = username => this.setState({ username });
+
+  onSetPassword = password => this.setState({ password });
+
+  onSetServer = server => this.setState({ server });
+
+  onDisplayError = () => this.displayError('Wrong email or password', 1000);
+
   render() {
-    const {
-      onSetUser,
-      onSetPassword,
-      onSetServer,
-      onLogin,
-      server,
-      username,
-      password,
-      isFetching,
-    } = this.props;
+    const { login, isFetching } = this.props;
+    const { username, password, server } = this.state;
     return (
       <Screen>
         <KeyboardAvoidingView
@@ -86,7 +89,7 @@ class LoginScreen extends React.PureComponent<Props> {
             inputStyle={{ color: DARK_BLUE }}
             autoCapitalize="none"
             useNativeDriver
-            onChangeText={onSetUser}
+            onChangeText={this.onSetUsername}
           />
           <Kohana
             style={{
@@ -104,7 +107,7 @@ class LoginScreen extends React.PureComponent<Props> {
             inputStyle={{ color: DARK_BLUE }}
             secureTextEntry
             useNativeDriver
-            onChangeText={text => onSetPassword(text)}
+            onChangeText={this.onSetPassword}
           />
           <Kohana
             style={{
@@ -121,13 +124,13 @@ class LoginScreen extends React.PureComponent<Props> {
             inputStyle={{ color: DARK_BLUE }}
             autoCapitalize="none"
             useNativeDriver
-            defaultValue={server}
-            onChangeText={onSetServer}
+            defaultValue={THINGER_SERVER}
+            onChangeText={this.onSetServer}
           />
           <TouchableOpacity
             onPress={() => {
               Keyboard.dismiss();
-              onLogin(username, password, server);
+              login(username, password, server);
             }}
             style={{
               alignItems: 'center',
@@ -150,24 +153,6 @@ class LoginScreen extends React.PureComponent<Props> {
     );
   }
 }
-
-const mapStateToProps = state => ({
-  username: state.login.user,
-  password: state.login.password,
-  server: state.login.server,
-  isFetching: state.login.isFetching,
-});
-
-const mapDispatchToProps = dispatch => ({
-  onQRScannerPress: () => NavigationActions.navigate('Scanner'),
-  onSetUser: user => dispatch(setUser(user)),
-  onSetPassword: password => dispatch(setPassword(password)),
-  onSetServer: user => dispatch(setUser(user)),
-  onLogin: async (user, password, server) => {
-    const response: LoginAction = await dispatch(loginFromApi(server, user, password));
-    if (response.type === 'RECEIVE_SESSION_FAILURE') dispatch(ToastActionsCreators.displayError('Wrong email or password', 1000));
-  },
-});
 
 export default connect(
   mapStateToProps,

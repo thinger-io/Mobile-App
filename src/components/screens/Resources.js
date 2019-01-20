@@ -22,7 +22,6 @@ type Props = {
   resources: ResourcesState,
   onChartClick: (resource: string) => any,
   onGetResources: (device: Device) => any,
-  onRun: (id: string) => any,
   getAll: (deviceId: string) => any,
   get: (deviceId: string, id: string) => any,
   post: (
@@ -30,6 +29,7 @@ type Props = {
     id: string,
     value: Attribute | { [attribute: string]: Attribute },
   ) => any,
+  run: (deviceId: string, id: string) => any,
 };
 
 type State = {
@@ -75,12 +75,16 @@ class ResourcesScreen extends React.Component<Props, State> {
     post(device.id, id, values);
   };
 
+  handleOnRunClick = (id) => {
+    const { device, run } = this.props;
+    run(device.id, id);
+  };
+
   renderItem = ({ item: id }) => {
     const {
-      resources, onChartClick, onRun, get, device,
+      resources, onChartClick, get, device,
     } = this.props;
     const { pullRefresh } = this.state;
-
     const resource = resources[id];
 
     if (isMultipleResource(resource.data)) {
@@ -106,7 +110,7 @@ class ResourcesScreen extends React.Component<Props, State> {
         onUpdateClick={() => get(device.id, id)}
         onPostClick={this.handleOnPostClick}
         onChartClick={() => onChartClick(id)}
-        onRun={() => onRun(id)}
+        run={this.handleOnRunClick}
       />
     );
   };
@@ -183,28 +187,14 @@ const mapDispatchToProps = {
   getAll: ResourcesActions.getAll,
   get: ResourcesActions.get,
   post: ResourcesActions.post,
+  run: ResourcesActions.run,
 };
 
 // const mapDispatchToProps = dispatch => ({
-//   onPostClick: (device, id, value) => dispatch(postResource(device, id, value)),
-//   onRun: (device, id) => runResource(device, id),
 //   onChartClick: (resource) => {
 //     dispatch(restartStreaming());
 //     dispatch(selectResource(resource));
 //     NavigationActions.navigate('Chart');
-//   },
-//   onGetResources: device => dispatch(getResourcesFromApi(device)),
-//   onSettingsClick: () => NavigationActions.navigate('Info'),
-// });
-
-// const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign({}, ownProps, stateProps, dispatchProps, {
-//   onPostClick: (id, value) => {
-//     const { device } = stateProps;
-//     return dispatchProps.onPostClick(device, id, value);
-//   },
-//   onRun: (id) => {
-//     const { device } = stateProps;
-//     return dispatchProps.onRun(device, id);
 //   },
 // });
 

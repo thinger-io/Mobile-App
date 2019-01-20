@@ -1,6 +1,6 @@
-import { NavigationActions } from "react-navigation";
-import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
-import ID from "../constants/GoogleAnalytics";
+import { NavigationActions } from 'react-navigation';
+import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
+import ID from '../constants/GoogleAnalytics';
 
 const tracker = new GoogleAnalyticsTracker(ID);
 
@@ -15,11 +15,8 @@ function getCurrentRouteName(navigationState) {
   return route.routeName;
 }
 
-export default (screenTracking = ({ getState }) => next => action => {
-  if (
-    action.type !== NavigationActions.NAVIGATE &&
-    action.type !== NavigationActions.BACK
-  ) {
+export default (screenTracking = ({ getState }) => next => (action) => {
+  if (action.type !== NavigationActions.NAVIGATE && action.type !== NavigationActions.BACK) {
     return next(action);
   }
 

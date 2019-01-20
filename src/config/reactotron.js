@@ -8,7 +8,7 @@ import Config from '.';
 
 Reactotron.configure({
   name: 'Thinger.io',
-  host: '192.168.31.161',
+  // host: '192.168.31.161',
 })
   .useReactNative()
   .use(asyncStorage())

@@ -13,10 +13,13 @@ import Resources from '../screens/Resources';
 import DeviceInfo from '../screens/DeviceInfo';
 import Chart from '../screens/Chart';
 import ShowQR from '../screens/ShowQR';
-import { COLOR_TAB_BAR_ACTIVE, COLOR_TAB_BAR_INACTIVE } from '../../constants/ThingerColors';
 import UserDevices from '../screens/User';
 import UserSettings from '../screens/UserSettings';
-import { DARK_BLUE } from '../../constants/ThingerColors';
+import {
+  DARK_BLUE,
+  COLOR_TAB_BAR_ACTIVE,
+  COLOR_TAB_BAR_INACTIVE,
+} from '../../constants/ThingerColors';
 
 const MainRoutes = createBottomTabNavigator(
   {
@@ -47,12 +50,15 @@ const MainRoutes = createBottomTabNavigator(
     tabBarPosition: 'bottom',
     animationEnabled: false,
     swipeEnabled: false,
+    navigationOptions: {
+      title: 'thinger.io',
+    },
   },
 );
 
 const MainNavigator = createStackNavigator(
   {
-    Main: { screen: MainRoutes, key: 'Main', title: 'thinger.io' },
+    Main: { screen: MainRoutes, key: 'Main' },
     Scanner: { screen: QRScanner },
     Settings: { screen: UserSettings },
     Device: { screen: Resources },

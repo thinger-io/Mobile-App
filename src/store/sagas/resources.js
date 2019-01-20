@@ -21,7 +21,7 @@ export function* get(api, { deviceId, id }) {
   } else {
     yield put(DevicesActions.setOffline(deviceId));
   }
-  yield put(ResourcesActions.setNoFetching(id));
+  yield put(ResourcesActions.setFetching(id, false));
 }
 
 export function* getAll(api, { deviceId }) {
@@ -33,8 +33,9 @@ export function* getAll(api, { deviceId }) {
   if (ok && data) {
     const ids = Object.keys(data);
     const byId = {};
+    const resources = yield select(state => state.resources.byId);
     ids.forEach((id) => {
-      byId[id] = { data: null, isFetching: false };
+      byId[id] = { ...resources[id], isFetching: false };
     });
     yield put(DevicesActions.setOnline(deviceId));
     yield put(DevicesActions.setResources(deviceId, ids));
@@ -43,11 +44,10 @@ export function* getAll(api, { deviceId }) {
   } else {
     yield put(DevicesActions.setOffline(deviceId));
   }
-  yield put(DevicesActions.setNoFetching(deviceId));
+  yield put(DevicesActions.setFetching(deviceId, false));
 }
 
 export function* post(api, { deviceId, id, values }) {
-  yield put(ResourcesActions.setData(id, { in: values }));
   yield put(ResourcesActions.setFetching(id));
   const device = yield select(state => state.devices.byId[deviceId]);
   API.setBaseURL(device.server);
@@ -64,5 +64,23 @@ export function* post(api, { deviceId, id, values }) {
   } else {
     yield put(DevicesActions.setOffline(deviceId));
   }
-  yield put(ResourcesActions.setNoFetching(id));
+  yield put(ResourcesActions.setFetching(id, false));
+}
+
+export function* run(api, { deviceId, id }) {
+  yield put(ResourcesActions.setFetching(id));
+  const device = yield select(state => state.devices.byId[deviceId]);
+  API.setBaseURL(device.server);
+  API.setAuthorization(device.jwt);
+  const { ok } = yield call(api.resources.post, {
+    user: device.usr,
+    device: device.dev,
+    resource: id,
+  });
+  if (ok) {
+    yield put(DevicesActions.setOnline(deviceId));
+  } else {
+    yield put(DevicesActions.setOffline(deviceId));
+  }
+  yield put(ResourcesActions.setFetching(id, false));
 }

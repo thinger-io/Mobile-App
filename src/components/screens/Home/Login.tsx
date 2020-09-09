@@ -1,23 +1,18 @@
 import { connect } from 'react-redux';
-import { ActivityIndicator, Image, KeyboardAvoidingView, TouchableOpacity, Keyboard } from 'react-native';
-import React from 'react';
+import { ActivityIndicator, Image, KeyboardAvoidingView, TouchableOpacity, Keyboard, StyleSheet } from 'react-native';
+import React, { useState, useMemo } from 'react';
 import { Kohana } from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Screen from '../../containers/Screen';
-import { COLOR_BACKGROUND, COLOR_TEXT_INPUT, DARK_BLUE, LIGHT_GREEN } from '../../../constants/ThingerColors';
+import { COLOR_TEXT_INPUT, DARK_BLUE, DIVIDER_COLOR, BLUE } from '../../../constants/ThingerColors';
 import { BORDER_RADIUS, MARGIN, PADDING } from '../../../constants/ThingerStyles';
 import H2Text from '../../texts/H2';
 import { AuthActions } from '../../../store/auth';
 import { THINGER_SERVER } from '../../../constants/ThingerConstants';
-import icon from '../../../assets/icon.png';
+import logo from '../../../assets/logo.png';
 import { AppState } from '../../../store/types';
 
 type Props = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
-type State = {
-  username: string;
-  password: string;
-  server: string;
-};
 
 const mapStateToProps = (state: AppState) => ({
   isFetching: state.auth.isFetching,
@@ -27,115 +22,122 @@ const mapDispatchToProps = {
   login: AuthActions.login,
 };
 
-class LoginScreen extends React.PureComponent<Props, State> {
-  state = {
-    username: '',
-    password: '',
-    server: THINGER_SERVER,
-  };
+const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    margin: MARGIN * 1.5,
+    marginTop: 8,
+    height: 55,
+    backgroundColor: BLUE,
+    padding: PADDING,
+    borderRadius: BORDER_RADIUS,
+  },
+});
 
-  onSetUsername = (username: string) => this.setState({ username });
+const LoginScreen = ({ login, isFetching }: Props) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [server, setServer] = useState(THINGER_SERVER);
 
-  onSetPassword = (password: string) => this.setState({ password });
+  const isFilled = useMemo(() => {
+    return !!username && !!password && !!server;
+  }, [username, password, server]);
 
-  onSetServer = (server: string) => this.setState({ server });
-
-  render() {
-    const { login, isFetching } = this.props;
-    const { username, password, server } = this.state;
-    return (
-      <Screen>
-        <KeyboardAvoidingView
-          behavior="padding"
+  return (
+    <Screen>
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={{
+          flex: 1,
+          paddingTop: PADDING * 2,
+        }}
+      >
+        <Image
+          source={logo}
           style={{
-            flex: 1,
-            backgroundColor: DARK_BLUE,
-            paddingTop: PADDING * 2,
+            margin: MARGIN * 2,
+            marginBottom: 48,
+            alignSelf: 'center',
           }}
+        />
+        <Kohana
+          style={{
+            backgroundColor: DIVIDER_COLOR,
+            flex: 0,
+            marginHorizontal: MARGIN * 1.5,
+            borderRadius: BORDER_RADIUS,
+          }}
+          label="Username"
+          iconClass={Icon}
+          iconName="person"
+          iconColor={DARK_BLUE}
+          labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
+          inputStyle={{ color: DARK_BLUE }}
+          autoCapitalize="none"
+          useNativeDriver
+          onChangeText={setUsername}
+        />
+        <Kohana
+          style={{
+            backgroundColor: DIVIDER_COLOR,
+            flex: 0,
+            marginHorizontal: MARGIN * 1.5,
+            marginVertical: 8,
+            borderRadius: BORDER_RADIUS,
+          }}
+          label="Password"
+          iconClass={Icon}
+          iconName="lock"
+          iconColor={DARK_BLUE}
+          labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
+          inputStyle={{ color: DARK_BLUE }}
+          secureTextEntry
+          useNativeDriver
+          onChangeText={setPassword}
+        />
+        <Kohana
+          style={{
+            backgroundColor: DIVIDER_COLOR,
+            flex: 0,
+            marginHorizontal: MARGIN * 1.5,
+            borderRadius: BORDER_RADIUS,
+          }}
+          label="Server"
+          iconClass={Icon}
+          iconName="http"
+          iconColor={DARK_BLUE}
+          labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
+          inputStyle={{ color: DARK_BLUE }}
+          autoCapitalize="none"
+          useNativeDriver
+          defaultValue={THINGER_SERVER}
+          onChangeText={setServer}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            Keyboard.dismiss();
+            login({ username, password, server });
+          }}
+          disabled={!isFilled}
+          activeOpacity={isFilled ? 1 : 0.2}
+          style={
+            isFilled
+              ? styles.button
+              : {
+                  ...styles.button,
+                  opacity: 0.2,
+                }
+          }
         >
-          <Image
-            source={icon}
-            style={{
-              height: 150,
-              width: 150,
-              margin: MARGIN * 2,
-              alignSelf: 'center',
-            }}
-          />
-          <Kohana
-            style={{
-              backgroundColor: COLOR_BACKGROUND,
-              flex: 0,
-              marginHorizontal: MARGIN * 1.5,
-              borderRadius: BORDER_RADIUS,
-            }}
-            label="Username"
-            iconClass={Icon}
-            iconName="person"
-            iconColor={DARK_BLUE}
-            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
-            inputStyle={{ color: DARK_BLUE }}
-            autoCapitalize="none"
-            useNativeDriver
-            onChangeText={this.onSetUsername}
-          />
-          <Kohana
-            style={{
-              backgroundColor: COLOR_BACKGROUND,
-              flex: 0,
-              marginHorizontal: MARGIN * 1.5,
-              marginVertical: 4,
-              borderRadius: BORDER_RADIUS,
-            }}
-            label="Password"
-            iconClass={Icon}
-            iconName="lock"
-            iconColor={DARK_BLUE}
-            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
-            inputStyle={{ color: DARK_BLUE }}
-            secureTextEntry
-            useNativeDriver
-            onChangeText={this.onSetPassword}
-          />
-          <Kohana
-            style={{
-              backgroundColor: COLOR_BACKGROUND,
-              flex: 0,
-              marginHorizontal: MARGIN * 1.5,
-              borderRadius: BORDER_RADIUS,
-            }}
-            label="Server"
-            iconClass={Icon}
-            iconName="http"
-            iconColor={DARK_BLUE}
-            labelStyle={{ color: COLOR_TEXT_INPUT, fontWeight: '100' }}
-            inputStyle={{ color: DARK_BLUE }}
-            autoCapitalize="none"
-            useNativeDriver
-            defaultValue={THINGER_SERVER}
-            onChangeText={this.onSetServer}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              Keyboard.dismiss();
-              login({ username, password, server });
-            }}
-            style={{
-              alignItems: 'center',
-              margin: MARGIN * 1.5,
-              marginTop: 4,
-              height: 55,
-              backgroundColor: LIGHT_GREEN,
-              padding: PADDING,
-              borderRadius: BORDER_RADIUS,
-            }}
-          >
-            {isFetching ? <ActivityIndicator size="small" color="#000000" /> : <H2Text>Login</H2Text>}
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </Screen>
-    );
-  }
-}
+          {isFetching ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <H2Text style={{ color: '#fff' }}>Login</H2Text>
+          )}
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </Screen>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

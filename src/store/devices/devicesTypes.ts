@@ -3,6 +3,7 @@ import { Device } from '../../types/Device';
 
 // State
 export type DevicesState = {
+  isFetching: boolean;
   ids: string[];
   userIds: string[];
   byId: {
@@ -12,6 +13,7 @@ export type DevicesState = {
 
 // Type names
 export enum DevicesTypes {
+  SET_FETCHING = 'DEVICES_SET_FETCHING',
   ADD = 'DEVICES_ADD',
   SET_USER_DEVICES = 'DEVICES_SET_USER_DEVICES',
   REMOVE = 'DEVICES_REMOVE',
@@ -20,6 +22,10 @@ export enum DevicesTypes {
 }
 
 // Action params
+export type SetFetchingActionParams = {
+  isFetching: DevicesState['isFetching'];
+};
+
 export type AddActionParams = {
   device: DevicesState['byId'][string];
 };
@@ -40,6 +46,7 @@ export type UpdateActionParams = {
 };
 
 export type DevicesActionCreators = {
+  setFetching: (payload: SetFetchingActionParams) => AnyAction;
   add: (payload: AddActionParams) => AnyAction;
   setUserDevices: (payload: SetUserDevicesActionParams) => AnyAction;
   remove: (payload: RemoveActionParams) => AnyAction;

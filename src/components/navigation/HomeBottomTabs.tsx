@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { useLayoutEffect } from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import ScannedDevices from '../screens/Home/Scanned';
-import UserDevices from '../screens/Home/User';
+import ScannedDevices from '../screens/Home/ScannedDeviceList';
+import UserDevices from '../screens/Home/UserDeviceList';
 import { COLOR_TAB_BAR_ACTIVE, COLOR_TAB_BAR_INACTIVE } from '../../constants/ThingerColors';
 import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';

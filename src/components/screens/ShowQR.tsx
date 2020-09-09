@@ -1,5 +1,3 @@
-// @flow
-
 import { View, Share } from 'react-native';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -9,10 +7,27 @@ import { COLOR_BACKGROUND, DARK_BLUE } from '../../constants/ThingerColors';
 import RoundedButton from '../buttons/RoundedButton';
 import { MARGIN } from '../../constants/ThingerStyles';
 import CenterView from '../containers/CenterView';
+import { AppState } from '../../store/types';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation/RootStack';
+import { RouteProp } from '@react-navigation/native';
 
-type Props = {
+type OwnProps = {
   name: string;
   jwt: string;
+  navigation: StackNavigationProp<RootStackParamList, 'ShowQR'>;
+  route: RouteProp<RootStackParamList, 'ShowQR'>;
+};
+
+type Props = ReturnType<typeof mapStateToProps> & OwnProps;
+
+const mapStateToProps = (state: AppState, props: OwnProps) => {
+  const id = props.route.params.deviceId;
+
+  return {
+    name: state.devices.byId[id].dev,
+    jwt: state.devices.byId[id].jwt,
+  };
 };
 
 class ShowQRScreen extends React.PureComponent<Props> {
@@ -38,14 +53,5 @@ class ShowQRScreen extends React.PureComponent<Props> {
     );
   }
 }
-
-const mapStateToProps = (state, props) => {
-  const id = props.navigation.getParam('device');
-
-  return {
-    name: state.devices.byId[id].dev,
-    jwt: state.devices.byId[id].jwt,
-  };
-};
 
 export default connect(mapStateToProps)(ShowQRScreen);

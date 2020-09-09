@@ -1,7 +1,7 @@
 import base64 from 'base-64';
-import { Device } from '../types/Device';
+import { ScannedDevice } from '../types/Device';
 
-export function parseJWT(jwt: string): Device {
+export function parseJWT(jwt: string): ScannedDevice {
   try {
     const data: string = jwt.split('.')[1];
     const payload = base64.decode(data);
@@ -12,6 +12,7 @@ export function parseJWT(jwt: string): Device {
       iat: number;
       exp: number;
       res: Array<string>;
+      svr?: string;
     } = JSON.parse(payload);
     return {
       dev: json.dev,
@@ -24,7 +25,7 @@ export function parseJWT(jwt: string): Device {
       isFetching: false,
       isOnline: false,
       isAuthorized: false,
-      server: 'https://api.thinger.io',
+      server: json.svr ? `https://${json.svr}` : 'https://api.thinger.io',
       hasServerConnection: false,
     };
   } catch (error) {

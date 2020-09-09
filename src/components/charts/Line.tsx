@@ -1,5 +1,3 @@
-//@flow
-
 import React from 'react';
 import { View, ActivityIndicator, Text } from 'react-native';
 import { PADDING } from '../../constants/ThingerStyles';
@@ -39,6 +37,7 @@ const LinesChart = ({ data, height, width }: Props) => {
           return (
             sequence && (
               <VictoryLine
+                id={sequence.key}
                 interpolation="natural"
                 data={sequence.data}
                 x="timestamp"

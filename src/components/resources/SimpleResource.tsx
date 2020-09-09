@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import { Attribute } from '../../types/Attribute';
 import { SimpleResource } from '../../types/Resource';

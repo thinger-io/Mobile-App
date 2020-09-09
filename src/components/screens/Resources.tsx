@@ -122,6 +122,8 @@ class ResourcesScreen extends React.Component<Props, State> {
     const { device, resources } = this.props;
     const { pullRefresh } = this.state;
 
+    console.log(device);
+
     const shouldRenderIndicator = device.isFetching && !pullRefresh;
     const shouldRenderOfflineError =
       !device.isFetching && !device.isOnline && device.hasServerConnection && device.isAuthorized;

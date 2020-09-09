@@ -9,33 +9,22 @@ import {
   UpdateActionParams,
   RemoveActionParams,
   DevicesActionCreators,
+  SetFetchingActionParams,
 } from '../devices/devicesTypes';
 import { Reducer } from '../types';
 
 // Initial State
 export const initialState: DevicesState = {
-  ids: ['5a33c4474391fbe37d5ec9e6'],
+  isFetching: false,
+  ids: [],
   userIds: [],
-  byId: {
-    '5a33c4474391fbe37d5ec9e6': {
-      dev: 'deviceA',
-      id: '5a33c4474391fbe37d5ec9e6',
-      usr: 'jt',
-      iat: 1513342023,
-      jwt:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkZXZpY2VBIiwiaWF0IjoxNTkxODAzOTEwLCJqdGkiOiI1ZWUxMDAwNmU3YzU3ZjZmNzM3ZDBlNGMiLCJ1c3IiOiJqdCJ9.1NKmuL2kkFSAc7UKwpElP7uooSw8WWCLiudQhw0PAiY',
-      isFetching: false,
-      isOnline: true,
-      isAuthorized: true,
-      server: 'https://api.thinger.io',
-      hasServerConnection: true,
-    },
-  },
+  byId: {},
 };
 
 // Action Creators
 const { Creators } = createActions<Types, DevicesActionCreators>(
   {
+    setFetching: ['payload'],
     add: ['payload'],
     setUserDevices: ['payload'],
     remove: ['payload'],
@@ -50,9 +39,14 @@ const { Creators } = createActions<Types, DevicesActionCreators>(
 );
 
 // Reducers
+const setFetching: Reducer<'devices', SetFetchingActionParams> = (state = initialState, { payload }) => ({
+  ...state,
+  isFetching: payload.isFetching,
+});
+
 const add: Reducer<'devices', AddActionParams> = (state = initialState, { payload }) => ({
   ...state,
-  ids: union(state.ids, payload.device.id),
+  ids: union(state.ids, [payload.device.id]),
   byId: { ...state.byId, [payload.device.id]: payload.device },
 });
 
@@ -64,7 +58,7 @@ const setUserDevices: Reducer<'devices', SetUserDevicesActionParams> = (state = 
 
 const remove: Reducer<'devices', RemoveActionParams> = (state = initialState, { payload }) =>
   update(state, {
-    ids: { $unshift: [payload.id] },
+    ids: (arr) => arr.filter((id) => id !== payload.id),
     byId: { $unset: [payload.id] },
   });
 
@@ -73,6 +67,7 @@ const updateDevice: Reducer<'devices', UpdateActionParams> = (state = initialSta
 
 // Handlers
 export const handlers = {
+  [Types.SET_FETCHING]: setFetching,
   [Types.ADD]: add,
   [Types.SET_USER_DEVICES]: setUserDevices,
   [Types.REMOVE]: remove,

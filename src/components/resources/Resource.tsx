@@ -1,12 +1,10 @@
-// @flow
-
 import * as React from 'react';
 import Card from '../cards/Card';
 import Button from '../cards/Button';
 import { LIGHT_BLUE, LIGHT_GREEN, LIGHT_PINK } from '../../constants/ThingerColors';
 
 type Props = {
-  children: React.Node;
+  children: React.ReactNode;
   isFetching: boolean;
   onPostClick?: () => any;
   onUpdateClick?: () => any;

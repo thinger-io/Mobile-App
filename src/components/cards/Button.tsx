@@ -1,5 +1,3 @@
-//@flow
-
 import { ActivityIndicator, TouchableOpacity, View, StyleSheet } from 'react-native';
 import React from 'react';
 import PText from '../texts/P';

@@ -30,7 +30,7 @@ function* refreshToken(api: ApiEndpoints) {
   const server = yield* select((state) => state.auth.server);
   const token = yield* select((state) => state.auth.refreshToken);
   setBaseURL(server);
-  const { ok, data } = yield* call(api.auth.refreshToken, token);
+  const { ok, data } = yield* call(api.auth.refreshToken, { token });
   if (ok && data && isOkResponse(ok, data)) {
     yield* put(
       AuthActions.setAuth({

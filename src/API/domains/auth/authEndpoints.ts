@@ -16,7 +16,7 @@ const AuthEndpointsFactory = (api: ApisauceInstance) => {
   };
 
   const refreshToken = ({ token }: { token: string }) => {
-    return api.post<Auth, ErrorResponse>('oauth/token', `grant_type=refresh_token&refreshToken=${token}`, {
+    return api.post<Auth, ErrorResponse>('oauth/token', `grant_type=refresh_token&refresh_token=${token}`, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },

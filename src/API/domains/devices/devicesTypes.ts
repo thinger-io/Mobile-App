@@ -1,6 +1,9 @@
 export type Device = {
+  svr?: string;
   device: string;
   description: string;
+  user: string;
+  type: string;
   connection: {
     active: boolean;
     ts: number;

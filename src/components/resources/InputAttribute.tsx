@@ -60,7 +60,6 @@ export default class InputAttribute extends React.Component<Props> {
 const styles = StyleSheet.create({
   input: {
     fontSize: 18,
-    marginRight: 10,
     flex: 1,
     textAlign: 'right',
     backgroundColor: '#F5F5F5',

@@ -54,7 +54,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
+      <PersistGate persistor={persistor} loading={null}>
         <StatusBar barStyle="light-content" />
         <NavigationContainer
           ref={navigationRef}

@@ -1,5 +1,3 @@
-//@flow
-
 import React from 'react';
 import AttributeView from './Attribute';
 import { Attribute } from '../../types/Attribute';

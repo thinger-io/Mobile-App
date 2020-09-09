@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React from 'react';
+import React, { Fragment, useCallback } from 'react';
 import { ScrollView } from 'react-native';
 import { MARGIN } from '../../constants/ThingerStyles';
 import RoundedButton from '../buttons/RoundedButton';
@@ -38,65 +38,68 @@ const mapDispatchToProps = {
   removeDevice: DevicesActions.remove,
 };
 
-class DeviceInfo extends React.Component<Props> {
-  handleOnChangeServer = (text: string) => {
-    const { device, updateDevice } = this.props;
-    updateDevice({ id: device.id, key: 'server', value: text });
-  };
+const DeviceInfo = ({ device, isUserDevice, updateDevice, removeDevice, navigation, route }: Props) => {
+  const handleOnChangeServer = useCallback(
+    (text: string) => {
+      updateDevice({ id: device.id, key: 'server', value: text });
+    },
+    [updateDevice, device],
+  );
 
-  handleOnChangeName = (text: string) => {
-    const { device, updateDevice } = this.props;
-    updateDevice({ id: device.id, key: 'name', value: text });
-  };
+  const handleOnChangeName = useCallback(
+    (text: string) => {
+      updateDevice({ id: device.id, key: 'name', value: text });
+    },
+    [device, updateDevice],
+  );
 
-  render() {
-    const { device, isUserDevice, removeDevice, navigation, route } = this.props;
-    return (
-      <Screen>
-        {device && (
-          <ScrollView>
-            <List>
-              <OutputItem name="Device" value={device.dev} />
-              <OutputItem name="User" value={device.usr} />
-              {isUserDevice ? (
-                <OutputItem name="Description" value={device.desc ? device.desc : ''} />
-              ) : (
-                [
-                  <TextInputItem
-                    name="Alias"
-                    value={device.name ? device.name : ''}
-                    placeholder={device.dev}
-                    onChangeText={this.handleOnChangeName}
-                  />,
-                  <TextInputItem
-                    name="Server"
-                    value={device.server}
-                    placeholder={THINGER_SERVER}
-                    onChangeText={this.handleOnChangeServer}
-                  />,
-                  <EnterItem
-                    name="Token QR"
-                    onPress={() => navigation.navigate('ShowQR', { deviceId: route.params.deviceId })}
-                  />,
-                  <OutputItem name="Token creation date" value={timestampToString(device.iat)} />,
-                  <OutputItem
-                    name="Token expiration date"
-                    value={device.exp ? timestampToString(device.exp) : 'Never'}
-                  />,
-                ]
-              )}
-            </List>
+  const handleRemoveDevice = useCallback(() => {
+    navigation.navigate('Home');
+    removeDevice({ id: device.id });
+  }, [device, removeDevice, navigation]);
 
-            {!isUserDevice && (
-              <CenterView style={{ margin: MARGIN }}>
-                <RoundedButton color={LIGHT_RED} text="Remove" onPress={() => removeDevice({ id: device.id })} />
-              </CenterView>
+  return (
+    <Screen>
+      {device && (
+        <ScrollView>
+          <List>
+            <OutputItem name="Device" value={device.dev} />
+            <OutputItem name="User" value={device.usr} />
+            {isUserDevice ? (
+              <OutputItem name="Description" value={device.desc ? device.desc : ''} />
+            ) : (
+              <Fragment>
+                <TextInputItem
+                  name="Alias"
+                  value={device.name ? device.name : ''}
+                  placeholder={device.dev}
+                  onChangeText={handleOnChangeName}
+                />
+                <TextInputItem
+                  name="Server"
+                  value={device.server}
+                  placeholder={THINGER_SERVER}
+                  onChangeText={handleOnChangeServer}
+                />
+                <EnterItem
+                  name="Token QR"
+                  onPress={() => navigation.navigate('ShowQR', { deviceId: route.params.deviceId })}
+                />
+                <OutputItem name="Token creation date" value={timestampToString(device.iat)} />
+                <OutputItem name="Token expiration date" value={device.exp ? timestampToString(device.exp) : 'Never'} />
+              </Fragment>
             )}
-          </ScrollView>
-        )}
-      </Screen>
-    );
-  }
-}
+          </List>
+
+          {!isUserDevice && (
+            <CenterView style={{ margin: MARGIN }}>
+              <RoundedButton color={LIGHT_RED} text="Remove" onPress={handleRemoveDevice} />
+            </CenterView>
+          )}
+        </ScrollView>
+      )}
+    </Screen>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeviceInfo);

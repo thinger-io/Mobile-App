@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { View, Text, StyleSheet } from 'react-native';

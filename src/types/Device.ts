@@ -1,4 +1,6 @@
-export type Device = {
+export type Device = ScannedDevice | UserDevice;
+
+type CommonDevice = {
   jwt: string;
   id: string;
   dev: string;
@@ -13,4 +15,12 @@ export type Device = {
   isAuthorized: boolean;
   server: string;
   hasServerConnection: boolean;
+};
+
+export type ScannedDevice = CommonDevice;
+
+export type UserDevice = CommonDevice & {
+  lastConnection: number;
+  desc: string;
+  type: string;
 };

@@ -28,7 +28,7 @@ class ResourceComponent extends React.Component<Props> {
   }
 
   render() {
-    return <Card body={this.props.children} footer={this.renderButtons()} />;
+    return <Card footer={this.renderButtons()}>{this.props.children}</Card>;
   }
 }
 

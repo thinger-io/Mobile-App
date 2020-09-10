@@ -19,9 +19,9 @@ export default class RunAttribute extends React.Component<Props> {
     return (
       <TouchableOpacity
         style={{
-          flex: 1,
           alignItems: 'flex-end',
-          marginRight: 15,
+          marginRight: 16,
+          marginLeft: 16,
         }}
         onPress={this.onRun}
       >

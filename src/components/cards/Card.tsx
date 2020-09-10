@@ -4,19 +4,16 @@ import { BORDER_RADIUS, MARGIN, PADDING } from '../../constants/ThingerStyles';
 
 type Props = {
   children?: React.ReactNode;
-  body?: React.ReactNode;
+
   footer?: React.ReactNode;
 };
 
 export default class Card extends React.Component<Props> {
   render() {
-    const { children, body, footer } = this.props;
+    const { children, footer } = this.props;
     return (
       <View style={styles.card}>
-        <View style={styles.body}>
-          {children}
-          {body}
-        </View>
+        <View style={styles.body}>{children}</View>
         <View style={styles.footer}>{footer}</View>
       </View>
     );

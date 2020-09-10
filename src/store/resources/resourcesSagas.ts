@@ -42,8 +42,8 @@ function* fetchOne(api: ApiEndpoints, { payload }: { payload: FetchOneActionPara
   });
   yield* call(handleResponseStatus, { deviceId: device.id, status });
 
-  if (ok && isOkResponse(ok, data) && data) {
-    yield* put(ResourcesActions.addResource({ id: payload.id, data: { ...data } }));
+  if (ok && isOkResponse(ok, data)) {
+    yield* put(ResourcesActions.addResource({ id: payload.id, data: { ...(data || {}) } }));
   } else if (status === 401) {
     yield* AuthSagas.refreshToken(api);
     yield* fetchOne(api, { payload });

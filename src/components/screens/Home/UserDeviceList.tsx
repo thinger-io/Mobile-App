@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import Login from './Login';
 import { AppState } from '../../../store/types';
 import { HomeBottomTabsParamList } from '../../navigation/HomeBottomTabs';
@@ -33,9 +33,13 @@ function UserScreen({ user, navigation, isFetching, devices, getDevices }: Props
     }
   }, [getDevices, user]);
 
+  const handleRefresh = useCallback(() => {
+    getDevices();
+  }, [getDevices]);
+
   if (user) {
     return (
-      <DeviceList isFetching={isFetching} devices={devices}>
+      <DeviceList isFetching={isFetching} devices={devices} onRefresh={handleRefresh} isRefreshing={isFetching}>
         {({ item: device }) => (
           <UserDevice
             name={device.name ? device.name : device.dev}

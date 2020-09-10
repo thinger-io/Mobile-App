@@ -31,7 +31,7 @@ const useStreamingResource = ({ resourceId, device }: useStreamingResourceProps)
 
   useEffect(() => {
     const interval = setInterval(
-      () => fetchResource({ deviceId: device.id, resource: resourceId, userId: device.usr }),
+      () => fetchResource({ deviceId: device.dev, resource: resourceId, userId: device.usr }),
       1000,
     );
 

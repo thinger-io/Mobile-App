@@ -18,7 +18,7 @@ function* handleResponseStatus({ deviceId, status }: { deviceId: Device['id']; s
     yield* put(DevicesActions.update({ id: deviceId, key: 'hasServerConnection', value: true }));
     yield* put(DevicesActions.update({ id: deviceId, key: 'isAuthorized', value: true }));
     yield* put(DevicesActions.update({ id: deviceId, key: 'isOnline', value: true }));
-  } else if (status === 401) {
+  } else if (status === 401 || status === 403) {
     yield* put(DevicesActions.update({ id: deviceId, key: 'hasServerConnection', value: true }));
     yield* put(DevicesActions.update({ id: deviceId, key: 'isAuthorized', value: false }));
   } else if (status === 404) {
@@ -56,22 +56,31 @@ function* fetchAll(api: ApiEndpoints, { payload }: { payload: FetchAllActionPara
   const device = yield* select((state: AppState) => state.devices.byId[payload.deviceId]);
   setBaseURL(device.server);
   setAuthorization(device.jwt);
-  const { ok, data, status } = yield* call(api.resources.fetchAll, { deviceId: device.dev, userId: device.usr });
-  yield* call(handleResponseStatus, { deviceId: device.id, status });
-  if (ok && data) {
-    const ids = Object.keys(data).filter((id) => !id.startsWith('$'));
-    const byId: ResourcesState['byId'] = {};
-    const resources = yield* select((state: AppState) => state.resources.byId);
-    ids.forEach((id) => {
-      byId[id] = { ...resources[id], isFetching: false };
-    });
-    yield* put(DevicesActions.update({ id: payload.deviceId, key: 'res', value: ids }));
-    yield* put(ResourcesActions.setResources({ ids, byId }));
-    yield* all(ids.map((resource) => call(fetchOne, api, { payload: { deviceId: payload.deviceId, id: resource } })));
-  } else if (status === 401) {
-    yield* AuthSagas.refreshToken(api);
-    yield* fetchAll(api, { payload });
+
+  let resourceIds: string[] = [];
+  if (device.res) {
+    resourceIds = device.res;
+  } else {
+    const { ok, data, status } = yield* call(api.resources.fetchAll, { deviceId: device.dev, userId: device.usr });
+    yield* call(handleResponseStatus, { deviceId: device.id, status });
+    if (ok && data) {
+      resourceIds = Object.keys(data);
+    } else if (status === 401) {
+      yield* AuthSagas.refreshToken(api);
+      yield* fetchAll(api, { payload });
+    }
   }
+
+  const ids = resourceIds.filter((id) => !id.startsWith('$'));
+
+  const byId: ResourcesState['byId'] = {};
+  const resources = yield* select((state: AppState) => state.resources.byId);
+  ids.forEach((id) => {
+    byId[id] = { ...resources[id], isFetching: false };
+  });
+
+  yield* put(ResourcesActions.setResources({ ids, byId }));
+  yield* all(ids.map((resource) => call(fetchOne, api, { payload: { deviceId: payload.deviceId, id: resource } })));
 
   yield* put(DevicesActions.update({ id: payload.deviceId, key: 'isFetching', value: false }));
 }

@@ -122,15 +122,12 @@ class ResourcesScreen extends React.Component<Props, State> {
     const { device, resources } = this.props;
     const { pullRefresh } = this.state;
 
-    console.log(device);
-
     const shouldRenderIndicator = device.isFetching && !pullRefresh;
     const shouldRenderOfflineError =
       !device.isFetching && !device.isOnline && device.hasServerConnection && device.isAuthorized;
     const shouldRenderServerError =
       !device.isFetching && device.isOnline && !device.hasServerConnection && device.isAuthorized;
-    const shouldRenderAuthError =
-      !device.isFetching && device.isOnline && device.hasServerConnection && !device.isAuthorized;
+    const shouldRenderAuthError = !device.isFetching && device.hasServerConnection && !device.isAuthorized;
     const shouldRenderList = !device.isFetching && device.isOnline && device.hasServerConnection && device.isAuthorized;
 
     return (
@@ -152,9 +149,7 @@ class ResourcesScreen extends React.Component<Props, State> {
         {shouldRenderServerError && (
           <ErrorMessage message={`Couldn't connect to\n${device.server}`} icon="plug" onPressButton={this.onRefresh} />
         )}
-        {shouldRenderAuthError && (
-          <ErrorMessage message={`${device.usr} isn't authorized`} icon="lock" onPressButton={this.onRefresh} />
-        )}
+        {shouldRenderAuthError && <ErrorMessage message="not authorized" icon="lock" onPressButton={this.onRefresh} />}
         {shouldRenderList && (
           <KeyboardAwareFlatList
             keyboardOpeningTime={0}

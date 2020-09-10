@@ -11,7 +11,7 @@ export function parseJWT(jwt: string): ScannedDevice {
       usr: string;
       iat: number;
       exp: number;
-      res: Array<string>;
+      res?: string[];
       svr?: string;
     } = JSON.parse(payload);
     return {

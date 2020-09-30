@@ -1,5 +1,5 @@
-import { AppRegistry } from 'react-native';
-import App from './src/App';
+import { AppRegistry, LogBox } from 'react-native';
+import App from './src/App.tsx';
 
-console.disableYellowBox = true;
+LogBox.ignoreAllLogs();
 AppRegistry.registerComponent('thingerio', () => App);

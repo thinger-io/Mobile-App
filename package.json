@@ -1,6 +1,6 @@
 {
     "name": "thingerio",
-    "version": "0.2.5",
+    "version": "2.0.0",
     "private": true,
     "scripts": {
         "start": "react-native start",
@@ -24,7 +24,7 @@
         "lodash": "^4.17.15",
         "moment": "^2.27.0",
         "react": "16.13.1",
-        "react-native": "0.63.2",
+        "react-native": "0.63.3",
         "react-native-camera": "^3.35.0",
         "react-native-flipper": "^0.55.0",
         "react-native-floating-action": "^1.21.0",

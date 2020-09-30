@@ -3,7 +3,7 @@
  * https://thinger.io
  */
 import React, { useEffect, useRef, useCallback, useState } from 'react';
-import { StatusBar, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import configureStore from './config/store';
 import RootStack from './components/navigation/RootStack';
 import { OrientationActions } from './store/orientation';
 import { AppState } from './store/types';
+import AppStatusBar from './components/AppStatusBar';
+import { DARK_BLUE } from './constants/ThingerColors';
 
 const _XHR = GLOBAL.originalXMLHttpRequest ? GLOBAL.originalXMLHttpRequest : GLOBAL.XMLHttpRequest;
 XMLHttpRequest = _XHR;
@@ -55,7 +57,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={null}>
-        <StatusBar barStyle="light-content" />
+        <AppStatusBar backgroundColor={DARK_BLUE} barStyle="light-content" />
         <NavigationContainer
           ref={navigationRef}
           onReady={handleNavigationReady}

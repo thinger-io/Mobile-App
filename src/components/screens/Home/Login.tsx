@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
-import { ActivityIndicator, Image, KeyboardAvoidingView, TouchableOpacity, Keyboard, StyleSheet } from 'react-native';
-import React, { useState, useMemo } from 'react';
+import { ActivityIndicator, TouchableOpacity, Keyboard, StyleSheet, Animated } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Kohana } from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Screen from '../../containers/Screen';
@@ -45,19 +46,20 @@ const LoginScreen = ({ login, isFetching }: Props) => {
 
   return (
     <Screen>
-      <KeyboardAvoidingView
-        behavior="padding"
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        extraScrollHeight={44}
         style={{
           flex: 1,
-          paddingTop: PADDING * 2,
         }}
       >
-        <Image
+        <Animated.Image
           source={logo}
           style={{
-            margin: MARGIN * 2,
-            marginBottom: 48,
+            marginVertical: MARGIN * 3,
+            height: 72,
             alignSelf: 'center',
+            aspectRatio: 3.5 / 1,
           }}
         />
         <Kohana
@@ -135,7 +137,7 @@ const LoginScreen = ({ login, isFetching }: Props) => {
             <H2Text style={{ color: '#fff' }}>Login</H2Text>
           )}
         </TouchableOpacity>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </Screen>
   );
 };

@@ -13,7 +13,7 @@
 		247F2F10250265ED00E49DE0 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		247F2F1125027F7100E49DE0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		24FAA0BF2490432900315173 /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FAA0BE2490432900315173 /* Dummy.swift */; };
-		A87D733AD007BFB35A17B559 /* libPods-thingerio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FF8E8CFD8C63B04FFD7A988 /* libPods-thingerio.a */; };
+		7BE7E87313FD234786601B42 /* libPods-thingerio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FF8E8CFD8C63B04FFD7A988 /* libPods-thingerio.a */; };
 		ADC1A971EB576AB72065BDC7 /* libPods-thingerio-thingerioTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BB2E590A69BFCB4394D7280 /* libPods-thingerio-thingerioTests.a */; };
 /* End PBXBuildFile section */
 
@@ -361,7 +361,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A87D733AD007BFB35A17B559 /* libPods-thingerio.a in Frameworks */,
+				7BE7E87313FD234786601B42 /* libPods-thingerio.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1341,10 +1341,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2FB5308C2ADB28D90FF4A357 /* Pods-thingerio.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = QS9964F28L;
 				ENABLE_BITCODE = NO;
@@ -1357,7 +1356,7 @@
 				);
 				INFOPLIST_FILE = thingerio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DFB_SONARKIT_ENABLED=1",
@@ -1380,10 +1379,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D8A5A3163CCBDB662E0229B5 /* Pods-thingerio.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = QS9964F28L;
 				ENABLE_BITCODE = NO;
@@ -1396,7 +1394,7 @@
 				);
 				INFOPLIST_FILE = thingerio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DFB_SONARKIT_ENABLED=1",
